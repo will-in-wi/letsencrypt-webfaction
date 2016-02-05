@@ -16,10 +16,6 @@ Style/Documentation:
 Style/AutoResourceCleanup:
   Enabled: true
 
-# Enforces always including the UTF-8 comment at the top of files.
-Style/Encoding:
-  Enabled: true
-
 # Standardize multi-line params.
 Style/FirstArrayElementLineBreak:
   Enabled: true
