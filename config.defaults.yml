@@ -1,0 +1,7 @@
+key_size: 4096
+# We need an ACME server to talk to, see github.com/letsencrypt/boulder
+endpoint: 'https://acme-v01.api.letsencrypt.org/'
+domains: []
+public: ''
+contact: ''
+output_dir: '~/le_certs/'
