@@ -54,13 +54,20 @@ FileUtils.mkdir_p(File.join(options.public, File.dirname(challenge.filename)))
 File.write(File.join(options.public, challenge.filename), challenge.file_content)
 
 # Once you are ready to serve the confirmation request you can proceed.
-challenge.request_verification # => true
-challenge.verify_status # => 'pending'
+raise 'Failed requesting verification' unless challenge.request_verification # => true
 
-# Wait a bit for the server to make the request, or really just blink, it should be fast.
-sleep(1)
+i = 0
+until challenge.verify_status == 'valid' || i == 10
+  # Wait a bit for the server to make the request, or really just blink, it should be fast.
+  sleep(1)
 
-challenge.verify_status # => 'valid'
+  puts challenge.verify_status # => 'pending'
+  i += 1
+end
+
+unless challenge.verify_status == 'valid'
+  raise "Failed to verify status in 10 seconds. Current status: #{challenge.verify_status}"
+end
 
 # We're going to need a certificate signing request. If not explicitly
 # specified, the first name listed becomes the common name.
