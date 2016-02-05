@@ -1,0 +1,78 @@
+#!/bin/sh ruby
+
+$LOAD_PATH.unshift(File.dirname(__FILE__) + '/../lib')
+
+require 'openssl'
+
+require 'letsencrypt_webfaction/args_parser'
+
+options = LetsencryptWebfaction::ArgsParser.new(ARGV)
+
+unless options.valid?
+  puts options.errors.values.join("\n")
+  exit
+end
+
+# START PROCEDURAL CODE.
+
+# We're going to need a private key.
+private_key = OpenSSL::PKey::RSA.new(options.key_size)
+
+# Initialize the client
+require 'acme/client'
+client = Acme::Client.new(private_key: private_key, endpoint: options.endpoint)
+
+# If the private key is not known to the server, we need to register it for the first time.
+registration = client.register(contact: "mailto:#{options.contact}")
+
+# You'll may need to agree to the term (that's up the to the server to require it or not but boulder does by default)
+registration.agree_terms
+
+# Let's try to optain a certificate
+
+# We need to prove that we control the domain using one of the challenges method.
+authorization = client.authorize(domain: options.domains.first)
+
+# For now the only challenge method supprted by the client is http-01.
+challenge = authorization.http01
+
+# The http-01 method will require you to response to an HTTP request.
+
+# You can retrieve the expected path for the file.
+challenge.filename # => ".well-known/acme-challenge/:some_token"
+
+# You can generate the body of the expected response.
+challenge.file_content # => 'string token and JWK thumbprint'
+
+# You can send no Content-Type at all but if you send one it has to be 'text/plain'.
+challenge.content_type
+
+# Save the file. We'll create a public directory to serve it from, and we'll creating the challenge directory.
+FileUtils.mkdir_p(File.join(options.public, File.dirname(challenge.filename)))
+
+# Then writing the file
+File.write(File.join(options.public, challenge.filename), challenge.file_content)
+
+# Once you are ready to serve the confirmation request you can proceed.
+challenge.request_verification # => true
+challenge.verify_status # => 'pending'
+
+# Wait a bit for the server to make the request, or really just blink, it should be fast.
+sleep(1)
+
+challenge.verify_status # => 'valid'
+
+# We're going to need a certificate signing request. If not explicitly
+# specified, the first name listed becomes the common name.
+csr = Acme::Client::CertificateRequest.new(names: options.domains)
+
+# We can now request a certificate, you can pass anything that returns
+# a valid DER encoded CSR when calling to_der on it, for example a
+# OpenSSL::X509::Request too.
+certificate = client.new_certificate(csr) # => #<Acme::Client::Certificate ....>
+
+# Save the certificate and key
+File.write('privkey.pem', certificate.request.private_key.to_pem)
+File.write('cert.pem', certificate.to_pem)
+File.write('chain.pem', certificate.chain_to_pem)
+File.write('fullchain.pem', certificate.fullchain_to_pem)
