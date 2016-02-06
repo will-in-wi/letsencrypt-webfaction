@@ -1,5 +1,7 @@
 module LetsencryptWebfaction
   class CertificateWriter
+    attr_reader :output_dir
+
     def initialize(output_dir, domain, certificate)
       @certificate = certificate
 

@@ -9,6 +9,7 @@ require 'acme/client'
 require 'letsencrypt_webfaction/args_parser'
 require 'letsencrypt_webfaction/domain_validator'
 require 'letsencrypt_webfaction/certificate_writer'
+require 'letsencrypt_webfaction/instructions'
 
 options = LetsencryptWebfaction::ArgsParser.new(ARGV)
 
@@ -48,3 +49,7 @@ certificate = client.new_certificate(csr) # => #<Acme::Client::Certificate ....>
 
 writer = LetsencryptWebfaction::CertificateWriter.new(options.output_dir, options.domains.first, certificate)
 writer.write!
+
+# Dump help text.
+instructions = LetsencryptWebfaction::Instructions.new writer.output_dir, options.domains
+puts instructions.message
