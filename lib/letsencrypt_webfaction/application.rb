@@ -69,8 +69,8 @@ module LetsencryptWebfaction
     end
 
     def validate_options!
-      return if options.valid?
-      puts options.errors.values.join("\n")
+      return if @options.valid?
+      puts @options.errors.values.join("\n")
       exit
     end
 
