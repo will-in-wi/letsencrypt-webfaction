@@ -56,9 +56,9 @@ To run the script directly from the repository, use:
 
     $ ruby -Ilib exe/letsencrypt_webfaction
 
-After checking out the repo, run `bundle install` to install dependencies. Then, run `bin/rspec` to run the tests. You should also run `bin/rubocop` to validate coding style and simplicity.
+After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
 
-To release a new version, update the version number in `lib/letsencrypt_webfaction.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org). This project uses [Semantic Versioning](http://semver.org/).
+To install this gem onto your local machine, run `bin/rake install`. To release a new version, update the version number in `lib/letsencrypt_webfaction.rb`, and then run `bin/rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org). This project uses [Semantic Versioning](http://semver.org/).
 
 ## Contributing
 
