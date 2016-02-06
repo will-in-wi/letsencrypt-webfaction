@@ -40,7 +40,9 @@ When the code runs, it places verification files into a public directory, valida
 
 After this is done, the utility will dump to stdout instructions regarding how to request that your new certs be installed by the WebFaction admins. This will include sample text and a link to https://help.webfaction.com/.
 
-If you use Cron, you should set `MAILTO=youremail@example.com` at the top in order to receive the instructions. The [WebFaction docs](https://docs.webfaction.com/software/general.html#scheduling-tasks-cron) have more details about how to do this.
+If you use Cron, you should set `MAILTO=youremail@example.com` and `MAILFROM=username@servername.webfaction.com` at the top in order to receive the instructions. The [WebFaction docs](https://docs.webfaction.com/software/general.html#scheduling-tasks-cron) have more details about how to do this.
+
+If you see messages containing SyntaxErrors, you are most likely using an old version of Ruby. This utility requires Ruby 2.1+.
 
 ### Public folders
 
