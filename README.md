@@ -8,6 +8,8 @@ This tool simplifies the manual process of using LetsEncrypt on Webfaction hosts
 
 [![Gem Version](https://badge.fury.io/rb/letsencrypt_webfaction.svg)](https://badge.fury.io/rb/letsencrypt_webfaction)
 
+[![Code Climate](https://codeclimate.com/github/will-in-wi/letsencrypt-webfaction/badges/gpa.svg)](https://codeclimate.com/github/will-in-wi/letsencrypt-webfaction)
+
 ## Installation
 
 Because WebFaction has an unusual Ruby setup with the default Ruby as 1.8, I recommend that you [set up RBEnv](https://github.com/rbenv/rbenv) and [Ruby Build](https://github.com/rbenv/ruby-build#readme) on your WebFaction server to run this script.
