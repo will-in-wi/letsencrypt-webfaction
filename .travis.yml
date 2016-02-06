@@ -5,3 +5,4 @@ rvm:
   - 2.0.0
   - jruby
 before_install: gem install bundler -v 1.11.2
+cache: bundler
