@@ -52,6 +52,10 @@ In the case of a Rails app, look for a folder called `public/`. If you are deplo
 
 ## Development
 
+To run the script directly from the repository, use:
+
+    $ ruby -Ilib exe/letsencrypt_webfaction
+
 After checking out the repo, run `bundle install` to install dependencies. Then, run `bin/rspec` to run the tests. You should also run `bin/rubocop` to validate coding style and simplicity.
 
 To release a new version, update the version number in `lib/letsencrypt_webfaction.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org). This project uses [Semantic Versioning](http://semver.org/).
