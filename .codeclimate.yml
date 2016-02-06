@@ -10,7 +10,7 @@ engines:
   rubocop:
     enabled: true
     checks:
-      Rails: false
+      Rubocop/Rails: false
 ratings:
   paths:
   - "**.inc"
