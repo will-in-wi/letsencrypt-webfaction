@@ -8,9 +8,15 @@ This tool simplifies the manual process of using LetsEncrypt on Webfaction hosts
 
 ## Installation
 
-Install it with:
+Because WebFaction has an unusual Ruby setup with the default Ruby as 1.8, I recommend that you [set up RBEnv](https://github.com/rbenv/rbenv) and [Ruby Build](https://github.com/rbenv/ruby-build#readme) on your WebFaction server to run this script.
 
+Once you have done so, install Ruby 2.1+ (probably 2.3.0 at time of writing). Then set the local Ruby and install the Gem. Finally unset the local Ruby so that you don't run into problems.
+
+    $ rbenv install 2.3.0
+    $ rbenv local 2.3.0
     $ gem install letsencrypt_webfaction
+    $ rbenv rehash
+    $ rm .ruby-version
 
 ## Usage
 
@@ -21,6 +27,18 @@ Basic example:
 To quickly get a list of parameters, you can call:
 
     $ letsencrypt_webfaction --help
+
+### Cron usage
+
+Normally, you will run the script manually once to get the certificate, and then you will use Cron to automate future certificate renewal.
+
+Your cron task could look something like:
+
+    0 4 * */2 *     cd /home/williaminwi/Projects/letsencrypt-webfaction && RBENV_ROOT=~/.rbenv RBENV_VERSION=2.3.0 ~/.rbenv/bin/rbenv exec letsencrypt_webfaction --contact you@example.com --domains example.com,www.example.com --public ~/webapps/myapp/
+
+This [would run](http://crontab.guru/#0_4_*_*/2_*) at 4 a.m. in Jan, Mar, May, Jul, Sep, and Nov. Certificates expire three months after issuance, so modify as desired.
+
+If you have more than one cron task running like this, you may want to set the environment variables at the top of the file, and create a config file containing the contact information.
 
 ### Detailed examples
 
