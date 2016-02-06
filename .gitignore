@@ -1,1 +1,5 @@
+# Ignore Gem builds
 /*.gem
+
+# Ignore Gemfile locking
+/Gemfile.lock
