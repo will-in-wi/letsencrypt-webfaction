@@ -22,6 +22,8 @@ Once you have done so, install Ruby 2.1+ (probably 2.3.0 at time of writing). Th
     $ rbenv rehash
     $ rm .ruby-version
 
+If you come up with a simpler way to do the install which doesn't involve RBenv, I'd love to hear about it. Please file a ticket!
+
 ## Usage
 
 Basic example:
