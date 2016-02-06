@@ -44,6 +44,9 @@ csr = Acme::Client::CertificateRequest.new(names: options.domains)
 # OpenSSL::X509::Request too.
 certificate = client.new_certificate(csr) # => #<Acme::Client::Certificate ....>
 
+# Make sure the output directory exists.
+FileUtils.mkdir_p(options.output_dir)
+
 # Save the certificate and key
 File.write(File.join(options.output_dir, 'privkey.pem'), certificate.request.private_key.to_pem)
 File.write(File.join(options.output_dir, 'cert.pem'), certificate.to_pem)
