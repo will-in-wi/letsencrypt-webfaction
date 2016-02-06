@@ -45,10 +45,11 @@ csr = Acme::Client::CertificateRequest.new(names: options.domains)
 certificate = client.new_certificate(csr) # => #<Acme::Client::Certificate ....>
 
 # Make sure the output directory exists.
-FileUtils.mkdir_p(options.output_dir)
+output_dir = File.expand_path(options.output_dir)
+FileUtils.mkdir_p(output_dir)
 
 # Save the certificate and key
-File.write(File.join(options.output_dir, 'privkey.pem'), certificate.request.private_key.to_pem)
-File.write(File.join(options.output_dir, 'cert.pem'), certificate.to_pem)
-File.write(File.join(options.output_dir, 'chain.pem'), certificate.chain_to_pem)
-File.write(File.join(options.output_dir, 'fullchain.pem'), certificate.fullchain_to_pem)
+File.write(File.join(output_dir, "#{options.domains.first}-privkey.pem"), certificate.request.private_key.to_pem)
+File.write(File.join(output_dir, "#{options.domains.first}-cert.pem"), certificate.to_pem)
+File.write(File.join(output_dir, "#{options.domains.first}-chain.pem"), certificate.chain_to_pem)
+File.write(File.join(output_dir, "#{options.domains.first}-fullchain.pem"), certificate.fullchain_to_pem)

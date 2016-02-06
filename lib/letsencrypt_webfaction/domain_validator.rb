@@ -16,7 +16,6 @@ module LetsencryptWebfaction
         # Wait a bit for the server to make the request, or really just blink, it should be fast.
         sleep(1)
 
-        puts 'pending'
         i += 1
       end
 
