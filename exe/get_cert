@@ -3,6 +3,7 @@
 $LOAD_PATH.unshift(File.dirname(__FILE__) + '/../lib')
 
 require 'openssl'
+require 'acme/client'
 
 require 'letsencrypt_webfaction/args_parser'
 require 'letsencrypt_webfaction/domain_validator'
@@ -20,7 +21,6 @@ end
 private_key = OpenSSL::PKey::RSA.new(options.key_size)
 
 # Initialize the client
-require 'acme/client'
 client = Acme::Client.new(private_key: private_key, endpoint: options.endpoint)
 
 # If the private key is not known to the server, we need to register it for the first time.
@@ -32,7 +32,7 @@ registration.agree_terms
 # Let's try to optain a certificate
 
 # Validate the domain.
-validator = LetsencryptWebfaction::DomainValidator.new options.domains, client
+validator = LetsencryptWebfaction::DomainValidator.new options.domains, client, options.public
 validator.validate!
 
 # We're going to need a certificate signing request. If not explicitly

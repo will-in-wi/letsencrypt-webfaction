@@ -1,8 +1,9 @@
 module LetsencryptWebfaction
   class DomainValidator
-    def initialize(domains, client)
+    def initialize(domains, client, public_dir)
       @domains = domains
       @client = client
+      @public_dir = public_dir
     end
 
     def validate!
@@ -39,10 +40,10 @@ module LetsencryptWebfaction
     def write_files!
       challenges.each do |challenge|
         # Save the file. We'll create a public directory to serve it from, and we'll creating the challenge directory.
-        FileUtils.mkdir_p(File.join(@options.public, File.dirname(challenge.filename)))
+        FileUtils.mkdir_p(File.join(@public_dir, File.dirname(challenge.filename)))
 
         # Then writing the file
-        File.write(File.join(@options.public, challenge.filename), challenge.file_content)
+        File.write(File.join(@public_dir, challenge.filename), challenge.file_content)
       end
     end
 
