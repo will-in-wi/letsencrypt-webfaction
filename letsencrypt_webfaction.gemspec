@@ -4,7 +4,7 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'letsencrypt_webfaction'
 
 Gem::Specification.new do |spec|
-  spec.name          = 'LetsEncrypt Webfaction'
+  spec.name          = 'letsencrypt_webfaction'
   spec.version       = LetsencryptWebfaction::VERSION
   spec.authors       = ['William Johnston']
   spec.email         = ['william@johnstonhaus.us']
