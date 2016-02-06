@@ -44,12 +44,5 @@ csr = Acme::Client::CertificateRequest.new(names: options.domains)
 # OpenSSL::X509::Request too.
 certificate = client.new_certificate(csr) # => #<Acme::Client::Certificate ....>
 
-# Make sure the output directory exists.
-output_dir = File.expand_path(options.output_dir)
-FileUtils.mkdir_p(output_dir)
-
-# Save the certificate and key
-File.write(File.join(output_dir, "#{options.domains.first}-privkey.pem"), certificate.request.private_key.to_pem)
-File.write(File.join(output_dir, "#{options.domains.first}-cert.pem"), certificate.to_pem)
-File.write(File.join(output_dir, "#{options.domains.first}-chain.pem"), certificate.chain_to_pem)
-File.write(File.join(output_dir, "#{options.domains.first}-fullchain.pem"), certificate.fullchain_to_pem)
+writer = LetsencryptWebfaction::CertificateWriter.new(options.output_dir, options.domains.first, certificate)
+writer.write!
