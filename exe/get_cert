@@ -7,6 +7,7 @@ require 'acme/client'
 
 require 'letsencrypt_webfaction/args_parser'
 require 'letsencrypt_webfaction/domain_validator'
+require 'letsencrypt_webfaction/certificate_writer'
 
 options = LetsencryptWebfaction::ArgsParser.new(ARGV)
 
