@@ -5,6 +5,7 @@ $LOAD_PATH.unshift(File.dirname(__FILE__) + '/../lib')
 require 'openssl'
 
 require 'letsencrypt_webfaction/args_parser'
+require 'letsencrypt_webfaction/domain_validator'
 
 options = LetsencryptWebfaction::ArgsParser.new(ARGV)
 
@@ -30,37 +31,9 @@ registration.agree_terms
 
 # Let's try to optain a certificate
 
-options.domains.each do |domain|
-  puts "Validating #{domain}"
-
-  # We need to prove that we control the domain using one of the challenges method.
-  authorization = client.authorize(domain: domain)
-
-  # For now the only challenge method supprted by the client is http-01.
-  challenge = authorization.http01
-
-  # Save the file. We'll create a public directory to serve it from, and we'll creating the challenge directory.
-  FileUtils.mkdir_p(File.join(options.public, File.dirname(challenge.filename)))
-
-  # Then writing the file
-  File.write(File.join(options.public, challenge.filename), challenge.file_content)
-
-  # Once you are ready to serve the confirmation request you can proceed.
-  raise 'Failed requesting verification' unless challenge.request_verification # => true
-
-  i = 0
-  until challenge.verify_status == 'valid' || i == 10
-    # Wait a bit for the server to make the request, or really just blink, it should be fast.
-    sleep(1)
-
-    puts challenge.verify_status # => 'pending'
-    i += 1
-  end
-
-  unless challenge.verify_status == 'valid'
-    raise "Failed to verify status in 10 seconds. Current status: #{challenge.verify_status}"
-  end
-end
+# Validate the domain.
+validator = LetsencryptWebfaction::DomainValidator.new options.domains, client
+validator.validate!
 
 # We're going to need a certificate signing request. If not explicitly
 # specified, the first name listed becomes the common name.
@@ -72,7 +45,7 @@ csr = Acme::Client::CertificateRequest.new(names: options.domains)
 certificate = client.new_certificate(csr) # => #<Acme::Client::Certificate ....>
 
 # Save the certificate and key
-File.write('privkey.pem', certificate.request.private_key.to_pem)
-File.write('cert.pem', certificate.to_pem)
-File.write('chain.pem', certificate.chain_to_pem)
-File.write('fullchain.pem', certificate.fullchain_to_pem)
+File.write(File.join(options.output_dir, 'privkey.pem'), certificate.request.private_key.to_pem)
+File.write(File.join(options.output_dir, 'cert.pem'), certificate.to_pem)
+File.write(File.join(options.output_dir, 'chain.pem'), certificate.chain_to_pem)
+File.write(File.join(options.output_dir, 'fullchain.pem'), certificate.fullchain_to_pem)
