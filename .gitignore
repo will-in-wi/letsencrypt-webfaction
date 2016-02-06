@@ -3,3 +3,6 @@
 
 # Ignore Gemfile locking
 /Gemfile.lock
+
+# Ignore code coverage output.
+/coverage
