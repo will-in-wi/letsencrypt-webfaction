@@ -7,3 +7,6 @@
 
 # Ignore code coverage output.
 /coverage
+
+# Ignore vim locks
+*.swp

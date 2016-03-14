@@ -18,7 +18,9 @@ module LetsencryptWebfaction
       Field.new(:contact, 'Email address to notify on renewal', [StringValidator.new]),
       Field::ListField.new(:domains, 'Comma separated list of domains. The first one will be the common name.', [ArrayValidator.new]),
       Field.new(:public, 'Location on the filesystem served by the desired site (e.g. ~/webapps/myapp/public_html)', [StringValidator.new]),
-      Field.new(:output_dir, 'Location on the filesystem to which the certs will be saved.', [StringValidator.new])
+      Field.new(:output_dir, 'Location on the filesystem to which the certs will be saved.', [StringValidator.new]),
+      Field.new(:support_email, 'The email address of the support company.', [StringValidator.new]),
+      Field.new(:account_email, 'The email address associated with your account.', [StringValidator.new])
     ].freeze
 
     # Set up getters.

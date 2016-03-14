@@ -25,11 +25,15 @@ module LetsencryptWebfaction
       # Write the obtained certificates.
       certificate_writer.write!
 
-      # Dump help text.
-      puts instructions.message
+      # Send emails.
+      emailer.send!
     end
 
     private
+
+    def emailer
+      @emails ||= LetsencryptWebfaction::Emailer.new instructions, support_email: @options.support_email, account_email: @options.account_email
+    end
 
     def instructions
       @instructions ||= LetsencryptWebfaction::Instructions.new certificate_writer.output_dir, @options.domains
