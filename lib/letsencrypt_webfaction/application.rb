@@ -5,6 +5,7 @@ require 'letsencrypt_webfaction/args_parser'
 require 'letsencrypt_webfaction/domain_validator'
 require 'letsencrypt_webfaction/certificate_writer'
 require 'letsencrypt_webfaction/instructions'
+require 'letsencrypt_webfaction/emailer'
 
 module LetsencryptWebfaction
   class Application
