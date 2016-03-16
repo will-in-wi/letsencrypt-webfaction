@@ -5,11 +5,12 @@ require 'letsencrypt_webfaction/args_parser'
 require 'letsencrypt_webfaction/domain_validator'
 require 'letsencrypt_webfaction/certificate_writer'
 require 'letsencrypt_webfaction/instructions'
+require 'letsencrypt_webfaction/emailer'
 
 module LetsencryptWebfaction
   class Application
-    def initialize
-      @options = LetsencryptWebfaction::ArgsParser.new(ARGV)
+    def initialize(args)
+      @options = LetsencryptWebfaction::ArgsParser.new(args)
     end
 
     def run!
@@ -25,11 +26,20 @@ module LetsencryptWebfaction
       # Write the obtained certificates.
       certificate_writer.write!
 
-      # Dump help text.
-      puts instructions.message
+      # Send emails.
+      emailer.send!
     end
 
     private
+
+    def emailer
+      acct_email = if @options.account_email == '' || @options.account_email.nil?
+                     @options.contact
+                   else
+                     @options.account_email
+                   end
+      @emails ||= LetsencryptWebfaction::Emailer.new instructions, support_email: @options.support_email, account_email: acct_email
+    end
 
     def instructions
       @instructions ||= LetsencryptWebfaction::Instructions.new certificate_writer.output_dir, @options.domains
@@ -70,8 +80,7 @@ module LetsencryptWebfaction
 
     def validate_options!
       return if @options.valid?
-      puts @options.errors.values.join("\n")
-      exit
+      raise ArgumentError, @options.errors.values.join("\n")
     end
 
     def private_key

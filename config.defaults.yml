@@ -5,3 +5,5 @@ domains: []
 public: ''
 contact: ''
 output_dir: '~/le_certs/'
+support_email: 'support@webfaction.com'
+account_email: ''

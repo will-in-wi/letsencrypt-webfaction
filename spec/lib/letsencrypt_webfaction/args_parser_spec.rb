@@ -32,7 +32,9 @@ RSpec.describe LetsencryptWebfaction::ArgsParser do
         '--contact', 'you@example.com',
         '--domains', 'example.com,www.example.com',
         '--public', '/home/myuser/webapps/myapp/public_html',
-        '--output_dir', '/home/myuser/le1_certs/'
+        '--output_dir', '/home/myuser/le1_certs/',
+        '--account_email', 'myemail@example.com',
+        '--support_email', 'acct@example.com'
       ]
     end
 
@@ -114,12 +116,18 @@ RSpec.describe LetsencryptWebfaction::ArgsParser do
         '--contact', 'you1@example.com',
         '--domains', 'example.org,www1.example.org',
         '--public', '/home/myuser/webapps/myapp1/public_html',
-        '--output_dir', '/home/myuser/le1_certs/'
+        '--output_dir', '/home/myuser/le1_certs/',
+        '--account_email', 'myemail@example.com',
+        '--support_email', 'acct@example.com'
       ]
     end
 
     it 'is valid' do
       expect(args_parser.valid?).to eq true
+    end
+
+    it 'has no errors' do
+      expect(args_parser.errors).to be_empty
     end
 
     it 'overrides key_size' do

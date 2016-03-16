@@ -2,7 +2,7 @@
 
 LetsEncrypt utility client for WebFaction hosts.
 
-This tool simplifies the manual process of using LetsEncrypt on Webfaction hosts. It can be added to cron where it will validate your domains automatically, place the generated certificates in a common folder, and then email you directions and example text to send the WebFaction support team.
+This tool simplifies the manual process of using LetsEncrypt on Webfaction hosts. It can be added to cron where it will validate your domains automatically, place the generated certificates in a common folder, and then email the Webfaction support team to request installation, also notifying you.
 
 [![Build Status](https://travis-ci.org/will-in-wi/letsencrypt-webfaction.svg?branch=master)](https://travis-ci.org/will-in-wi/letsencrypt-webfaction)
 
@@ -62,9 +62,7 @@ This could be run automatically every two months.
 
 When the code runs, it places verification files into a public directory, validates the domains with LetsEncrypt (or your ACME provider), and then dumps the signed certificate and private key into an output folder. By default, the output folder is `~/le_certs/`, inside which it will create `[domain_name]/[timestamp]/`.
 
-After this is done, the utility will dump to stdout instructions regarding how to request that your new certs be installed by the WebFaction admins. This will include sample text and a link to https://help.webfaction.com/.
-
-If you use Cron, you should set `MAILTO=youremail@example.com` and `MAILFROM=username@servername.webfaction.com` at the top in order to receive the instructions. The [WebFaction docs](https://docs.webfaction.com/software/general.html#scheduling-tasks-cron) have more details about how to do this.
+After this is done, the utility will email the cert installation request to Webfaction support and also copy you.
 
 If you see messages containing SyntaxErrors, you are most likely using an old version of Ruby. This utility requires Ruby 2.1+.
 
@@ -83,6 +81,8 @@ To run the script directly from the repository, use:
     $ ruby -Ilib exe/letsencrypt_webfaction
 
 To test certificate issuance, consider using the [LetsEncrypt staging server](https://community.letsencrypt.org/t/testing-against-the-lets-encrypt-staging-environment/6763). This doesn't have the 5 certs per domain every 7 days rate limit. You can add the `--endpoint https://acme-staging.api.letsencrypt.org/` parameter to do so.
+
+You will probably also want to use the argument `--support_email ""` which will keep support from actually being contacted. Alternately, set the `support_email` address to be yourself.
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
 
