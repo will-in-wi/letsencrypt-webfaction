@@ -33,7 +33,12 @@ module LetsencryptWebfaction
     private
 
     def emailer
-      @emails ||= LetsencryptWebfaction::Emailer.new instructions, support_email: @options.support_email, account_email: @options.account_email
+      acct_email = if @options.account_email == '' || @options.account_email.nil?
+                     @options.contact
+                   else
+                     @options.account_email
+                   end
+      @emails ||= LetsencryptWebfaction::Emailer.new instructions, support_email: @options.support_email, account_email: acct_email
     end
 
     def instructions
@@ -75,8 +80,7 @@ module LetsencryptWebfaction
 
     def validate_options!
       return if @options.valid?
-      puts @options.errors.values.join("\n")
-      exit
+      raise ArgumentError, @options.errors.values.join("\n")
     end
 
     def private_key
