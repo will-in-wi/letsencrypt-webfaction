@@ -1,6 +1,8 @@
 # Add lib to the require dir.
 $LOAD_PATH.unshift(File.dirname(__FILE__) + '/../lib')
 
+TEMP_DIR = Pathname.new(File.dirname(__FILE__) + '/tmp').freeze
+
 require 'simplecov'
 SimpleCov.start
 

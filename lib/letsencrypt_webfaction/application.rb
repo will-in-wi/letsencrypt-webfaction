@@ -9,8 +9,8 @@ require 'letsencrypt_webfaction/emailer'
 
 module LetsencryptWebfaction
   class Application
-    def initialize
-      @options = LetsencryptWebfaction::ArgsParser.new(ARGV)
+    def initialize(args)
+      @options = LetsencryptWebfaction::ArgsParser.new(args)
     end
 
     def run!

@@ -2,4 +2,4 @@
 
 require 'letsencrypt_webfaction/application'
 
-LetsencryptWebfaction::Application.new.run!
+LetsencryptWebfaction::Application.new(ARGV).run!
