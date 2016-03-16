@@ -24,7 +24,7 @@ RSpec.describe LetsencryptWebfaction::Emailer do
 
     context 'email to support' do
       subject do
-        emails.select { |e| e.to.include? support_email }.first
+        emails.find { |e| e.to.include? support_email }
       end
 
       it 'has one such email' do
@@ -38,7 +38,7 @@ RSpec.describe LetsencryptWebfaction::Emailer do
 
     context 'email to account address' do
       subject do
-        emails.select { |e| e.to.include? account_email }.first
+        emails.find { |e| e.to.include? account_email }
       end
 
       it 'has one such email' do

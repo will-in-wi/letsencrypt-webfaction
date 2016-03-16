@@ -9,13 +9,13 @@ module LetsencryptWebfaction
       out = 'LetsEncrypt Webfaction has generated a new certificate for ' \
         "#{to_sentence @domains}. The certificates have been placed in " \
         "#{@output_dir}. "
-      
-      if support_email
-        out << 'WebFaction support has been contacted with the following message:'
-      else
-        out << 'Go to https://help.webfaction.com, log in, and paste the ' \
-        'following text into a new ticket:'
-      end
+
+      out << if support_email
+               'WebFaction support has been contacted with the following message:'
+             else
+               'Go to https://help.webfaction.com, log in, and paste the ' \
+               'following text into a new ticket:'
+             end
 
       out
     end
