@@ -12,7 +12,35 @@ This tool simplifies the manual process of using LetsEncrypt on Webfaction hosts
 
 ## Installation
 
-Because WebFaction has an unusual Ruby setup with the default Ruby as 1.8, I recommend that you [set up RBEnv](https://github.com/rbenv/rbenv) and [Ruby Build](https://github.com/rbenv/ruby-build#readme) on your WebFaction server to run this script.
+This utility works on [CentOS 6 and 7 boxes](https://docs.webfaction.com/user-guide/server.html#finding-your-server-s-operating-system). The CentOS 5 systems do not have a new enough OpenSSL to include the algorithms required. You may be able to make this work using rbenv and compiling openssl yourself.
+
+You can install LetsEncrypt Webfaction using the system Ruby or using RBEnv.
+
+### System Ruby
+
+This is the simpler method and is preferred.
+
+Run the following command to install:
+
+```sh
+GEM_HOME=$HOME/.letsencrypt_webfaction/gems RUBYLIB=$GEM_HOME/lib gem2.2 install letsencrypt_webfaction
+```
+
+Add the following to `~/.bash_profile`:
+
+```sh
+function letsencrypt_webfaction {
+    PATH=$PATH:$GEM_HOME/bin GEM_HOME=$HOME/.letsencrypt_webfaction/gems RUBYLIB=$GEM_HOME/lib ruby2.2 $HOME/.letsencrypt_webfaction/gems/bin/letsencrypt_webfaction $*
+}
+```
+
+Now, you can run `letsencrypt_webfaction` from the shell.
+
+### RBEnv
+
+This method is useful if you are already using RBEnv to manage Ruby.
+
+Follow the instructions to [set up RBEnv](https://github.com/rbenv/rbenv) and [Ruby Build](https://github.com/rbenv/ruby-build#readme) on your WebFaction server.
 
 Once you have done so, install Ruby 2.1+ (probably 2.3.0 at time of writing). Then set the local Ruby and install the Gem. Finally unset the local Ruby so that you don't run into problems.
 
@@ -21,8 +49,6 @@ Once you have done so, install Ruby 2.1+ (probably 2.3.0 at time of writing). Th
     $ gem install letsencrypt_webfaction
     $ rbenv rehash
     $ rm .ruby-version
-
-If you come up with a simpler way to do the install which doesn't involve RBenv, I'd love to hear about it. Please file a ticket!
 
 ## Usage
 
@@ -40,6 +66,9 @@ Normally, you will run the script manually once to get the certificate, and then
 
 Your cron task could look something like:
 
+    # System Ruby Installation
+    0 4 1 */2 *     PATH=$PATH:$GEM_HOME/bin GEM_HOME=$HOME/.letsencrypt_webfaction/gems RUBYLIB=$GEM_HOME/lib ruby2.2 $HOME/.letsencrypt_webfaction/gems/bin/letsencrypt_webfaction --contact you@example.com --domains example.com,www.example.com --public ~/webapps/myapp/
+    # RBEnv Installation
     0 4 1 */2 *     RBENV_ROOT=~/.rbenv RBENV_VERSION=2.3.0 ~/.rbenv/bin/rbenv exec letsencrypt_webfaction --contact you@example.com --domains example.com,www.example.com --public ~/webapps/myapp/
 
 This [would run](http://crontab.guru/#0_4_*_*/2_*) at 4 a.m. in Jan, Mar, May, Jul, Sep, and Nov. Certificates expire three months after issuance, so modify as desired.
