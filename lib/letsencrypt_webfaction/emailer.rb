@@ -22,7 +22,7 @@ module LetsencryptWebfaction
 
     def send_to_support!
       return if @support_email.nil? || @support_email == ''
-      Pony.mail(to: @support_email, from: @account_email, subject: SUBJECT_MESSAGE, body: @instructions.full_message(support_email: @support_email != ''))
+      Pony.mail(to: @support_email, from: @account_email, subject: SUBJECT_MESSAGE, body: @instructions.instructions)
     end
 
     def send_to_account!

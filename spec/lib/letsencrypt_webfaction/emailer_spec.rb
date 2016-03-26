@@ -33,6 +33,10 @@ RSpec.describe LetsencryptWebfaction::Emailer do
         expect(subject.body).to include 'Please apply the new certificate'
       end
 
+      it 'does not have wrapper' do
+        expect(subject.body).to_not include 'WebFaction support has been contacted'
+      end
+
       it 'has the correct from' do
         expect(subject.from).to include account_email
       end
