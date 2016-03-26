@@ -35,3 +35,9 @@ Style/Send:
 # If you interpolate a literal, just include it in the string itself.
 Lint/LiteralInInterpolation:
   Enabled: true
+
+# Personal preference. Makes the diffs smaller.
+Style/TrailingCommaInLiteral:
+  EnforcedStyleForMultiline: consistent_comma
+Style/TrailingCommaInArguments:
+  EnforcedStyleForMultiline: consistent_comma

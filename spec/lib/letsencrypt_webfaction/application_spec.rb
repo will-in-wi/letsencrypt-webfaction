@@ -18,7 +18,7 @@ RSpec.describe LetsencryptWebfaction::Application do
       '--public', PUBLIC_DIR.to_s,
       '--output_dir', TEMP_DIR.join('out').to_s,
       '--support_email', 'support@example.com',
-      '--endpoint', 'http://localhost:4002'
+      '--endpoint', 'http://localhost:4002',
     ]
   end
   let(:application) { LetsencryptWebfaction::Application.new(args) }
@@ -65,7 +65,7 @@ RSpec.describe LetsencryptWebfaction::Application do
           '--public', PUBLIC_DIR.to_s,
           '--output_dir', TEMP_DIR.join('out').to_s,
           '--support_email', '',
-          '--endpoint', 'http://localhost:4002'
+          '--endpoint', 'http://localhost:4002',
         ]
       end
 

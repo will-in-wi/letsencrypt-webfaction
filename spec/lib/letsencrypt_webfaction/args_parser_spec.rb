@@ -34,7 +34,7 @@ RSpec.describe LetsencryptWebfaction::ArgsParser do
         '--public', '/home/myuser/webapps/myapp/public_html',
         '--output_dir', '/home/myuser/le1_certs/',
         '--account_email', 'myemail@example.com',
-        '--support_email', 'acct@example.com'
+        '--support_email', 'acct@example.com',
       ]
     end
 
@@ -118,7 +118,7 @@ RSpec.describe LetsencryptWebfaction::ArgsParser do
         '--public', '/home/myuser/webapps/myapp1/public_html',
         '--output_dir', '/home/myuser/le1_certs/',
         '--account_email', 'myemail@example.com',
-        '--support_email', 'acct@example.com'
+        '--support_email', 'acct@example.com',
       ]
     end
 
