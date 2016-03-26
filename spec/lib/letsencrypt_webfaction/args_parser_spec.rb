@@ -80,7 +80,7 @@ RSpec.describe LetsencryptWebfaction::ArgsParser do
     let(:args) { ['--help'] }
 
     it 'exits and outputs help text' do
-      expect { args_parser }.to raise_error(SystemExit).and output(/Usage: get_cert \[options\]/).to_stdout
+      expect { args_parser }.to raise_error(SystemExit).and output(/Usage: letsencrypt_webfaction \[options\]/).to_stdout
     end
   end
 

@@ -8,7 +8,7 @@ require 'letsencrypt_webfaction/args_parser/array_validator'
 
 module LetsencryptWebfaction
   class ArgsParser
-    BANNER = 'Usage: get_cert [options]'.freeze
+    BANNER = 'Usage: letsencrypt_webfaction [options]'.freeze
     DEFAULTS_PATH = 'config.defaults.yml'.freeze
     VALID_KEY_SIZES = [2048, 4096].freeze
 

@@ -1,3 +1,7 @@
+v1.0.1 (unreleased)
+
+* Clean up help response.
+
 v1.0.0
 
 * Add support for creating a ticket with WebFaction directly.
