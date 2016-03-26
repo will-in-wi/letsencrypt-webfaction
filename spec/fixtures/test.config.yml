@@ -1,6 +1,5 @@
 key_size: 2048
 endpoint: 'https://acme.example.com/'
-contact: 'you@example.com'
 domains:
   - 'example.com'
   - 'www.example.com'

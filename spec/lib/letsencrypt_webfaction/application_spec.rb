@@ -13,7 +13,7 @@ RSpec.describe LetsencryptWebfaction::Application do
 
   let(:args) do
     [
-      '--contact', 'contact@example.com',
+      '--account_email', 'contact@example.com',
       '--domains', 'www.example.com,example.com',
       '--public', PUBLIC_DIR.to_s,
       '--output_dir', TEMP_DIR.join('out').to_s,
@@ -60,7 +60,7 @@ RSpec.describe LetsencryptWebfaction::Application do
     context 'without support' do
       let(:args) do
         [
-          '--contact', 'contact@example.com',
+          '--account_email', 'contact@example.com',
           '--domains', 'www.example.com,example.com',
           '--public', PUBLIC_DIR.to_s,
           '--output_dir', TEMP_DIR.join('out').to_s,
@@ -71,6 +71,18 @@ RSpec.describe LetsencryptWebfaction::Application do
 
       it 'sends only one email' do
         expect(Mail::TestMailer.deliveries.length).to eq 1
+      end
+    end
+  end
+
+  describe '#run!' do
+    context 'with invalid options' do
+      let(:args) { [] }
+
+      it 'raises argument error' do
+        expect do
+          application.run!
+        end.to raise_error ArgumentError
       end
     end
   end

@@ -33,12 +33,7 @@ module LetsencryptWebfaction
     private
 
     def emailer
-      acct_email = if @options.account_email == '' || @options.account_email.nil?
-                     @options.contact
-                   else
-                     @options.account_email
-                   end
-      @emails ||= LetsencryptWebfaction::Emailer.new instructions, support_email: @options.support_email, account_email: acct_email
+      @emails ||= LetsencryptWebfaction::Emailer.new instructions, support_email: @options.support_email, account_email: @options.account_email, notification_email: @options.admin_notification_email
     end
 
     def instructions
@@ -72,7 +67,7 @@ module LetsencryptWebfaction
 
     def register_key!
       # If the private key is not known to the server, we need to register it for the first time.
-      registration = client.register(contact: "mailto:#{@options.contact}")
+      registration = client.register(contact: "mailto:#{@options.letsencrypt_account_email}")
 
       # You'll may need to agree to the term (that's up the to the server to require it or not but boulder does by default)
       registration.agree_terms

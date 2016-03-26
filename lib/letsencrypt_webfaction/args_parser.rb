@@ -15,12 +15,13 @@ module LetsencryptWebfaction
     FIELDS = [
       Field::IntegerField.new(:key_size, 'Size of private key (e.g. 4096)', [DefinedValuesValidator.new(VALID_KEY_SIZES)]),
       Field.new(:endpoint, 'ACME endpoint (e.g. https://acme-v01.api.letsencrypt.org/)', [StringValidator.new]),
-      Field.new(:contact, 'Email address to notify on renewal', [StringValidator.new]),
       Field::ListField.new(:domains, 'Comma separated list of domains. The first one will be the common name.', [ArrayValidator.new]),
       Field.new(:public, 'Location on the filesystem served by the desired site (e.g. ~/webapps/myapp/public_html)', [StringValidator.new]),
       Field.new(:output_dir, 'Location on the filesystem to which the certs will be saved.', [StringValidator.new]),
-      Field.new(:support_email, 'The email address of the support company.', []),
-      Field.new(:account_email, 'The email address associated with your account. Defaults to the value of contact.', []),
+      Field.new(:support_email, 'The email address of the ISP support.', []),
+      Field.new(:account_email, 'The email address associated with your account.', [StringValidator.new]),
+      Field.new(:admin_notification_email, 'The email address associated with your account. Defaults to the value of account_email.', []),
+      Field.new(:letsencrypt_account_email, 'The email address associated with your account. Defaults to the value of account_email.', []),
     ].freeze
 
     # Set up getters.
@@ -99,6 +100,15 @@ module LetsencryptWebfaction
 
     def parse!
       opt_parser.parse!(@options)
+
+      # Set defaults from other fields.
+      if @admin_notification_email.nil? || @admin_notification_email == ''
+        @admin_notification_email = @account_email
+      end
+
+      if @letsencrypt_account_email.nil? || @letsencrypt_account_email == ''
+        @letsencrypt_account_email = @account_email
+      end
     end
   end
 end

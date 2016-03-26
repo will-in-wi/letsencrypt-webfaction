@@ -54,7 +54,7 @@ Once you have done so, install Ruby 2.1+ (probably 2.3.0 at time of writing). Th
 
 Basic example:
 
-    $ letsencrypt_webfaction --contact me@example.com --domains example.com,www.example.com --public ~/webapps/myapp/public_html/
+    $ letsencrypt_webfaction --account_email me@example.com --domains example.com,www.example.com --public ~/webapps/myapp/public_html/
 
 To quickly get a list of parameters, you can call:
 
@@ -67,9 +67,9 @@ Normally, you will run the script manually once to get the certificate, and then
 Your cron task could look something like:
 
     # System Ruby Installation
-    0 4 1 */2 *     PATH=$PATH:$GEM_HOME/bin GEM_HOME=$HOME/.letsencrypt_webfaction/gems RUBYLIB=$GEM_HOME/lib ruby2.2 $HOME/.letsencrypt_webfaction/gems/bin/letsencrypt_webfaction --contact you@example.com --domains example.com,www.example.com --public ~/webapps/myapp/
+    0 4 1 */2 *     PATH=$PATH:$GEM_HOME/bin GEM_HOME=$HOME/.letsencrypt_webfaction/gems RUBYLIB=$GEM_HOME/lib ruby2.2 $HOME/.letsencrypt_webfaction/gems/bin/letsencrypt_webfaction --account_email you@example.com --domains example.com,www.example.com --public ~/webapps/myapp/
     # RBEnv Installation
-    0 4 1 */2 *     RBENV_ROOT=~/.rbenv RBENV_VERSION=2.3.0 ~/.rbenv/bin/rbenv exec letsencrypt_webfaction --contact you@example.com --domains example.com,www.example.com --public ~/webapps/myapp/
+    0 4 1 */2 *     RBENV_ROOT=~/.rbenv RBENV_VERSION=2.3.0 ~/.rbenv/bin/rbenv exec letsencrypt_webfaction --account_email you@example.com --domains example.com,www.example.com --public ~/webapps/myapp/
 
 This [would run](http://crontab.guru/#0_4_*_*/2_*) at 4 a.m. in Jan, Mar, May, Jul, Sep, and Nov. Certificates expire three months after issuance, so modify as desired.
 

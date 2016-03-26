@@ -1,6 +1,8 @@
+# See config.defaults.yml for all available settings.
+
 key_size: 4096
 endpoint: 'https://acme-v01.api.letsencrypt.org/'
-contact: 'me@example.com'
+account_email: 'me@example.com'
 domains:
   - 'example.com'
   - 'www.example.com'
