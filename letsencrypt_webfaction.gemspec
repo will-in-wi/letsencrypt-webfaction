@@ -14,8 +14,7 @@ Gem::Specification.new do |spec|
                        'LetsEncrypt on Webfaction hosts. It can be added to ' \
                        'cron where it will validate your domains ' \
                        'automatically, place the generated certs in a common ' \
-                       'folder, and then email you directions and example ' \
-                       'text to send the WebFaction support team.'
+                       'folder, and then email the WebFaction support team directions'
   spec.homepage      = 'https://github.com/will-in-wi/letsencrypt-webfaction'
   spec.license       = 'MIT'
 
@@ -25,7 +24,7 @@ Gem::Specification.new do |spec|
   spec.require_paths = %w(lib)
 
   spec.cert_chain  = ['certs/will_in_wi.pem']
-  spec.signing_key = File.expand_path('~/.ssh/gem-private_key.pem') if $0 =~ /gem\z/
+  spec.signing_key = File.expand_path('~/.ssh/gem-private_key.pem') if $PROGRAM_NAME.end_with?('gem')
 
   spec.required_ruby_version = '>= 2.1.0'
 
