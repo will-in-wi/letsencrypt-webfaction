@@ -1,6 +1,7 @@
-v1.0.1 (unreleased)
+v1.0.1
 
 * Clean up help response.
+* Sign gems
 
 v1.0.0
 
