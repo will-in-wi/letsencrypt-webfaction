@@ -24,6 +24,9 @@ Gem::Specification.new do |spec|
   spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
   spec.require_paths = %w(lib)
 
+  spec.cert_chain  = ['certs/will_in_wi.pem']
+  spec.signing_key = File.expand_path('~/.ssh/gem-private_key.pem') if $0 =~ /gem\z/
+
   spec.required_ruby_version = '>= 2.1.0'
 
   spec.add_runtime_dependency 'acme-client', '~> 0.3.0'
