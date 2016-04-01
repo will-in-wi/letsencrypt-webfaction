@@ -45,9 +45,5 @@ module LetsencryptWebfaction
         File.write(File.join(@public_dir, challenge.filename), challenge.file_content)
       end
     end
-
-    def delete_files!
-      # TODO
-    end
   end
 end
