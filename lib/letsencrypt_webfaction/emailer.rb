@@ -4,7 +4,7 @@ module LetsencryptWebfaction
   class Emailer
     SUBJECT_MESSAGE = 'New certificate installation'.freeze
 
-    def initialize(instructions, support_email: '', account_email: '', notification_email: '')
+    def initialize(instructions, support_email: '', account_email: '', notification_email: '', email_configuration: {})
       @instructions = instructions
 
       raise Error, 'Missing account_email' if account_email == '' || account_email.nil?
@@ -13,6 +13,8 @@ module LetsencryptWebfaction
       @support_email = support_email
       @account_email = account_email
       @notification_email = notification_email
+
+      Pony.options = email_configuration
     end
 
     def send!

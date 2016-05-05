@@ -74,6 +74,10 @@ RSpec.describe LetsencryptWebfaction::ArgsParser do
     it 'overrides letsencrypt_account_email' do
       expect(args_parser.letsencrypt_account_email).to eq 'acct2@example.com'
     end
+
+    it 'has an empty hash of email_configuration' do
+      expect(args_parser.email_configuration).to eq({})
+    end
   end
 
   context 'returns help information' do
@@ -113,6 +117,12 @@ RSpec.describe LetsencryptWebfaction::ArgsParser do
 
     it 'sets output_dir' do
       expect(args_parser.output_dir).to eq '/home/myuser/le2_certs/'
+    end
+
+    it 'sets email_configuration' do
+      expect(args_parser.email_configuration['via']).to eq 'smtp'
+      expect(args_parser.email_configuration['via_options']['address']).to eq 'smtp.example.com'
+      expect(args_parser.email_configuration['via_options']['port']).to eq '587'
     end
   end
 
