@@ -122,7 +122,7 @@ email_configuration:
     :domain: 'localhost.localdomain' # the HELO domain provided by the client to the server
 ```
 
-Gmail specific note: If you use 2 step verification, you will have to generate an application specific password and NOT use your normal password - see https://support.google.com/accounts/answer/185833?hl=en
+See the wiki for additional Gmail specific notes.
 
 For all possible options, see [the Pony configuration](https://github.com/benprew/pony).
 
