@@ -2,6 +2,7 @@ v1.1.0
 
 * Support for additional special email configuration.
 * Building on the previous feature, additional documentation around Gmail support.
+* Fix issue where users had to specify all params in a custom config file.
 
 v1.0.1
 

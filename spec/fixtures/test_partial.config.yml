@@ -1,0 +1,6 @@
+domains:
+  - 'example.com'
+  - 'www.example.com'
+# The webroot of the application.
+public: '/home/myuser/webapps/myapp/public_html'
+account_email: 'myacct@example.com'

@@ -126,6 +126,38 @@ RSpec.describe LetsencryptWebfaction::ArgsParser do
     end
   end
 
+  context 'loads partial config' do
+    let(:args) { ['--config', 'spec/fixtures/test_partial.config.yml'] }
+
+    it 'is valid' do
+      expect(args_parser.valid?).to eq true
+    end
+
+    it 'sets key_size' do
+      expect(args_parser.key_size).to eq 4096
+    end
+
+    it 'sets endpoint' do
+      expect(args_parser.endpoint).to eq 'https://acme-v01.api.letsencrypt.org/'
+    end
+
+    it 'sets account_email' do
+      expect(args_parser.account_email).to eq 'myacct@example.com'
+    end
+
+    it 'sets domains' do
+      expect(args_parser.domains).to eq ['example.com', 'www.example.com']
+    end
+
+    it 'sets public' do
+      expect(args_parser.public).to eq '/home/myuser/webapps/myapp/public_html'
+    end
+
+    it 'sets output_dir' do
+      expect(args_parser.output_dir).to eq '~/le_certs/'
+    end
+  end
+
   context 'overrides configuration with arguments' do
     let(:args) do
       [
