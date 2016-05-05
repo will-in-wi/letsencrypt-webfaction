@@ -67,6 +67,7 @@ module LetsencryptWebfaction
     def load_config!(config_path)
       config = YAML.load_file(config_path)
       FIELDS.each do |field|
+        next unless config[field.identifier.to_s]
         instance_variable_set("@#{field.identifier}", config[field.identifier.to_s])
       end
 
