@@ -111,15 +111,15 @@ A Gmail example might be:
 
 ```yaml
 email_configuration:
-  via: 'smtp'
-  via_options:
-    address: 'smtp.gmail.com'
-    port: '587'
-    enable_starttls_auto: true
-    user_name: 'myuser@gmail.com'
-    password: 'password_see_note'
-    authentication: 'plain'
-    domain: 'localhost.localdomain' # the HELO domain provided by the client to the server
+  :via: 'smtp'
+  :via_options:
+    :address: 'smtp.gmail.com'
+    :port: '587'
+    :enable_starttls_auto: true
+    :user_name: 'myuser@gmail.com'
+    :password: 'password_see_note'
+    :authentication: 'plain'
+    :domain: 'localhost.localdomain' # the HELO domain provided by the client to the server
 ```
 
 Gmail specific note: If you use 2 step verification, you will have to generate an application specific password and NOT use your normal password - see https://support.google.com/accounts/answer/185833?hl=en

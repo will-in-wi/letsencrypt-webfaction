@@ -9,7 +9,7 @@ output_dir: '/home/myuser/le2_certs/'
 account_email: 'myacct@example.com'
 support_email: 'supportemail@example.com'
 email_configuration:
-  via: 'smtp'
-  via_options:
-    address: 'smtp.example.com'
-    port: '587'
+  :via: 'smtp'
+  :via_options:
+    :address: 'smtp.example.com'
+    :port: '587'
