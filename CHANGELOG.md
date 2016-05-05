@@ -1,3 +1,8 @@
+v1.1.0
+
+* Support for additional special email configuration.
+* Building on the previous feature, additional documentation around Gmail support.
+
 v1.0.1
 
 * Clean up help response.
