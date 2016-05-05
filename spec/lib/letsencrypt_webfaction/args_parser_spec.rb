@@ -120,9 +120,9 @@ RSpec.describe LetsencryptWebfaction::ArgsParser do
     end
 
     it 'sets email_configuration' do
-      expect(args_parser.email_configuration['via']).to eq 'smtp'
-      expect(args_parser.email_configuration['via_options']['address']).to eq 'smtp.example.com'
-      expect(args_parser.email_configuration['via_options']['port']).to eq '587'
+      expect(args_parser.email_configuration[:via]).to eq 'smtp'
+      expect(args_parser.email_configuration[:via_options][:address]).to eq 'smtp.example.com'
+      expect(args_parser.email_configuration[:via_options][:port]).to eq '587'
     end
   end
 
