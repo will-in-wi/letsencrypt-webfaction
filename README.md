@@ -103,6 +103,29 @@ In the case of a PHP site, such as Drupal or Wordpress, look for the folder with
 
 In the case of a Rails app, look for a folder called `public/`. If you are deploying your app with Capistrano, this could show up in `/home/myuser/webapps/myapp/current/public/`.
 
+### Custom email configuration
+
+Particularly in the case of Gmail, you may need to override the default usage of Sendmail and use SMTP. You can add custom configuration to the config file you pass, in order to accomplish this.
+
+A Gmail example might be:
+
+```yaml
+email_configuration:
+  :via: 'smtp'
+  :via_options:
+    :address: 'smtp.gmail.com'
+    :port: '587'
+    :enable_starttls_auto: true
+    :user_name: 'myuser@gmail.com'
+    :password: 'password_see_note'
+    :authentication: 'plain'
+    :domain: 'localhost.localdomain' # the HELO domain provided by the client to the server
+```
+
+See the wiki for additional Gmail specific notes.
+
+For all possible options, see [the Pony configuration](https://github.com/benprew/pony).
+
 ## Development
 
 To run the script directly from the repository, use:

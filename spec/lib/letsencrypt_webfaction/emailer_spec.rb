@@ -6,7 +6,8 @@ RSpec.describe LetsencryptWebfaction::Emailer do
   let(:account_email) { 'me@example.com' }
   let(:support_email) { 'support@example.com' }
   let(:instructions) { LetsencryptWebfaction::Instructions.new 'outdir', ['www.example.com'] }
-  let(:emailer) { LetsencryptWebfaction::Emailer.new instructions, support_email: support_email, account_email: account_email, notification_email: notification_email }
+  let(:email_configuration) { {} }
+  let(:emailer) { LetsencryptWebfaction::Emailer.new instructions, support_email: support_email, account_email: account_email, notification_email: notification_email, email_configuration: email_configuration }
   let(:emails) { Mail::TestMailer.deliveries }
 
   describe '#send!' do
@@ -18,6 +19,14 @@ RSpec.describe LetsencryptWebfaction::Emailer do
 
     it 'sends two emails' do
       expect(Mail::TestMailer.deliveries.length).to eq 2
+    end
+
+    context 'with special configuration' do
+      let(:email_configuration) { { headers: { 'X-Custom-Header' => 'Testing 1.2.3...' } } }
+
+      it 'has the passed header' do
+        expect(emails.first['X-Custom-Header'].to_s).to eq 'Testing 1.2.3...'
+      end
     end
 
     context 'email to support' do

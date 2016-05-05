@@ -29,6 +29,9 @@ module LetsencryptWebfaction
       attr_reader field
     end
 
+    # EMail config is special, as it only comes from the config file, due to complexity.
+    attr_reader :email_configuration
+
     def initialize(options)
       @options = options
 
@@ -66,6 +69,8 @@ module LetsencryptWebfaction
       FIELDS.each do |field|
         instance_variable_set("@#{field.identifier}", config[field.identifier.to_s])
       end
+
+      @email_configuration = config['email_configuration'] || {}
     end
 
     def handle_config(opts)

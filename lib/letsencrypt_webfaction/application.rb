@@ -33,7 +33,7 @@ module LetsencryptWebfaction
     private
 
     def emailer
-      @emails ||= LetsencryptWebfaction::Emailer.new instructions, support_email: @options.support_email, account_email: @options.account_email, notification_email: @options.admin_notification_email
+      @emails ||= LetsencryptWebfaction::Emailer.new instructions, support_email: @options.support_email, account_email: @options.account_email, notification_email: @options.admin_notification_email, email_configuration: @options.email_configuration
     end
 
     def instructions
