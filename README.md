@@ -71,7 +71,7 @@ Your cron task could look something like:
     # RBEnv Installation
     0 4 1 */2 *     RBENV_ROOT=~/.rbenv RBENV_VERSION=2.3.0 ~/.rbenv/bin/rbenv exec letsencrypt_webfaction --account_email you@example.com --domains example.com,www.example.com --public ~/webapps/myapp/
 
-This [would run](http://crontab.guru/#0_4_*_*/2_*) at 4 a.m. in Jan, Mar, May, Jul, Sep, and Nov. Certificates expire three months after issuance, so modify as desired.
+This [would run](http://crontab.guru/#0_4_1_*/2_*) at 4 a.m. on the first day of January, March, May, July, September, and November. Certificates expire three months after issuance, so modify as desired. It may be preferable to change the date of the month that your cron task runs on so that WebFaction staff don't simultaneously receive all certificate change requests at the same time.
 
 If you have more than one cron task running like this, you may want to set the environment variables at the top of the file, and create a config file containing the contact information.
 
