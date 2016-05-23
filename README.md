@@ -10,6 +10,8 @@ This tool simplifies the manual process of using LetsEncrypt on Webfaction hosts
 
 [![Code Climate](https://codeclimate.com/github/will-in-wi/letsencrypt-webfaction/badges/gpa.svg)](https://codeclimate.com/github/will-in-wi/letsencrypt-webfaction)
 
+*Note: if you find this useful and are setting up a new account, you can support me a little by using [my WebFaction affiliate link](https://www.webfaction.com/?aid=49923). I think I get a 10% referal bonus from whatever you spend at WebFaction. Thanks!*
+
 ## Installation
 
 This utility works on [CentOS 6 and 7 boxes](https://docs.webfaction.com/user-guide/server.html#finding-your-server-s-operating-system). The CentOS 5 systems do not have a new enough OpenSSL to include the algorithms required. You may be able to make this work using rbenv and compiling openssl yourself. A tutorial for CentOS 5 is available here: https://github.com/will-in-wi/letsencrypt-webfaction/wiki/Install-custom-OpenSSL-and-Ruby-on-CentOS-5-host
