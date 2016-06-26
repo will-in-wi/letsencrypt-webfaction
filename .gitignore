@@ -10,3 +10,6 @@
 
 # Ignore vim locks
 *.swp
+
+# Ignore local config.
+/.bundle
