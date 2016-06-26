@@ -1,3 +1,7 @@
+v1.1.1
+
+* Handle changes in Acme::Client regarding autoloading. Require newer version.
+
 v1.1.0
 
 * Support for additional special email configuration.
