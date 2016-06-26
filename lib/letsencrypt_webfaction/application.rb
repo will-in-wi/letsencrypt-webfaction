@@ -1,5 +1,5 @@
 require 'openssl'
-require 'acme/client'
+require 'acme-client'
 
 require 'letsencrypt_webfaction/args_parser'
 require 'letsencrypt_webfaction/domain_validator'
