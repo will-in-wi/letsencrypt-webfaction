@@ -1,3 +1,7 @@
+v1.1.2
+
+* Lock version of json-jwt since they changed API.
+
 v1.1.1
 
 * Handle changes in Acme::Client regarding autoloading. Require newer version.
