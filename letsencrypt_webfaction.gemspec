@@ -31,6 +31,8 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency 'acme-client', '>=0.3.3'
   spec.add_runtime_dependency 'pony', '~> 1.11'
 
+  spec.add_runtime_dependency 'json-jwt', '1.5.2'
+
   spec.add_development_dependency 'bundler', '~> 1.11'
   spec.add_development_dependency 'rake', '~> 10.0'
   spec.add_development_dependency 'rspec', '~> 3.4'
