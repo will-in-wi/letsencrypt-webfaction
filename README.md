@@ -36,6 +36,8 @@ function letsencrypt_webfaction {
 }
 ```
 
+Then run `source $HOME/.bash_profile`.
+
 Now, you can run `letsencrypt_webfaction` from the shell.
 
 ### RBEnv
