@@ -1,3 +1,7 @@
+v1.1.3
+
+* Lock version of activesupport so that older versions of Ruby still work.
+
 v1.1.2
 
 * Lock version of json-jwt since they changed API.
