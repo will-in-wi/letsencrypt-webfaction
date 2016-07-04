@@ -1,8 +1,17 @@
+require 'letsencrypt_webfaction'
 require 'letsencrypt_webfaction/args_parser'
 
 RSpec.describe LetsencryptWebfaction::ArgsParser do
   let(:args) { [] }
   let(:args_parser) { LetsencryptWebfaction::ArgsParser.new args }
+
+  describe '--version' do
+    let(:args) { ['--version'] }
+
+    it 'returns version number' do
+      expect { args_parser }.to output("#{LetsencryptWebfaction::VERSION}\n").to_stdout.and raise_error(SystemExit)
+    end
+  end
 
   context 'without required arguments' do
     let(:args) { [] }

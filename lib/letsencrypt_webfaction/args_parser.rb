@@ -42,7 +42,7 @@ module LetsencryptWebfaction
       file_path = File.join(File.dirname(__FILE__), '../../', DEFAULTS_PATH)
       load_config!(File.expand_path(file_path))
 
-      # TODO: Rework this to not exit on instantiation due to help text.
+      # TODO: Rework this to not exit on instantiation due to help text or version.
       parse!
     end
 
