@@ -1,6 +1,7 @@
 require 'optparse'
 require 'yaml'
 
+require 'letsencrypt_webfaction'
 require 'letsencrypt_webfaction/args_parser/field'
 require 'letsencrypt_webfaction/args_parser/string_validator'
 require 'letsencrypt_webfaction/args_parser/defined_values_validator'
@@ -88,6 +89,13 @@ module LetsencryptWebfaction
       end
     end
 
+    def handle_version(opts)
+      opts.on_tail('--version', 'Show version') do
+        puts LetsencryptWebfaction::VERSION
+        exit
+      end
+    end
+
     def handle_field(opts, field)
       opts.on("--#{field.identifier}=#{field.identifier.upcase}", field.description) do |val|
         instance_variable_set("@#{field.identifier}", field.sanitize(val))
@@ -100,6 +108,7 @@ module LetsencryptWebfaction
 
         handle_config(opts)
         handle_help(opts)
+        handle_version(opts)
         FIELDS.each { |field| handle_field(opts, field) }
       end
     end
