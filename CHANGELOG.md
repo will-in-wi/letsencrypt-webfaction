@@ -1,3 +1,7 @@
+v1.1.4
+
+* Show version number with `--version` flag.
+
 v1.1.3
 
 * Lock version of activesupport so that older versions of Ruby still work.
