@@ -93,21 +93,21 @@ The syntax of the letsencrypt_webfaction command is as follows:
 
 ### Options:
 
-    --account_email
+* `--account_email`
 
-        Your WebFaction contact email address.
+    Your WebFaction contact email address.
 
-    --domains
-        
-        The domains for which you want to create certificates, separated by commas (with no spaces). The domains must be served from the same folder. There is one certificate per webapp, regardless of how many domains are served from it.
+* `--domains` 
+    
+    The domains for which you want to create certificates, separated by commas (with no spaces). The domains must be served from the same folder. There is one certificate per webapp, regardless of how many domains are served from it.
 
-    --public
+* `--public`
 
-        A folder which is directly served at `http://[yourdomain.com]/` into which the ACME verification files can be placed.
+    A folder which is directly served at `http://[yourdomain.com]/` into which the ACME verification files can be placed.
 
-        In the case of a PHP site, such as Drupal or Wordpress, look for the folder with `index.php` in it. This is usually in `/home/[myuser]/webapps/[yourapp/]`.
+    In the case of a PHP site, such as Drupal or Wordpress, look for the folder with `index.php` in it. This is usually in `/home/[myuser]/webapps/[yourapp/]`.
 
-        In the case of a Rails app, look for a folder called `public/`. If you are deploying your app with Capistrano, this could show up in `/home/myuser/webapps/[yourapp]/current/public/`. 
+    In the case of a Rails app, look for a folder called `public/`. If you are deploying your app with Capistrano, this could show up in `/home/myuser/webapps/[yourapp]/current/public/`. 
 
 If you have several webapps, then you will need to issue the command several times. The command can be run from any folder. 
 
