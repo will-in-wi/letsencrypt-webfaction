@@ -89,9 +89,10 @@ The syntax of the letsencrypt_webfaction command is as follows:
 
     $ letsencrypt_webfaction --account_email <email-address> --domains <domain[,domain[,domain...]]> --public <server-folder>
 
-    
 
 ### Options:
+
+The basic parameters are as follows:
 
 * `--account_email`
 
@@ -109,7 +110,11 @@ The syntax of the letsencrypt_webfaction command is as follows:
 
     In the case of a Rails app, look for a folder called `public/`. If you are deploying your app with Capistrano, this could show up in `/home/myuser/webapps/[yourapp]/current/public/`. 
 
+    In some cases (such as with some Node.js or Python applications), you may need to create this folder. See [https://github.com/will-in-wi/letsencrypt-webfaction/issues/24](here) for an example.
+
 If you have several webapps, then you will need to issue the command several times. The command can be run from any folder. 
+
+Other parameters (which are generally best left to their default values, unless you have a perticular need to change them) can be found in the `config.defaults.yml` configuration file (see below in the "More detailed examples" section).
 
 ### Example
 Here is a basic example which issues one certificate for both yourdomain.com and www.yourdomain.com, both of which are served by `~/webapps/yourapp/wordpress` and your WebFaction contact email address is you@youremail.com. This assumes that both yourdomain.com and www.yourdomain.com are served from the same folder. 
@@ -118,7 +123,14 @@ Here is a basic example which issues one certificate for both yourdomain.com and
 
 ### Testing
 
-To test certificate issuance, consider using the [LetsEncrypt staging server](https://community.letsencrypt.org/t/testing-against-the-lets-encrypt-staging-environment/6763). This doesn't have the rate limit of 5 certs per domain every 7 days. You can add the `--endpoint https://acme-staging.api.letsencrypt.org/` parameter to the `letsencrypt_webfaction` command to do so.
+To test certificate issuance, consider using the [LetsEncrypt staging server](https://community.letsencrypt.org/t/testing-against-the-lets-encrypt-staging-environment/6763). This doesn't have the rate limit of 5 certs per domain every 7 days. You can add the `--endpoint https://acme-staging.api.letsencrypt.org/` parameter to the `letsencrypt_webfaction` command to do so. 
+
+When testing, you will also want to change the `--support_email` parameter, so that an email is not sent needlessly to WebFaction Support. To do this, add `--support_email ""` (so no support email is sent) or `--support_email you@youremail.com` (so the support email is sent to you).
+
+A test command could thus be something like the following:
+
+    $ letsencrypt_webfaction --account_email you@youremail.com --domains yourdomain.com,www.yourdomain.com --public ~/webapps/yourapp/wordpress/ --endpoint https://acme-staging.api.letsencrypt.org/ --support_email you@youremail.com
+
 
 ### Operation
 
@@ -171,9 +183,9 @@ RBENV_VERSION=2.3.0 gem install letsencrypt_webfaction
 
 ### More detailed examples
 
-Default parameters can be found in [config.defaults.yml](./config.defaults.yml). All of the parameters can be overridden by passing another config file, arguments to the executable, or both. If a config file and arguments are passed, they will be interleaved with the arguments having precedence.
+Default parameters can be found in [config.defaults.yml](./config.defaults.yml). All of the parameters can be overridden by passing another config file, arguments to the executable, or both. If a both a config file and command-line arguments are passed, they will be interleaved, with the command-line arguments having precedence.
 
-A config file needs to be in YAML format and have a subset of the keys in [config.defaults.yml](./config.defaults.yml). If you use a config file, you add the `--config [./myconfig.yml]` parameter to the letsencrypt_webfaction command.
+A config file needs to be in [http://www.yaml.org/refcard.html](YAML format) and have a subset of the keys in [config.defaults.yml](./config.defaults.yml). If you use a config file, you add the `--config [./myconfig.yml]` parameter to the letsencrypt_webfaction command.
 
 This allows you to set up a Cron task for multiple sites with the defaults for all of them (such as your email address) in a config file, and site specific directives in the command. For example:
 
@@ -212,9 +224,7 @@ To run the script directly from the repository, use:
 
     $ ruby -Ilib exe/letsencrypt_webfaction
 
-The note above about the Let's Encrypt stage server is very helpful when developing.
-
-You will probably also want to use the argument `--support_email ""` which will keep support from actually being contacted. Alternately, set the `support_email` address to be yourself.
+See details in the "Testing" section above on how to use the Let's Encrypt stage server when developing, together with usage of the `--support_email` parameter in a testing environment.
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
 
