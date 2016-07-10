@@ -1,8 +1,8 @@
-# LetsEncrypt Webfaction
+# LetsEncrypt WebFaction
 
 LetsEncrypt utility client for WebFaction hosts.
 
-This tool simplifies the manual process of using LetsEncrypt on Webfaction hosts. It can be added to the Cron scheduled task runner where it will validate your domains automatically, place the generated certificates in a common folder, and then email the Webfaction support team to request installation, also notifying you.
+This tool simplifies the manual process of using LetsEncrypt on WebFaction hosts. It can be added to the Cron scheduled task runner where it will validate your domains automatically, place the generated certificates in a common folder, and then email the WebFaction Support team to request installation, also notifying you.
 
 [![Build Status](https://travis-ci.org/will-in-wi/letsencrypt-webfaction.svg?branch=master)](https://travis-ci.org/will-in-wi/letsencrypt-webfaction)
 
@@ -16,7 +16,7 @@ This tool simplifies the manual process of using LetsEncrypt on Webfaction hosts
 
 [Certbot](https://certbot.eff.org/) is the "official" (in that it was the first and to some extent reference client) Let's Encrypt client. Let's Encrypt decided to focus Certbot on a particular use case, namely the configuration of servers which are directly facing the internet and can have the Certbot application run as root. For other use cases, they encourage the implementation of other clients tailored to different cases. This has spawned a wide variety of alternative implementations.
 
-LetsEncrypt Webfaction is just such an alternative implementation. It was built because the WebFaction use case does not fit in the Certbot preconditions, namely that users don't have root access to change the frontend Nginx server configuration. WebFaction thus far requires that we place the certificate and private key somewhere on the server and then submit a ticket to install the certificate. This is exactly the workflow that is being automated.
+LetsEncrypt WebFaction is just such an alternative implementation. It was built because the WebFaction use case does not fit in the Certbot preconditions, namely that users don't have root access to change the frontend Nginx server configuration. WebFaction thus far requires that we place the certificate and private key somewhere on the server and then submit a ticket to install the certificate. This is exactly the workflow that is being automated.
 
 Certbot could probably be used in "manual" mode to create the certificate on disk, and then something else wired up to make the certificate installation request. For various reasons, I decided not to do this. If someone creates instructions to do this, I'd be happy to link to it from [the wiki](https://github.com/will-in-wi/letsencrypt-webfaction/wiki).
 
@@ -32,35 +32,40 @@ Cron is an application which will execute commands on a defined schedule. WebFac
 
 All of the commands listed below (unless specified otherwise) are run in an SSH session on the server. Again, WebFaction has written a [splendid little tutorial on how to get this working](https://docs.webfaction.com/user-guide/access.html#ssh).
 
+### SFTP
+
+If you're not happy navigating around your server's folders and files through SSH, you might find some of this process easier if you access your server with an FTP client over Secure FTP. WebFaction [also has this covered](https://docs.webfaction.com/user-guide/access.html#connecting-with-ftp).
+
 ## Installation
 
 This utility works on [CentOS 6 and 7 boxes](https://docs.webfaction.com/user-guide/server.html#finding-your-server-s-operating-system). The CentOS 5 systems do not have a new enough OpenSSL to include the algorithms required. You may be able to make this work using rbenv and compiling openssl yourself. A tutorial for CentOS 5 is available here: https://github.com/will-in-wi/letsencrypt-webfaction/wiki/Install-custom-OpenSSL-and-Ruby-on-CentOS-5-host
 
-All places where you need to substitute a value specific to your setup will be denoted with square brackets, e.g. `[mydomain.tld]`. There are cases where shell variables are used, such as `$HOME`. These should be typed verbatim.
+All places where you need to substitute a value specific to your setup will be denoted with square brackets, e.g. [yourdomain.com]. There are cases where shell variables are used, such as `$HOME`. These should be typed verbatim.
 
-You can install LetsEncrypt Webfaction using the system Ruby or using RBEnv.
+You can install LetsEncrypt WebFaction using the system Ruby or using RBEnv.
 
 ### System Ruby
 
 This is the simpler method and is preferred.
 
-Run the following command to install the letsencrypt_webfaction package via the [RubyGems package management site](https://rubygems.org/gems/letsencrypt_webfaction):
+Run the following command in an SSH session to install the letsencrypt_webfaction package via the [RubyGems package management site](https://rubygems.org/gems/letsencrypt_webfaction):
 
 ```sh
 GEM_HOME=$HOME/.letsencrypt_webfaction/gems RUBYLIB=$GEM_HOME/lib gem2.2 install letsencrypt_webfaction
 ```
 
-Add the following to `~/.bash_profile` to simplify the running of LetsEncrypt Webfaction with a bash function:
+Add the following to `~/.bash_profile` (using, for example, an FTP client or your favorite text editor):
 
 ```sh
 function letsencrypt_webfaction {
     PATH=$PATH:$GEM_HOME/bin GEM_HOME=$HOME/.letsencrypt_webfaction/gems RUBYLIB=$GEM_HOME/lib ruby2.2 $HOME/.letsencrypt_webfaction/gems/bin/letsencrypt_webfaction $*
 }
 ```
+This will simplify the running of the LetsEncrypt WebFaction command, by setting some variables in advance.
 
-Then run the command `source $HOME/.bash_profile` to apply the new settings.
+After saving `~/.bash_profile`, run the command `source $HOME/.bash_profile` to apply the new settings.
 
-Now, you can run `letsencrypt_webfaction` from the shell to get certificates. You can run this from any folder.
+Now, you are ready to run `letsencrypt_webfaction` from your SSH session to get certificates. See below for usage. 
 
 ### RBEnv
 
@@ -76,15 +81,93 @@ Once you have done so, install Ruby 2.1+ (probably 2.3.0 at time of writing). Th
     $ rbenv rehash # Makes RBenv aware of the letsencrypt_webfaction utility.
     $ rm .ruby-version # Unsets Ruby 2.3.0 as the default version in the current folder.
 
+## Usage
+
+### Syntax
+
+The syntax of the letsencrypt_webfaction command is as follows:
+
+    $ letsencrypt_webfaction --account_email <email-address> --domains <domain[,domain[,domain...]]> --public <server-folder>
+
+
+### Options:
+
+The basic parameters are as follows:
+
+* `--account_email`
+
+    Your WebFaction contact email address.
+
+* `--domains` 
+    
+    The domains for which you want to create certificates, separated by commas (with no spaces). The domains must be served from the same folder. There is one certificate per webapp, regardless of how many domains are served from it.
+
+* `--public`
+
+    A folder which is directly served at `http://[yourdomain.com]/` into which the ACME verification files can be placed.
+
+    In the case of a PHP site, such as Drupal or Wordpress, look for the folder with `index.php` in it. This is usually in `/home/[myuser]/webapps/[yourapp/]`.
+
+    In the case of a Rails app, look for a folder called `public/`. If you are deploying your app with Capistrano, this could show up in `/home/myuser/webapps/[yourapp]/current/public/`. 
+
+    In some cases (such as with some Node.js or Python applications), you may need to create this folder. See [here](https://github.com/will-in-wi/letsencrypt-webfaction/issues/24) for an example of this workaround.
+
+If you have several webapps, then you will need to issue the command several times. The command can be run from any folder. 
+
+Other parameters (which are generally best left to their default values, unless you have a perticular need to change them) can be found in the `config.defaults.yml` configuration file (see below in the "More detailed examples" section).
+
+### Example
+Here is a basic example which issues one certificate for both yourdomain.com and www.yourdomain.com, both of which are served by `~/webapps/yourapp/wordpress` and your WebFaction contact email address is you@youremail.com. This assumes that both yourdomain.com and www.yourdomain.com are served from the same folder. 
+
+    $ letsencrypt_webfaction --account_email you@youremail.com --domains yourdomain.com,www.yourdomain.com --public ~/webapps/yourapp/wordpress/
+
+### Testing
+
+To test certificate issuance, consider using the [LetsEncrypt staging server](https://community.letsencrypt.org/t/testing-against-the-lets-encrypt-staging-environment/6763). This doesn't have the rate limit of 5 certs per domain every 7 days. You can add the `--endpoint https://acme-staging.api.letsencrypt.org/` parameter to the `letsencrypt_webfaction` command to do so. 
+
+When testing, you will also want to change the `--support_email` parameter, so that an email is not sent needlessly to WebFaction Support. To do this, add `--support_email ""` (so no support email is sent) or `--support_email you@youremail.com` (so the support email is sent to you).
+
+A test command could thus be something like the following:
+
+    $ letsencrypt_webfaction --account_email you@youremail.com --domains yourdomain.com,www.yourdomain.com --public ~/webapps/yourapp/wordpress/ --endpoint https://acme-staging.api.letsencrypt.org/ --support_email you@youremail.com
+
+
+### Operation
+
+When letsencrypt_webfaction runs, it places verification files into the public directory specified, validates the domains with LetsEncrypt, and then dumps the signed certificate and private key into an output folder. By default, the output folder is `~/le_certs/`, inside which it will create `[domain_name]/[timestamp]/`.
+
+After this is done, the utility will email the certificate installation request to WebFaction Support, copying you.
+
+To quickly get a list of parameters and help for each, you can run:
+
+    $ letsencrypt_webfaction --help
+
+Once you have the certificate installed and working, you will probably want to redirect the HTTP version of your site to the HTTPS version. WebFaction has [documentation describing how to do this](https://docs.webfaction.com/software/static.html#static-redirecting-from-http-to-https).
+
+### Cron usage
+
+Normally, you will run the script manually once to get the certificate, and then you will use Cron to automate future certificate renewal.
+
+Your Cron task could look something like:
+
+    # System Ruby Installation
+    0 4 1 */2 *     PATH=$PATH:$GEM_HOME/bin GEM_HOME=$HOME/.letsencrypt_webfaction/gems RUBYLIB=$GEM_HOME/lib ruby2.2 $HOME/.letsencrypt_webfaction/gems/bin/letsencrypt_webfaction --account_email [you@youremail.com] --domains [yourdomain.com,www.yourdomain.com] --public ~/webapps/[yourapp/your_public_html]/
+    # RBEnv Installation
+    0 4 1 */2 *     RBENV_ROOT=~/.rbenv RBENV_VERSION=2.3.0 ~/.rbenv/bin/rbenv exec letsencrypt_webfaction --account_email [you@youremail.com] --domains [yourdomain.com,www.yourdomain.com] --public ~/webapps/[yourapp/your_public_html]/
+
+This [would run](http://crontab.guru/#0_4_1_*/2_*) at 4 a.m. on the first day of January, March, May, July, September, and November. Certificates expire three months after issuance, so modify as desired (for example, you may want to run the task every two months initially, to be sure that everything is working before extending the period). Change the date of the Cron task so that WebFaction staff don't simultaneously receive all certificate change requests on the first day of the month.
+
+If you have more than one Cron task running like this, you may want to set the environment variables at the top of the file, and create a config file containing the contact information.
+
 ## Upgrading
 
-The WebFaction support team will not upgrade your installation of LetsEncrypt Webfaction. You don't usually need to do this unless you have an issue, but as a general rule with most software it is good to do occasionally.
+While WebFaction staff maintain your standard server software, the support team will not upgrade your installation of LetsEncrypt WebFaction. You won't usually need to do this unless you have an issue but, as is good practice with most software, it's best kept up to date.
 
-You can find the version by running `letsencrypt_webfaction --version`. Sort of. In versions >= 1.1.4, this will work. In older versions, this will just print `letsencrypt_webfaction: version unknown` due to an oversight on my part. So if you get the latter output, just upgrade.
+You can find the current version by running `letsencrypt_webfaction --version`. Sort of. In versions >= 1.1.4, this will work. In older versions, this will just print `letsencrypt_webfaction: version unknown` due to an oversight on my part. So if you get the latter output, just upgrade.
 
 [The changelog](./CHANGELOG.md) describes changes from version to version.
 
-LetsEncrypt Webfaction follows [Semantic Versioning](http://semver.org/). In a nutshell, a version number such as `1.2.3` is divided as `major.minor.patch`. When the major version is incremented, you will probably have to change something about the configuration to make it work. The changelog will let you know what changes you need to make. When the minor version is incremented, there are new features but existing features haven't changed. If the patch version is incremented, the changes are all under the hood and shouldn't change or add any existing features.
+LetsEncrypt WebFaction follows [Semantic Versioning](http://semver.org/). In a nutshell, a version number such as `1.2.3` is divided as `major.minor.patch`. When the major version is incremented, you will probably have to change something about the configuration to make it work. The changelog will let you know what changes you need to make. When the minor version is incremented, there are new features but existing features haven't changed. If the patch version is incremented, the changes are all under the hood and shouldn't change or add any existing features.
 
 TL;DR: Be careful with major version upgrades and you should be fine with upgrading to minor or patch releases.
 
@@ -98,64 +181,21 @@ GEM_HOME=$HOME/.letsencrypt_webfaction/gems RUBYLIB=$GEM_HOME/lib gem2.2 install
 RBENV_VERSION=2.3.0 gem install letsencrypt_webfaction
 ```
 
-## Usage
+### More detailed examples
 
-Here is a basic example which issues one certificate for both example.com and www.example.com which is served by `~/webapps/myapp/my_public_html` when your WebFaction contact email address is myemail@example.com. This assumes that both example.com and www.example.com are served from the same folder. An easy way to think about it is that there is one certificate per webapp, regardless of how many domains are served from it.
+Default parameters can be found in [config.defaults.yml](./config.defaults.yml). All of the parameters can be overridden by passing another config file, arguments to the executable, or both. If a both a config file and command-line arguments are passed, they will be interleaved, with the command-line arguments having precedence.
 
-    $ letsencrypt_webfaction --account_email [myemail@example.com] --domains [example.com,www.example.com] --public ~/webapps/[myapp]/[my_public_html]/
+A config file needs to be in [http://www.yaml.org/refcard.html](YAML format) and have a subset of the keys in [config.defaults.yml](./config.defaults.yml). If you use a config file, you add the `--config [./myconfig.yml]` parameter to the letsencrypt_webfaction command.
 
-The certificate will be placed in `~/le_certs/example.com/[timestamp]/` and WebFaction will be emailed to install the certificate.
+This allows you to set up a Cron task for multiple sites with the defaults for all of them (such as your email address) in a config file, and site specific directives in the command. For example:
 
-To quickly get a list of parameters and help for each, you should run:
-
-    $ letsencrypt_webfaction --help
-
-To test certificate issuance, consider using the [LetsEncrypt staging server](https://community.letsencrypt.org/t/testing-against-the-lets-encrypt-staging-environment/6763). This doesn't have the 5 certs per domain every 7 days rate limit. You can add the `--endpoint https://acme-staging.api.letsencrypt.org/` parameter to the `letsencrypt_webfaction` command to do so.
-
-When letsencrypt_webfaction runs, it places verification files into a public directory, validates the domains with LetsEncrypt (or your ACME provider), and then dumps the signed certificate and private key into an output folder. By default, the output folder is `~/le_certs/`, inside which it will create `[domain_name]/[timestamp]/`.
-
-After this is done, the utility will email the cert installation request to Webfaction support and also copy you.
-
-Once you have the certificate installed and working, you will probably want to redirect the HTTP version to the HTTPS version. WebFaction has [documentation describing how to do this](https://docs.webfaction.com/software/static.html#static-redirecting-from-http-to-https).
-
-### Public folders
-
-For this utility to work, it is assumed that there is a folder which is directly served at `http://[yourdomain]/` into which the ACME verification files can be placed.
-
-In the case of a PHP site, such as Drupal or Wordpress, look for the folder with `index.php` in it. This is usually in `/home/[myuser]/webapps/[myapp/]`.
-
-In the case of a Rails app, look for a folder called `public/`. If you are deploying your app with Capistrano, this could show up in `/home/myuser/webapps/[myapp]/current/public/`.
-
-### Cron usage
-
-Normally, you will run the script manually once to get the certificate, and then you will use Cron to automate future certificate renewal.
-
-Your cron task could look something like:
-
-    # System Ruby Installation
-    0 4 1 */2 *     PATH=$PATH:$GEM_HOME/bin GEM_HOME=$HOME/.letsencrypt_webfaction/gems RUBYLIB=$GEM_HOME/lib ruby2.2 $HOME/.letsencrypt_webfaction/gems/bin/letsencrypt_webfaction --account_email [you@example.com] --domains [example.com,www.example.com] --public ~/webapps/[myapp]/
-    # RBEnv Installation
-    0 4 1 */2 *     RBENV_ROOT=~/.rbenv RBENV_VERSION=2.3.0 ~/.rbenv/bin/rbenv exec letsencrypt_webfaction --account_email [you@example.com] --domains [example.com,www.example.com] --public ~/webapps/[myapp]/
-
-This [would run](http://crontab.guru/#0_4_1_*/2_*) at 4 a.m. on the first day of January, March, May, July, September, and November. Certificates expire three months after issuance, so modify as desired. It may be preferable to change the date of the month that your cron task runs on so that WebFaction staff don't simultaneously receive all certificate change requests at the same time.
-
-If you have more than one cron task running like this, you may want to set the environment variables at the top of the file, and create a config file containing the contact information.
-
-### Detailed examples
-
-Default parameters can be found in [config.defaults.yml](./config.defaults.yml). All of the parameters can be overridden by passing another config file, arguments to the executable, or both. If a config file and arguments are passed, they will be interleaved with the arguments having precedence.
-
-A config file needs to be in YAML format and have a subset of the keys in [config.defaults.yml](./config.defaults.yml). If you use a config file, you add the `--config [./myconfig.yml]` parameter to the letsencrypt_webfaction command.
-
-This allows you to set up a cron task for multiple sites with the defaults for all of them (such as your email address) in a config file, and site specific directives in the command. For example:
-
-    $ letsencrypt_webfaction --config [~/le_config.yml] --domains [example.com,www.example.com] --public ~/webapps/[myapp/public_html/]
+    $ letsencrypt_webfaction --config [~/le_config.yml] --domains [yourdomain.com,www.yourdomain.com] --public ~/webapps/[yourapp/your_public_html/]
 
 This could be run automatically every two months.
 
 ### Custom email configuration
 
-Particularly in the case of Gmail, you may need to override the default usage of Sendmail and use SMTP. You can create a custom configuration file as described above (passed using `--config`) and add the below custom configuration in order to accomplish this.
+If you use a WebFaction email address, the process of sending emails to WebFaction Support should work just fine. In some cases, particularly in the case of Gmail, you may need to override the default usage of Sendmail and use SMTP. You can create a custom configuration file as described above (passed using `--config`) and add the below custom configuration in order to accomplish this.
 
 A Gmail example might be:
 
@@ -166,7 +206,7 @@ email_configuration:
     :address: 'smtp.gmail.com'
     :port: '587'
     :enable_starttls_auto: true
-    :user_name: '[myuser@gmail.com]'
+    :user_name: '[you@gmail.com]'
     :password: '[password_see_note]'
     :authentication: 'plain'
     :domain: 'localhost.localdomain' # the HELO domain provided by the client to the server
@@ -184,9 +224,7 @@ To run the script directly from the repository, use:
 
     $ ruby -Ilib exe/letsencrypt_webfaction
 
-The note above about the Let's Encrypt stage server is very helpful when developing.
-
-You will probably also want to use the argument `--support_email ""` which will keep support from actually being contacted. Alternately, set the `support_email` address to be yourself.
+See details in the "Testing" section above on how to use the Let's Encrypt stage server when developing, together with usage of the `--support_email` parameter in a testing environment.
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
 
