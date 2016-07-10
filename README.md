@@ -193,6 +193,8 @@ This allows you to set up a Cron task for multiple sites with the defaults for a
 
 This could be run automatically every two months.
 
+A config file can be placed anywhere in your WebFaction account. A good place might be `~/le_config/siteconfig.yml`.
+
 ### Custom email configuration
 
 If you use a WebFaction email address, the process of sending emails to WebFaction Support should work just fine. In some cases, particularly in the case of Gmail, you may need to override the default usage of Sendmail and use SMTP. You can create a custom configuration file as described above (passed using `--config`) and add the below custom configuration in order to accomplish this.
