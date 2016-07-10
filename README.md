@@ -185,7 +185,7 @@ RBENV_VERSION=2.3.0 gem install letsencrypt_webfaction
 
 Default parameters can be found in [config.defaults.yml](./config.defaults.yml). All of the parameters can be overridden by passing another config file, arguments to the executable, or both. If a both a config file and command-line arguments are passed, they will be interleaved, with the command-line arguments having precedence.
 
-A config file needs to be in [http://www.yaml.org/refcard.html](YAML format) and have a subset of the keys in [config.defaults.yml](./config.defaults.yml). If you use a config file, you add the `--config [./myconfig.yml]` parameter to the letsencrypt_webfaction command.
+A config file needs to be in [YAML format](http://www.yaml.org/refcard.html) and have a subset of the keys in [config.defaults.yml](./config.defaults.yml). If you use a config file, you add the `--config [./myconfig.yml]` parameter to the letsencrypt_webfaction command.
 
 This allows you to set up a Cron task for multiple sites with the defaults for all of them (such as your email address) in a config file, and site specific directives in the command. For example:
 
