@@ -4,6 +4,8 @@ LetsEncrypt utility client for WebFaction hosts.
 
 This tool simplifies the manual process of using LetsEncrypt on WebFaction hosts. It can be added to the Cron scheduled task runner where it will validate your domains automatically, place the generated certificates in a common folder, and then email the WebFaction Support team to request installation, also notifying you.
 
+For more documentation, as well as walkthroughs, [see the wiki](https://github.com/will-in-wi/letsencrypt-webfaction/wiki)!
+
 [![Build Status](https://travis-ci.org/will-in-wi/letsencrypt-webfaction.svg?branch=master)](https://travis-ci.org/will-in-wi/letsencrypt-webfaction)
 
 [![Gem Version](https://badge.fury.io/rb/letsencrypt_webfaction.svg)](https://badge.fury.io/rb/letsencrypt_webfaction)
