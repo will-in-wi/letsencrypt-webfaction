@@ -1,3 +1,12 @@
+v1.1.6
+
+* Fix issue with pulling in ActiveSupport when no longer needed.
+
+v1.1.5
+
+* Doc improvements.
+* Require a new enough version of Acme::Client.
+
 v1.1.4
 
 * Show version number with `--version` flag.
