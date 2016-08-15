@@ -28,16 +28,8 @@ Gem::Specification.new do |spec|
 
   spec.required_ruby_version = '>= 2.1.0'
 
-  spec.add_runtime_dependency 'acme-client', '>=0.3.7'
+  spec.add_runtime_dependency 'acme-client', '>=0.4.0'
   spec.add_runtime_dependency 'pony', '~> 1.11'
-
-  # Dependencies of dependencies when specific versions are needed.
-
-  # Upstream changed API and broke acme-client.
-  spec.add_runtime_dependency 'json-jwt', '1.5.2'
-
-  # Rails 5 stopped supporting < 2.2.2, which some of the WF servers still use.
-  spec.add_runtime_dependency 'activesupport', '< 5.0'
 
   spec.add_development_dependency 'bundler', '~> 1.11'
   spec.add_development_dependency 'rake', '~> 10.0'
