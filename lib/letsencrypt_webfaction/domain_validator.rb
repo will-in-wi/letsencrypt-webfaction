@@ -1,3 +1,5 @@
+require 'fileutils'
+
 module LetsencryptWebfaction
   class DomainValidator
     def initialize(domains, client, public_dir)
