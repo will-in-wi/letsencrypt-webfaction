@@ -1,3 +1,7 @@
+v1.1.7
+
+* Manually require fileutils, something formerly done automatically.
+
 v1.1.6
 
 * Fix issue with pulling in ActiveSupport when no longer needed.
