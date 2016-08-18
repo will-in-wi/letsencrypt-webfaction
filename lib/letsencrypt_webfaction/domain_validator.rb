@@ -1,4 +1,5 @@
 require 'fileutils'
+require 'pry'
 
 module LetsencryptWebfaction
   class DomainValidator
@@ -21,7 +22,21 @@ module LetsencryptWebfaction
         i += 1
       end
 
-      raise 'Failed to verify statuses in 10 seconds.' unless all_challenges_valid?
+      unless all_challenges_valid?
+        validations = authorizations.map(&:domain).zip(challenges)
+        $stderr.puts 'Failed to verify statuses.'
+        validations.each do |tuple|
+          domain, challenge = tuple
+          if challenge.verify_status == 'valid'
+            $stderr.puts "#{domain}: Success"
+          else
+            $stderr.puts "#{domain}: #{challenge.error['detail']}"
+            $stderr.puts "Make sure that you can access http://#{domain}/#{challenge.filename}"
+          end
+        end
+
+        return false
+      end
     end
 
     private
