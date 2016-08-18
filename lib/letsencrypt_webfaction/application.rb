@@ -21,7 +21,7 @@ module LetsencryptWebfaction
       register_key!
 
       # Validate the domains.
-      validator.validate!
+      return unless validator.validate!
 
       # Write the obtained certificates.
       certificate_writer.write!

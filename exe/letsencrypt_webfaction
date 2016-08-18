@@ -2,4 +2,5 @@
 
 require 'letsencrypt_webfaction/application'
 
-LetsencryptWebfaction::Application.new(ARGV).run!
+res = LetsencryptWebfaction::Application.new(ARGV).run!
+exit(res ? 0 : 1)

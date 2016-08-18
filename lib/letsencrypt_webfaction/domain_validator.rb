@@ -37,6 +37,8 @@ module LetsencryptWebfaction
 
         return false
       end
+
+      true
     end
 
     private
