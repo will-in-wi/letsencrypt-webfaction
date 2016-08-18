@@ -1,6 +1,8 @@
 v1.1.7
 
 * Manually require fileutils, something formerly done automatically.
+* Require Acme::Client 0.4.1 to fix `require` issue.
+* Output improved help text in case of failure.
 
 v1.1.6
 
