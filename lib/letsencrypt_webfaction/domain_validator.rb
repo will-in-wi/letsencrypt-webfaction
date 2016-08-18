@@ -64,8 +64,12 @@ module LetsencryptWebfaction
           $stderr.puts "#{@domain}: Success"
         else
           $stderr.puts "#{@domain}: #{@challenge.error['detail']}"
-          $stderr.puts "Make sure that you can access http://#{@domain}/#{@challenge.filename}"
+          $stderr.puts "Make sure that you can access #{url}"
         end
+      end
+
+      def url
+        "http://#{@domain}/#{@challenge.filename}"
       end
     end
   end
