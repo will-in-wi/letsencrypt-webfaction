@@ -37,7 +37,7 @@ RSpec.describe LetsencryptWebfaction::DomainValidator do
       allow(challenge).to receive(:file_content).and_return('file01 content', 'file02 content')
       allow(challenge).to receive(:request_verification)
       allow(challenge).to receive(:verify_status).and_return('pending')
-      allow(challenge).to receive(:error).and_return({'detail' => 'Pretend failure'})
+      allow(challenge).to receive(:error).and_return('detail' => 'Pretend failure')
 
       authorization = double('authorization')
       allow(authorization).to receive(:http01).and_return(challenge)
@@ -72,7 +72,7 @@ Make sure that you can access http://www.example.com/file02.txt
       allow(challenge1).to receive(:file_content).and_return('file01 content')
       allow(challenge1).to receive(:request_verification)
       allow(challenge1).to receive(:verify_status).and_return('pending')
-      allow(challenge1).to receive(:error).and_return({'detail' => 'Pretend failure'})
+      allow(challenge1).to receive(:error).and_return('detail' => 'Pretend failure')
 
       challenge2 = double('challenge2')
       allow(challenge2).to receive(:filename).and_return('file02.txt')

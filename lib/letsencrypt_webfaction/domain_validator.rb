@@ -14,31 +14,13 @@ module LetsencryptWebfaction
 
       challenges.each(&:request_verification)
 
-      i = 0
-      until all_challenges_valid? || i == 10
-        # Wait a bit for the server to make the request, or really just blink, it should be fast.
+      10.times do
+        return true if all_challenges_valid?
         sleep(1)
-
-        i += 1
       end
 
-      unless all_challenges_valid?
-        validations = authorizations.map(&:domain).zip(challenges)
-        $stderr.puts 'Failed to verify statuses.'
-        validations.each do |tuple|
-          domain, challenge = tuple
-          if challenge.verify_status == 'valid'
-            $stderr.puts "#{domain}: Success"
-          else
-            $stderr.puts "#{domain}: #{challenge.error['detail']}"
-            $stderr.puts "Make sure that you can access http://#{domain}/#{challenge.filename}"
-          end
-        end
-
-        return false
-      end
-
-      true
+      print_errors
+      false
     end
 
     private
@@ -62,6 +44,28 @@ module LetsencryptWebfaction
 
         # Then writing the file
         File.write(File.join(@public_dir, challenge.filename), challenge.file_content)
+      end
+    end
+
+    def print_errors
+      validations = authorizations.map(&:domain).zip(challenges)
+      $stderr.puts 'Failed to verify statuses.'
+      validations.each { |tuple| Validation.new(*tuple).print_error }
+    end
+
+    class Validation
+      def initialize(domain, challenge)
+        @domain = domain
+        @challenge = challenge
+      end
+
+      def print_error
+        if @challenge.verify_status == 'valid'
+          $stderr.puts "#{@domain}: Success"
+        else
+          $stderr.puts "#{@domain}: #{@challenge.error['detail']}"
+          $stderr.puts "Make sure that you can access http://#{@domain}/#{@challenge.filename}"
+        end
       end
     end
   end
