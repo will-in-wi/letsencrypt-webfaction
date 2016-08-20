@@ -1,3 +1,7 @@
+v1.1.8
+
+* Remove accidental runtime dependency on Pry.
+
 v1.1.7
 
 * Manually require fileutils, something formerly done automatically.
