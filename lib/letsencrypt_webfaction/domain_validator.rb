@@ -1,5 +1,4 @@
 require 'fileutils'
-require 'pry'
 
 module LetsencryptWebfaction
   class DomainValidator
