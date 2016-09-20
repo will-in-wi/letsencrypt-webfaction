@@ -1,5 +1,7 @@
 # LetsEncrypt WebFaction
 
+*Note: WebFaction [just released control panel support](https://blog.webfaction.com/2016/09/manage-ssl-certificates-with-the-control-panel/) for installing certificates. This is not integration with Let's Encrypt, nor does it yet have an API I can integrate with. See https://github.com/will-in-wi/letsencrypt-webfaction/issues/47 for the latest status updates.*
+
 LetsEncrypt utility client for WebFaction hosts.
 
 This tool simplifies the manual process of using LetsEncrypt on WebFaction hosts. It can be added to the Cron scheduled task runner where it will validate your domains automatically, place the generated certificates in a common folder, and then email the WebFaction Support team to request installation, also notifying you.
