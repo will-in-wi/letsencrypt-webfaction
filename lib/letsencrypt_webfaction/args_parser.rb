@@ -114,6 +114,7 @@ module LetsencryptWebfaction
     end
 
     def parse!
+      # rubocop:disable Style/GuardClause
       opt_parser.parse!(@options)
 
       # Set defaults from other fields.
