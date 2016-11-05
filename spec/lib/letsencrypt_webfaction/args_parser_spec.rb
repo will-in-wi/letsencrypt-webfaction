@@ -20,8 +20,8 @@ RSpec.describe LetsencryptWebfaction::ArgsParser do
       expect(args_parser.valid?).to eq false
     end
 
-    it 'requires account_email' do
-      expect(args_parser.errors[:account_email]).to eq ["Invalid account_email ''"]
+    it 'requires letsencrypt_account_email' do
+      expect(args_parser.errors[:letsencrypt_account_email]).to eq ["Invalid letsencrypt_account_email ''"]
     end
 
     it 'requires domains' do
@@ -49,8 +49,6 @@ RSpec.describe LetsencryptWebfaction::ArgsParser do
         '--domains', 'example.com,www.example.com',
         '--public', '/home/myuser/webapps/myapp/public_html',
         '--output_dir', '/home/myuser/le1_certs/',
-        '--account_email', 'myemail@example.com',
-        '--admin_notification_email', 'acct1@example.com',
         '--letsencrypt_account_email', 'acct2@example.com',
         '--username', 'myusername',
         '--password', 'mypassword',
@@ -85,10 +83,6 @@ RSpec.describe LetsencryptWebfaction::ArgsParser do
 
     it 'overrides output_dir' do
       expect(args_parser.output_dir).to eq '/home/myuser/le1_certs/'
-    end
-
-    it 'overrides admin_notification_email' do
-      expect(args_parser.admin_notification_email).to eq 'acct1@example.com'
     end
 
     it 'overrides letsencrypt_account_email' do
@@ -139,10 +133,6 @@ RSpec.describe LetsencryptWebfaction::ArgsParser do
       expect(args_parser.endpoint).to eq 'https://acme.example.com/'
     end
 
-    it 'sets account_email' do
-      expect(args_parser.account_email).to eq 'myacct@example.com'
-    end
-
     it 'sets domains' do
       expect(args_parser.domains).to eq ['example.com', 'www.example.com']
     end
@@ -153,12 +143,6 @@ RSpec.describe LetsencryptWebfaction::ArgsParser do
 
     it 'sets output_dir' do
       expect(args_parser.output_dir).to eq '/home/myuser/le2_certs/'
-    end
-
-    it 'sets email_configuration' do
-      expect(args_parser.email_configuration[:via]).to eq 'smtp'
-      expect(args_parser.email_configuration[:via_options][:address]).to eq 'smtp.example.com'
-      expect(args_parser.email_configuration[:via_options][:port]).to eq '587'
     end
   end
 
@@ -175,10 +159,6 @@ RSpec.describe LetsencryptWebfaction::ArgsParser do
 
     it 'sets endpoint' do
       expect(args_parser.endpoint).to eq 'https://acme-v01.api.letsencrypt.org/'
-    end
-
-    it 'sets account_email' do
-      expect(args_parser.account_email).to eq 'myacct@example.com'
     end
 
     it 'sets domains' do
@@ -208,7 +188,6 @@ RSpec.describe LetsencryptWebfaction::ArgsParser do
         '--domains', 'example.org,www1.example.org',
         '--public', '/home/myuser/webapps/myapp1/public_html',
         '--output_dir', '/home/myuser/le1_certs/',
-        '--account_email', 'myemail@example.com',
       ]
     end
 
@@ -226,10 +205,6 @@ RSpec.describe LetsencryptWebfaction::ArgsParser do
 
     it 'overrides endpoint' do
       expect(args_parser.endpoint).to eq 'https://acme1.example.com/'
-    end
-
-    it 'overrides account_email' do
-      expect(args_parser.account_email).to eq 'myemail@example.com'
     end
 
     it 'overrides domains' do
@@ -273,10 +248,6 @@ RSpec.describe LetsencryptWebfaction::ArgsParser do
     it 'does not have cert_name' do
       # Uses a converted common name
       expect(args_parser.cert_name).to eq ''
-    end
-
-    it 'does not have account_email' do
-      expect(args_parser.account_email).to eq ''
     end
 
     it 'does not have domains' do

@@ -25,7 +25,7 @@ RSpec.describe LetsencryptWebfaction::Application do
 
   let(:args) do
     [
-      '--account_email', 'contact@example.com',
+      '--letsencrypt_account_email', 'contact@example.com',
       '--domains', 'www.example.com,example.com',
       '--public', PUBLIC_DIR.to_s,
       '--output_dir', TEMP_DIR.join('out').to_s,

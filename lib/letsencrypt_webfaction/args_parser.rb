@@ -20,9 +20,7 @@ module LetsencryptWebfaction
       Field::ListField.new(:domains, 'Comma separated list of domains. The first one will be the common name.', [ArrayValidator.new]),
       Field.new(:public, 'Location on the filesystem served by the desired site (e.g. ~/webapps/myapp/public_html)', [StringValidator.new]),
       Field.new(:output_dir, 'Location on the filesystem to which the certs will be saved.', [StringValidator.new]),
-      Field.new(:account_email, 'The email address associated with your account.', [StringValidator.new]),
-      Field.new(:admin_notification_email, 'The email address associated with your account. Defaults to the value of account_email.', []),
-      Field.new(:letsencrypt_account_email, 'The email address associated with your account. Defaults to the value of account_email.', []),
+      Field.new(:letsencrypt_account_email, 'The email address associated with your account.', [StringValidator.new]),
       Field.new(:api_url, 'The URL to the Webfaction API.', [StringValidator.new]),
       Field.new(:username, 'The username for your Webfaction account.', [StringValidator.new]),
       Field.new(:password, 'The password for your Webfaction account.', [StringValidator.new]),
@@ -121,15 +119,6 @@ module LetsencryptWebfaction
     def parse!
       # rubocop:disable Style/GuardClause
       opt_parser.parse!(@options)
-
-      # Set defaults from other fields.
-      if @admin_notification_email.nil? || @admin_notification_email == ''
-        @admin_notification_email = @account_email
-      end
-
-      if @letsencrypt_account_email.nil? || @letsencrypt_account_email == ''
-        @letsencrypt_account_email = @account_email
-      end
 
       # Set default hostname
       if @servername.nil? || @servername == ''
