@@ -4,7 +4,7 @@ require 'acme-client'
 require 'letsencrypt_webfaction/args_parser'
 require 'letsencrypt_webfaction/domain_validator'
 require 'letsencrypt_webfaction/certificate_installer'
-require 'letsencrypt_webfaction/instructions'
+require 'letsencrypt_webfaction/webfaction_api_credentials'
 
 module LetsencryptWebfaction
   class Application
@@ -31,7 +31,7 @@ module LetsencryptWebfaction
     def certificate_installer
       @certificate_installer ||= begin
         credentials = LetsencryptWebfaction::WebfactionApiCredentials.new username: @options.username, password: @options.password, servername: @options.servername, api_server: @options.api_url
-        LetsencryptWebfaction::CertificateInstaller.new(certificate, credentials)
+        LetsencryptWebfaction::CertificateInstaller.new(@options.cert_name, certificate, credentials)
       end
     end
 
