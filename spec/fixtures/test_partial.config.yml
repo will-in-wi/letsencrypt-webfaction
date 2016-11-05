@@ -4,3 +4,6 @@ domains:
 # The webroot of the application.
 public: '/home/myuser/webapps/myapp/public_html'
 account_email: 'myacct@example.com'
+username: 'myusername'
+password: 'mypassword'
+servername: 'myserver'

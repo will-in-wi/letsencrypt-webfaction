@@ -4,7 +4,11 @@ endpoint: 'https://acme-v01.api.letsencrypt.org/'
 domains: []
 public: ''
 output_dir: '~/le_certs/'
-support_email: 'support@webfaction.com'
 account_email: ''
 admin_notification_email: '' # Defaults to the value given in account_email.
 letsencrypt_account_email: '' # Defaults to the value given in account_email.
+api_url: 'https://api.webfaction.com/'
+username: ''
+password: ''
+servername: ''
+cert_name: ''

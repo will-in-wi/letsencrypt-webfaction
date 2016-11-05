@@ -7,7 +7,9 @@ domains:
 public: '/home/myuser/webapps/myapp/public_html'
 output_dir: '/home/myuser/le2_certs/'
 account_email: 'myacct@example.com'
-support_email: 'supportemail@example.com'
+username: 'myusername'
+password: 'mypassword'
+servername: 'myserver'
 email_configuration:
   :via: 'smtp'
   :via_options:

@@ -17,8 +17,10 @@ RSpec.describe LetsencryptWebfaction::Application do
       '--domains', 'www.example.com,example.com',
       '--public', PUBLIC_DIR.to_s,
       '--output_dir', TEMP_DIR.join('out').to_s,
-      '--support_email', 'support@example.com',
       '--endpoint', 'http://localhost:4002',
+      '--username', 'myusername',
+      '--password', 'mypassword',
+      '--servername', 'myservername',
     ]
   end
   let(:application) { LetsencryptWebfaction::Application.new(args) }
@@ -54,23 +56,6 @@ RSpec.describe LetsencryptWebfaction::Application do
       it { is_expected.to include 'cert.pem' }
       it { is_expected.to include 'fullchain.pem' }
       it { is_expected.to include 'privkey.pem' }
-    end
-
-    context 'without support' do
-      let(:args) do
-        [
-          '--account_email', 'contact@example.com',
-          '--domains', 'www.example.com,example.com',
-          '--public', PUBLIC_DIR.to_s,
-          '--output_dir', TEMP_DIR.join('out').to_s,
-          '--support_email', '',
-          '--endpoint', 'http://localhost:4002',
-        ]
-      end
-
-      it 'sends only one email' do
-        expect(Mail::TestMailer.deliveries.length).to eq 1
-      end
     end
   end
 

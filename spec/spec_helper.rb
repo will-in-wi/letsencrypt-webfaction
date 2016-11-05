@@ -2,12 +2,17 @@
 $LOAD_PATH.unshift(File.dirname(__FILE__) + '/../lib')
 
 TEMP_DIR = Pathname.new(File.dirname(__FILE__) + '/tmp').freeze
+FIXTURE_DIR = Pathname.new(File.dirname(__FILE__) + '/fixtures').freeze
 
 require 'simplecov'
 SimpleCov.start
 
+require 'support/fixtures'
+
 require 'pony'
 require 'pry'
+
+require 'webmock/rspec'
 
 # Don't actually send emails in test.
 Pony.override_options = { via: :test }
@@ -64,7 +69,7 @@ RSpec.configure do |config|
   # Allows RSpec to persist some state between runs in order to support
   # the `--only-failures` and `--next-failure` CLI options. We recommend
   # you configure your source control system to ignore this file.
-  # config.example_status_persistence_file_path = 'spec/examples.txt'
+  config.example_status_persistence_file_path = 'spec/.examples.txt'
 
   # Limits the available syntax to the non-monkey patched syntax that is
   # recommended. For more details, see:

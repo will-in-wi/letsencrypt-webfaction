@@ -3,9 +3,8 @@ require 'acme-client'
 
 require 'letsencrypt_webfaction/args_parser'
 require 'letsencrypt_webfaction/domain_validator'
-require 'letsencrypt_webfaction/certificate_writer'
+require 'letsencrypt_webfaction/certificate_installer'
 require 'letsencrypt_webfaction/instructions'
-require 'letsencrypt_webfaction/emailer'
 
 module LetsencryptWebfaction
   class Application
@@ -24,24 +23,16 @@ module LetsencryptWebfaction
       return unless validator.validate!
 
       # Write the obtained certificates.
-      certificate_writer.write!
-
-      # Send emails.
-      emailer.send!
+      certificate_installer.install!
     end
 
     private
 
-    def emailer
-      @emails ||= LetsencryptWebfaction::Emailer.new instructions, support_email: @options.support_email, account_email: @options.account_email, notification_email: @options.admin_notification_email, email_configuration: @options.email_configuration
-    end
-
-    def instructions
-      @instructions ||= LetsencryptWebfaction::Instructions.new certificate_writer.output_dir, @options.domains
-    end
-
-    def certificate_writer
-      @certificate_writer ||= LetsencryptWebfaction::CertificateWriter.new(@options.output_dir, @options.domains.first, certificate)
+    def certificate_installer
+      @certificate_installer ||= begin
+        credentials = LetsencryptWebfaction::WebfactionApiCredentials.new username: @options.username, password: @options.password, servername: @options.servername, api_server: @options.api_url
+        LetsencryptWebfaction::CertificateInstaller.new(certificate, credentials)
+      end
     end
 
     def certificate

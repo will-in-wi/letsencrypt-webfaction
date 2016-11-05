@@ -31,6 +31,14 @@ RSpec.describe LetsencryptWebfaction::ArgsParser do
     it 'requires public' do
       expect(args_parser.errors[:public]).to eq ["Invalid public ''"]
     end
+
+    it 'requires username' do
+      expect(args_parser.errors[:username]).to eq ["Invalid username ''"]
+    end
+
+    it 'requires password' do
+      expect(args_parser.errors[:password]).to eq ["Invalid password ''"]
+    end
   end
 
   context 'with arguments' do
@@ -42,9 +50,12 @@ RSpec.describe LetsencryptWebfaction::ArgsParser do
         '--public', '/home/myuser/webapps/myapp/public_html',
         '--output_dir', '/home/myuser/le1_certs/',
         '--account_email', 'myemail@example.com',
-        '--support_email', 'acct@example.com',
         '--admin_notification_email', 'acct1@example.com',
         '--letsencrypt_account_email', 'acct2@example.com',
+        '--username', 'myusername',
+        '--password', 'mypassword',
+        '--servername', 'Web123',
+        '--cert_name', 'blah_server',
       ]
     end
 
@@ -82,6 +93,22 @@ RSpec.describe LetsencryptWebfaction::ArgsParser do
 
     it 'overrides letsencrypt_account_email' do
       expect(args_parser.letsencrypt_account_email).to eq 'acct2@example.com'
+    end
+
+    it 'overrides username' do
+      expect(args_parser.username).to eq 'myusername'
+    end
+
+    it 'overrides password' do
+      expect(args_parser.password).to eq 'mypassword'
+    end
+
+    it 'overrides servername' do
+      expect(args_parser.servername).to eq 'Web123'
+    end
+
+    it 'overrides cert_name' do
+      expect(args_parser.cert_name).to eq 'blah_server'
     end
 
     it 'has an empty hash of email_configuration' do
@@ -165,6 +192,11 @@ RSpec.describe LetsencryptWebfaction::ArgsParser do
     it 'sets output_dir' do
       expect(args_parser.output_dir).to eq '~/le_certs/'
     end
+
+    it 'has cert_name' do
+      # Uses a converted common name
+      expect(args_parser.cert_name).to eq 'example_com'
+    end
   end
 
   context 'overrides configuration with arguments' do
@@ -177,7 +209,6 @@ RSpec.describe LetsencryptWebfaction::ArgsParser do
         '--public', '/home/myuser/webapps/myapp1/public_html',
         '--output_dir', '/home/myuser/le1_certs/',
         '--account_email', 'myemail@example.com',
-        '--support_email', 'acct@example.com',
       ]
     end
 
@@ -229,6 +260,21 @@ RSpec.describe LetsencryptWebfaction::ArgsParser do
       expect(args_parser.output_dir).to eq '~/le_certs/'
     end
 
+    it 'has api_url' do
+      expect(args_parser.api_url).to eq 'https://api.webfaction.com/'
+    end
+
+    it 'has servername' do
+      # Uses local hostname by default.
+      expect(args_parser.servername).to_not eq ''
+      expect(args_parser.servername).to_not be_nil
+    end
+
+    it 'does not have cert_name' do
+      # Uses a converted common name
+      expect(args_parser.cert_name).to eq ''
+    end
+
     it 'does not have account_email' do
       expect(args_parser.account_email).to eq ''
     end
@@ -240,13 +286,13 @@ RSpec.describe LetsencryptWebfaction::ArgsParser do
     it 'does not have public' do
       expect(args_parser.public).to eq ''
     end
-  end
 
-  context 'with empty support_email' do
-    let(:args) { ['--support_email', ''] }
+    it 'does not have username' do
+      expect(args_parser.username).to eq ''
+    end
 
-    it 'has empty support_email' do
-      expect(args_parser.support_email).to eq ''
+    it 'does not have password' do
+      expect(args_parser.password).to eq ''
     end
   end
 end
