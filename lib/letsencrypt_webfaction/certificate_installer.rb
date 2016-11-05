@@ -19,9 +19,9 @@ module LetsencryptWebfaction
 
       cert_list = server.call('list_certificates', session_id)
       action = if cert_list.find { |cert| cert['name'] == @cert_name }
-        'update_certificate'
-      else
-        'create_certificate'
+                 'update_certificate'
+               else
+                 'create_certificate'
       end
       server.call(action, session_id, @cert_name, @certificate.to_pem, @certificate.request.private_key.to_pem, @certificate.chain_to_pem)
 

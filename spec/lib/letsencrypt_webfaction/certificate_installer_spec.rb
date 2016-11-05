@@ -23,14 +23,14 @@ RSpec.describe LetsencryptWebfaction::CertificateInstaller do
     stub_request(:post, 'https://wfserverapi.example.com/')
       .with(body: "<?xml version=\"1.0\" ?><methodCall><methodName>login</methodName><params><param><value><string>myusername</string></value></param><param><value><string>mypassword</string></value></param><param><value><string>myservername</string></value></param><param><value><i4>2</i4></value></param></params></methodCall>\n")
       .to_return(status: 200, body: fixture('login_response.xml'))
-    stub_request(:post, "https://wfserverapi.example.com/")
+    stub_request(:post, 'https://wfserverapi.example.com/')
       .with(body: "<?xml version=\"1.0\" ?><methodCall><methodName>list_certificates</methodName><params><param><value><string>oz7e1xz9r0mf0wgue22hsj8tgkhqyo74</string></value></param></params></methodCall>\n")
       .to_return(status: 200, body: fixture('list_certificates_response.xml'))
   end
 
   context 'with existing certificate' do
     before :each do
-      stub_request(:post, "https://wfserverapi.example.com/")
+      stub_request(:post, 'https://wfserverapi.example.com/')
         .with(body: "<?xml version=\"1.0\" ?><methodCall><methodName>update_certificate</methodName><params><param><value><string>oz7e1xz9r0mf0wgue22hsj8tgkhqyo74</string></value></param><param><value><string>test_auto_cert</string></value></param><param><value><string>CERTIFICATE</string></value></param><param><value><string>PRIVATE_KEY</string></value></param><param><value><string>CHAIN CERTIFICATE</string></value></param></params></methodCall>\n")
         .to_return(status: 200, body: fixture('create_certificate_response.xml'))
     end
@@ -38,14 +38,14 @@ RSpec.describe LetsencryptWebfaction::CertificateInstaller do
     it 'updates certificate' do
       cert_installer.install!
 
-      expect(WebMock).to have_requested(:post, "https://wfserverapi.example.com/")
+      expect(WebMock).to have_requested(:post, 'https://wfserverapi.example.com/')
         .with(body: "<?xml version=\"1.0\" ?><methodCall><methodName>update_certificate</methodName><params><param><value><string>oz7e1xz9r0mf0wgue22hsj8tgkhqyo74</string></value></param><param><value><string>test_auto_cert</string></value></param><param><value><string>CERTIFICATE</string></value></param><param><value><string>PRIVATE_KEY</string></value></param><param><value><string>CHAIN CERTIFICATE</string></value></param></params></methodCall>\n")
     end
   end
 
   context 'without existing certificate' do
     before :each do
-      stub_request(:post, "https://wfserverapi.example.com/")
+      stub_request(:post, 'https://wfserverapi.example.com/')
         .with(body: "<?xml version=\"1.0\" ?><methodCall><methodName>create_certificate</methodName><params><param><value><string>oz7e1xz9r0mf0wgue22hsj8tgkhqyo74</string></value></param><param><value><string>testdomain_example_com</string></value></param><param><value><string>CERTIFICATE</string></value></param><param><value><string>PRIVATE_KEY</string></value></param><param><value><string>CHAIN CERTIFICATE</string></value></param></params></methodCall>\n")
         .to_return(status: 200, body: fixture('create_certificate_response.xml'))
     end
@@ -55,7 +55,7 @@ RSpec.describe LetsencryptWebfaction::CertificateInstaller do
     it 'creates certificate' do
       cert_installer.install!
 
-      expect(WebMock).to have_requested(:post, "https://wfserverapi.example.com/")
+      expect(WebMock).to have_requested(:post, 'https://wfserverapi.example.com/')
         .with(body: "<?xml version=\"1.0\" ?><methodCall><methodName>create_certificate</methodName><params><param><value><string>oz7e1xz9r0mf0wgue22hsj8tgkhqyo74</string></value></param><param><value><string>testdomain_example_com</string></value></param><param><value><string>CERTIFICATE</string></value></param><param><value><string>PRIVATE_KEY</string></value></param><param><value><string>CHAIN CERTIFICATE</string></value></param></params></methodCall>\n")
     end
   end
