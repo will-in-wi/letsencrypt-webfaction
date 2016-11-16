@@ -2,7 +2,7 @@
 
 key_size: 4096
 endpoint: 'https://acme-v01.api.letsencrypt.org/'
-account_email: 'me@example.com'
+letsencrypt_account_email: 'me@example.com'
 domains:
   - 'example.com'
   - 'www.example.com'

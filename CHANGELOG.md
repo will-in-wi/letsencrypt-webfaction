@@ -1,3 +1,15 @@
+v2.0.0
+
+* Switch to using the Webfaction API for certificate installation.
+
+*MIGRATION NOTES*
+
+* New required parameters for Webfaction API: `username` and `password`. It is recommended that these be passed in a config file instead of being command line arguments.
+* `--account_email`, `--admin_notification_email`, and `--support_email` are gone. `--letsencrypt_account_email` remains and needs to be set directly.
+* Pony and direct emailing are gone. Since this utility uses the admin interface, the only reason to send emails are for errors, which are handled with the `MAILTO` string in the crontab, per the readme.
+* `--cert_name` is a new conditional param. This defaults to the first domain given, with dots replaced by underscores.
+* `--servername` and `--api_url` are new params with sane defaults.
+
 v1.1.8
 
 * Remove accidental runtime dependency on Pry.

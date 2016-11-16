@@ -1,0 +1,59 @@
+<?xml version='1.0'?>
+<methodResponse>
+	<params>
+		<param>
+			<value>
+				<struct>
+					<member>
+						<name>private_key</name>
+						<value>
+							<string>-----BEGIN RSA PRIVATE KEY-----
+PRIVATE_KEY
+-----END RSA PRIVATE KEY-----</string>
+						</value>
+					</member>
+					<member>
+						<name>intermediates</name>
+						<value>
+							<string>-----BEGIN CERTIFICATE-----
+INTERMEDIATE
+-----END CERTIFICATE-----</string>
+						</value>
+					</member>
+					<member>
+						<name>name</name>
+						<value>
+							<string>test_auto_cert</string>
+						</value>
+					</member>
+					<member>
+						<name>certificate</name>
+						<value>
+							<string>-----BEGIN CERTIFICATE-----
+CERTIFICATE
+-----END CERTIFICATE-----</string>
+						</value>
+					</member>
+					<member>
+						<name>expiry_date</name>
+						<value>
+							<string>2017-01-30</string>
+						</value>
+					</member>
+					<member>
+						<name>domains</name>
+						<value>
+							<string>testdomain.example.com</string>
+						</value>
+					</member>
+					<member>
+						<name>id</name>
+						<value>
+							<int>1234</int>
+						</value>
+					</member>
+				</struct>
+			</value>
+		</param>
+	</params>
+</methodResponse>

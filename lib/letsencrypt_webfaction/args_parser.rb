@@ -1,4 +1,5 @@
 require 'optparse'
+require 'socket'
 require 'yaml'
 
 require 'letsencrypt_webfaction'
@@ -19,10 +20,12 @@ module LetsencryptWebfaction
       Field::ListField.new(:domains, 'Comma separated list of domains. The first one will be the common name.', [ArrayValidator.new]),
       Field.new(:public, 'Location on the filesystem served by the desired site (e.g. ~/webapps/myapp/public_html)', [StringValidator.new]),
       Field.new(:output_dir, 'Location on the filesystem to which the certs will be saved.', [StringValidator.new]),
-      Field.new(:support_email, 'The email address of the ISP support.', []),
-      Field.new(:account_email, 'The email address associated with your account.', [StringValidator.new]),
-      Field.new(:admin_notification_email, 'The email address associated with your account. Defaults to the value of account_email.', []),
-      Field.new(:letsencrypt_account_email, 'The email address associated with your account. Defaults to the value of account_email.', []),
+      Field.new(:letsencrypt_account_email, 'The email address associated with your account.', [StringValidator.new]),
+      Field.new(:api_url, 'The URL to the Webfaction API.', [StringValidator.new]),
+      Field.new(:username, 'The username for your Webfaction account.', [StringValidator.new]),
+      Field.new(:password, 'The password for your Webfaction account.', [StringValidator.new]),
+      Field.new(:servername, 'The server on which this application resides (e.g. Web123).', [StringValidator.new]),
+      Field.new(:cert_name, 'The name of the certificate in the Webfaction UI.', [StringValidator.new]),
     ].freeze
 
     # Set up getters.
@@ -117,13 +120,14 @@ module LetsencryptWebfaction
       # rubocop:disable Style/GuardClause
       opt_parser.parse!(@options)
 
-      # Set defaults from other fields.
-      if @admin_notification_email.nil? || @admin_notification_email == ''
-        @admin_notification_email = @account_email
+      # Set default hostname
+      if @servername.nil? || @servername == ''
+        @servername = Socket.gethostname.split('.')[0].sub(/^./, &:upcase)
       end
 
-      if @letsencrypt_account_email.nil? || @letsencrypt_account_email == ''
-        @letsencrypt_account_email = @account_email
+      # Set default cert_name
+      if @cert_name.nil? || @cert_name == ''
+        @cert_name = @domains[0].tr('.', '_') if @domains.any?
       end
     end
   end

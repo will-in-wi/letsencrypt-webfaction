@@ -13,3 +13,6 @@
 
 # Ignore local config.
 /.bundle
+
+# Ignore spec next-failure file.
+/spec/.examples.txt

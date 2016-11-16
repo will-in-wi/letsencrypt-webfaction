@@ -11,14 +11,29 @@ RSpec.describe LetsencryptWebfaction::Application do
     FileUtils.rm_rf TEMP_DIR
   end
 
+  before :each do
+    stub_request(:post, 'https://wfserverapi.example.com/')
+      .with(body: "<?xml version=\"1.0\" ?><methodCall><methodName>login</methodName><params><param><value><string>myusername</string></value></param><param><value><string>mypassword</string></value></param><param><value><string>myservername</string></value></param><param><value><i4>2</i4></value></param></params></methodCall>\n")
+      .to_return(status: 200, body: fixture('login_response.xml'))
+    stub_request(:post, 'https://wfserverapi.example.com/')
+      .with(body: "<?xml version=\"1.0\" ?><methodCall><methodName>list_certificates</methodName><params><param><value><string>oz7e1xz9r0mf0wgue22hsj8tgkhqyo74</string></value></param></params></methodCall>\n")
+      .to_return(status: 200, body: fixture('list_certificates_response.xml'))
+    stub_request(:post, 'https://wfserverapi.example.com/')
+      .with(body: "<?xml version=\"1.0\" ?><methodCall><methodName>create_certificate</methodName><params><param><value><string>oz7e1xz9r0mf0wgue22hsj8tgkhqyo74</string></value></param><param><value><string>www_example_com</string></value></param><param><value><string>CERTIFICATE</string></value></param><param><value><string>PRIVATE KEY</string></value></param><param><value><string>CHAIN!</string></value></param></params></methodCall>\n")
+      .to_return(status: 200, body: fixture('create_certificate_response.xml'))
+  end
+
   let(:args) do
     [
-      '--account_email', 'contact@example.com',
+      '--letsencrypt_account_email', 'contact@example.com',
       '--domains', 'www.example.com,example.com',
       '--public', PUBLIC_DIR.to_s,
       '--output_dir', TEMP_DIR.join('out').to_s,
-      '--support_email', 'support@example.com',
       '--endpoint', 'http://localhost:4002',
+      '--username', 'myusername',
+      '--password', 'mypassword',
+      '--servername', 'myservername',
+      '--api_url', 'https://wfserverapi.example.com/',
     ]
   end
   let(:application) { LetsencryptWebfaction::Application.new(args) }
@@ -34,43 +49,11 @@ RSpec.describe LetsencryptWebfaction::Application do
       allow(client).to receive_message_chain(:register, agree_terms: nil)
       allow(Acme::Client).to receive(:new) { client }
 
-      Mail::TestMailer.deliveries.clear
-
       # Run code.
       application.run!
     end
-
-    it 'sends emails' do
-      expect(Mail::TestMailer.deliveries.length).to eq 2
-    end
-
     it 'writes validation file' do
       expect(PUBLIC_DIR.join('challenge1.txt')).to exist
-    end
-
-    context 'output files' do
-      subject { Dir.glob(TEMP_DIR.join('out/www.example.com/*/*')).map { |f| File.basename f } }
-
-      it { is_expected.to include 'cert.pem' }
-      it { is_expected.to include 'fullchain.pem' }
-      it { is_expected.to include 'privkey.pem' }
-    end
-
-    context 'without support' do
-      let(:args) do
-        [
-          '--account_email', 'contact@example.com',
-          '--domains', 'www.example.com,example.com',
-          '--public', PUBLIC_DIR.to_s,
-          '--output_dir', TEMP_DIR.join('out').to_s,
-          '--support_email', '',
-          '--endpoint', 'http://localhost:4002',
-        ]
-      end
-
-      it 'sends only one email' do
-        expect(Mail::TestMailer.deliveries.length).to eq 1
-      end
     end
   end
 
