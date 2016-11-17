@@ -144,9 +144,7 @@ A test command could thus be something like the following:
 
 ### Operation
 
-When letsencrypt_webfaction runs, it places verification files into the public directory specified, validates the domains with LetsEncrypt, and then dumps the signed certificate and private key into an output folder. By default, the output folder is `~/le_certs/`, inside which it will create `[domain_name]/[timestamp]/`.
-
-After this is done, the utility will email the certificate installation request to WebFaction Support, copying you.
+When letsencrypt_webfaction runs, it places verification files into the public directory specified, validates the domains with LetsEncrypt, and then uploads the certificate to WebFaction's API.
 
 To quickly get a list of parameters and help for each, you can run:
 
