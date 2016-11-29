@@ -205,28 +205,6 @@ This could be run automatically every two months.
 
 A config file can be placed anywhere in your WebFaction account. A good place might be `~/le_config/siteconfig.yml`.
 
-### Custom email configuration
-
-If you use a WebFaction email address, the process of sending emails to WebFaction Support should work just fine. In some cases, particularly in the case of Gmail, you may need to override the default usage of Sendmail and use SMTP. You can create a custom configuration file as described above (passed using `--config`) and add the below custom configuration in order to accomplish this.
-
-A Gmail example might be:
-
-```yaml
-email_configuration:
-  :via: 'smtp'
-  :via_options:
-    :address: 'smtp.gmail.com'
-    :port: '587'
-    :enable_starttls_auto: true
-    :user_name: '[you@gmail.com]'
-    :password: '[password_see_note]'
-    :authentication: 'plain'
-    :domain: 'localhost.localdomain' # the HELO domain provided by the client to the server
-```
-
-See this [project's GitHub wiki](https://github.com/will-in-wi/letsencrypt-webfaction/wiki) for additional Gmail specific notes.
-
-For all possible options, see [the Pony configuration](https://github.com/benprew/pony).
 
 ## Development
 
