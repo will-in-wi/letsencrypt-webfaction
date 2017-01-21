@@ -12,6 +12,10 @@ Metrics/LineLength:
 Style/Documentation:
   Enabled: false
 
+Metrics/BlockLength:
+  Exclude:
+    # Tests involve long blocks.
+    - 'spec/**/*'
 
 # Extra cops:
 
