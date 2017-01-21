@@ -102,7 +102,7 @@ The basic parameters are as follows:
 
 * `--domains`
 
-    The domains for which you want to create certificates, separated by commas (with no spaces). The domains must be served from the same folder. There is one certificate per webapp, regardless of how many domains are served from it.
+    The domains for which you want to create certificates, separated by commas (with no spaces). The domains must be served from the same folder. There is one certificate per WebFaction Website, regardless of how many domains are served from it.
 
 * `--public`
 
