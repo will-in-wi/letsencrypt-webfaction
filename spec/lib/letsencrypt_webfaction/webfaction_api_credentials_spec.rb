@@ -31,4 +31,28 @@ RSpec.describe LetsencryptWebfaction::WebfactionApiCredentials do
 
     it { is_expected.to eq 'https://wfserverapi.example.com/' }
   end
+
+  describe '#valid?' do
+    subject { creds.valid? }
+
+    context 'with valid password' do
+      before :each do
+        stub_request(:post, 'https://wfserverapi.example.com/')
+          .with(body: "<?xml version=\"1.0\" ?><methodCall><methodName>login</methodName><params><param><value><string>myusername</string></value></param><param><value><string>mypassword</string></value></param><param><value><string>myservername</string></value></param><param><value><i4>2</i4></value></param></params></methodCall>\n")
+          .to_return(status: 200, body: fixture('login_response.xml'))
+      end
+
+      it { is_expected.to eq true }
+    end
+
+    context 'with invalid password' do
+      before :each do
+        stub_request(:post, 'https://wfserverapi.example.com/')
+          .with(body: "<?xml version=\"1.0\" ?><methodCall><methodName>login</methodName><params><param><value><string>myusername</string></value></param><param><value><string>mypassword</string></value></param><param><value><string>myservername</string></value></param><param><value><i4>2</i4></value></param></params></methodCall>\n")
+          .to_raise(XMLRPC::FaultException.new(1, 'LoginError'))
+      end
+
+      it { is_expected.to eq false }
+    end
+  end
 end

@@ -16,6 +16,12 @@ module LetsencryptWebfaction
       # Validate that the correct options were passed.
       validate_options!
 
+      # Check credentials
+      unless api_credentials.valid?
+        $stderr.puts 'WebFaction API username, password, and/or servername are incorrect. Login failed.'
+        exit 1
+      end
+
       # Register the private key.
       register_key!
 
@@ -28,11 +34,12 @@ module LetsencryptWebfaction
 
     private
 
+    def api_credentials
+      @_api_credentials ||= LetsencryptWebfaction::WebfactionApiCredentials.new username: @options.username, password: @options.password, servername: @options.servername, api_server: @options.api_url
+    end
+
     def certificate_installer
-      @certificate_installer ||= begin
-        credentials = LetsencryptWebfaction::WebfactionApiCredentials.new username: @options.username, password: @options.password, servername: @options.servername, api_server: @options.api_url
-        LetsencryptWebfaction::CertificateInstaller.new(@options.cert_name, certificate, credentials)
-      end
+      @certificate_installer ||= LetsencryptWebfaction::CertificateInstaller.new(@options.cert_name, certificate, api_credentials)
     end
 
     def certificate
