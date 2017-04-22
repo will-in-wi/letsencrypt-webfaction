@@ -54,5 +54,19 @@ RSpec.describe LetsencryptWebfaction::WebfactionApiCredentials do
 
       it { is_expected.to eq false }
     end
+
+    context 'with unknown error' do
+      before :each do
+        stub_request(:post, 'https://wfserverapi.example.com/')
+          .with(body: "<?xml version=\"1.0\" ?><methodCall><methodName>login</methodName><params><param><value><string>myusername</string></value></param><param><value><string>mypassword</string></value></param><param><value><string>myservername</string></value></param><param><value><i4>2</i4></value></param></params></methodCall>\n")
+          .to_raise(XMLRPC::FaultException.new(1, 'SomeOtherError'))
+      end
+
+      it 'bubbles exception up' do
+        expect do
+          subject
+        end.to raise_exception XMLRPC::FaultException, 'SomeOtherError'
+      end
+    end
   end
 end
