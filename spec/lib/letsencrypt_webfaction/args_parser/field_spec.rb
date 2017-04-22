@@ -35,7 +35,7 @@ RSpec.describe LetsencryptWebfaction::ArgsParser::Field do
 
     it 'sanitizes' do
       # Identity function. Returns its input.
-      expect(field.sanitize('1,2,3,4')).to eq %w(1 2 3 4)
+      expect(field.sanitize('1,2,3,4')).to eq %w[1 2 3 4]
     end
   end
 end

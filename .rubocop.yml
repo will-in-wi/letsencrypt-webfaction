@@ -17,6 +17,10 @@ Metrics/BlockLength:
     # Tests involve long blocks.
     - 'spec/**/*'
 
+# I'm not pulling in a library, or forcing Ruby 2.3+
+Style/IndentHeredoc:
+  Enabled: false
+
 # Extra cops:
 
 # Encourages block syntax for things like File.open
