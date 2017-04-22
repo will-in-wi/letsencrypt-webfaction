@@ -1,7 +1,6 @@
 v2.0.1
 
 * Check WebFaction credentials before issuing cert.
-* Use XMLRPC gem in Ruby 2.4+
 
 v2.0.0
 
