@@ -48,12 +48,26 @@ RSpec.describe LetsencryptWebfaction::Application do
       allow(client).to receive_message_chain(:authorize, http01: challenge)
       allow(client).to receive_message_chain(:register, agree_terms: nil)
       allow(Acme::Client).to receive(:new) { client }
-
-      # Run code.
-      application.run!
     end
+
     it 'writes validation file' do
+      application.run!
+
       expect(PUBLIC_DIR.join('challenge1.txt')).to exist
+    end
+
+    context 'with invalid credentials' do
+      before :each do
+        stub_request(:post, 'https://wfserverapi.example.com/')
+          .with(body: "<?xml version=\"1.0\" ?><methodCall><methodName>login</methodName><params><param><value><string>myusername</string></value></param><param><value><string>mypassword</string></value></param><param><value><string>myservername</string></value></param><param><value><i4>2</i4></value></param></params></methodCall>\n")
+          .to_raise(XMLRPC::FaultException.new(1, 'LoginError'))
+      end
+
+      it 'exits due to invalid credentials' do
+        expect do
+          application.run!
+        end.to output(/Login failed/).to_stderr.and raise_error SystemExit
+      end
     end
   end
 
