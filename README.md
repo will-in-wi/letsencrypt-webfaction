@@ -116,7 +116,7 @@ The basic parameters are as follows:
 
 * `--username`
 
-    The username you use to log into the Webfaction control panel.
+    The username you use to log into the Webfaction control panel. Needed along with the password to upload your cert to their API.
 
 * `--password`
 
@@ -131,7 +131,9 @@ Other parameters (which are generally best left to their default values, unless 
 ### Example
 Here is a basic example which issues one certificate for both yourdomain.com and www.yourdomain.com, both of which are served by `~/webapps/yourapp/wordpress` and your WebFaction contact email address is you@youremail.com. This assumes that both yourdomain.com and www.yourdomain.com are served from the same folder.
 
-    $ letsencrypt_webfaction --letsencrypt_account_email you@youremail.com --domains yourdomain.com,www.yourdomain.com --public ~/webapps/yourapp/wordpress/
+    $ letsencrypt_webfaction --letsencrypt_account_email you@youremail.com --domains yourdomain.com,www.yourdomain.com --public ~/webapps/yourapp/wordpress/ --username myusername --password mypassword
+
+*Note: Passing the password via the command line as seen here is insecure. You should use the `--config` mechanism mentioned later.*
 
 ### Testing
 
