@@ -110,7 +110,7 @@ The basic parameters are as follows:
 
     In the case of a PHP site, such as Drupal or Wordpress, look for the folder with `index.php` in it. This is usually in `/home/[myuser]/webapps/[yourapp/]`.
 
-    In the case of a Rails app, look for a folder called `public/`. If you are deploying your app with Capistrano, this could show up in `/home/myuser/webapps/[yourapp]/current/public/`. 
+    In the case of a Rails app, look for a folder called `public/`. If you are deploying your app with Capistrano, this could show up in `/home/myuser/webapps/[yourapp]/current/public/`.
 
     In some cases (such as with some Node.js or Python applications), you may need to create this folder. See [here](https://github.com/will-in-wi/letsencrypt-webfaction/issues/24) for an example of this workaround.
 
