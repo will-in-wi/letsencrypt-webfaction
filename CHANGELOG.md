@@ -1,5 +1,7 @@
 v2.0.1
 
+* Check WebFaction credentials before issuing cert.
+
 v2.0.0
 
 * Switch to using the Webfaction API for certificate installation.
