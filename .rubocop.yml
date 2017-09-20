@@ -18,7 +18,7 @@ Metrics/BlockLength:
     - 'spec/**/*'
 
 # I'm not pulling in a library, or forcing Ruby 2.3+
-Style/IndentHeredoc:
+Layout/IndentHeredoc:
   Enabled: false
 
 # Extra cops:
@@ -28,13 +28,13 @@ Style/AutoResourceCleanup:
   Enabled: true
 
 # Standardize multi-line params.
-Style/FirstArrayElementLineBreak:
+Layout/FirstArrayElementLineBreak:
   Enabled: true
-Style/FirstHashElementLineBreak:
+Layout/FirstHashElementLineBreak:
   Enabled: true
-Style/FirstMethodArgumentLineBreak:
+Layout/FirstMethodArgumentLineBreak:
   Enabled: true
-Style/FirstMethodParameterLineBreak:
+Layout/FirstMethodParameterLineBreak:
   Enabled: true
 
 # Encourage using public_send to prove that you actually want to bypass visibility.
