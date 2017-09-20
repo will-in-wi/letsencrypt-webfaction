@@ -143,7 +143,7 @@ To test certificate issuance, consider using the [LetsEncrypt staging server](ht
 
 A test command could thus be something like the following:
 
-    $ letsencrypt_webfaction --letsencrypt_account_email you@youremail.com --domains yourdomain.com,www.yourdomain.com --public ~/webapps/yourapp/wordpress/ --endpoint https://acme-staging.api.letsencrypt.org/
+    $ letsencrypt_webfaction --letsencrypt_account_email you@youremail.com --domains yourdomain.com,www.yourdomain.com --public ~/webapps/yourapp/wordpress/ --username <webfaction-username> --password <webfaction-password> --endpoint https://acme-staging.api.letsencrypt.org/
 
 
 ### Operation
