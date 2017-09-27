@@ -116,6 +116,8 @@ The basic parameters are as follows:
 
     In some cases (such as with some Node.js or Python applications), you may need to create this folder. See [here](https://github.com/will-in-wi/letsencrypt-webfaction/issues/24) for an example of this workaround.
 
+    You can specify multiple public directories in this option, separated by commas. This is useful when you want to create a single certificate that serves multiple domains that happen to be backed by multiple different public directories. During Let's Encrypt's http01 challenge-response, letsencrypt-webfaction will copy all the challenge files for all domains into all the public directories. Let's Encrypt supports up to 100 domains per certificate, and they discuss the pros and cons of the multiple-domain technique here: https://letsencrypt.org/docs/integration-guide/
+
 * `--username`
 
     The username you use to log into the Webfaction control panel. Needed along with the password to upload your cert to their API.
