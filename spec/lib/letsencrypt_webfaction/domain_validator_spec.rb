@@ -2,7 +2,7 @@ require 'letsencrypt_webfaction/domain_validator'
 
 RSpec.describe LetsencryptWebfaction::DomainValidator do
   let(:domains) { ['example.com', 'www.example.com'] }
-  let(:public_dir) { 'spec/tmp/' }
+  let(:public_dir) { ['spec/tmp/'] }
 
   after :each do
     # Clean out the test folder.

@@ -5,7 +5,7 @@ module LetsencryptWebfaction
     def initialize(domains, client, public_dirs)
       @domains = domains
       @client = client
-      @public_dir = public_dirs.map { |dir| File.expand_path(dir) }
+      @public_dirs = public_dirs.map { |dir| File.expand_path(dir) }
     end
 
     def validate!
