@@ -2,22 +2,28 @@ require 'letsencrypt_webfaction/domain_validator'
 
 RSpec.describe LetsencryptWebfaction::DomainValidator do
   let(:domains) { ['example.com', 'www.example.com'] }
-  let(:public_dir) { 'spec/tmp/' }
+  let(:public_dir) { ['spec/tmp/'] }
 
   after :each do
     # Clean out the test folder.
-    FileUtils.rm_f Dir.glob("#{public_dir}/*")
+    FileUtils.rm_f Dir.glob('spec/tmp/*')
   end
 
   it '#validate! works' do
-    challenge = double('challenge')
-    allow(challenge).to receive(:filename).and_return('file01.txt', 'file02.txt')
-    allow(challenge).to receive(:file_content).and_return('file01 content', 'file02 content')
-    allow(challenge).to receive(:request_verification)
-    allow(challenge).to receive(:verify_status).and_return('pending', 'valid')
+    challenge1 = double('challenge1')
+    allow(challenge1).to receive(:filename).and_return('file01.txt')
+    allow(challenge1).to receive(:file_content).and_return('file01 content')
+    allow(challenge1).to receive(:request_verification)
+    allow(challenge1).to receive(:verify_status).and_return('pending', 'valid')
+
+    challenge2 = double('challenge2')
+    allow(challenge2).to receive(:filename).and_return('file02.txt')
+    allow(challenge2).to receive(:file_content).and_return('file02 content')
+    allow(challenge2).to receive(:request_verification)
+    allow(challenge2).to receive(:verify_status).and_return('pending', 'valid')
 
     authorization = double('authorization')
-    allow(authorization).to receive(:http01).and_return(challenge)
+    allow(authorization).to receive(:http01).and_return(challenge1, challenge2)
 
     client = double('client')
     allow(client).to receive(:authorize).and_return(authorization)
@@ -28,6 +34,46 @@ RSpec.describe LetsencryptWebfaction::DomainValidator do
     allow_any_instance_of(Object).to receive(:sleep)
 
     dv.validate!
+
+    path = Pathname.new(public_dir.first)
+    expect(path.join('file01.txt')).to be_exist
+    expect(path.join('file02.txt')).to be_exist
+  end
+
+  context 'with multiple public dirs' do
+    let(:public_dir) { ['spec/tmp/test2/', 'spec/tmp/test1/'] }
+
+    it 'creates multiple files' do
+      challenge1 = double('challenge1')
+      allow(challenge1).to receive(:filename).and_return('file01.txt')
+      allow(challenge1).to receive(:file_content).and_return('file01 content')
+      allow(challenge1).to receive(:request_verification)
+      allow(challenge1).to receive(:verify_status).and_return('pending', 'valid')
+
+      challenge2 = double('challenge2')
+      allow(challenge2).to receive(:filename).and_return('file02.txt')
+      allow(challenge2).to receive(:file_content).and_return('file02 content')
+      allow(challenge2).to receive(:request_verification)
+      allow(challenge2).to receive(:verify_status).and_return('pending', 'valid')
+
+      authorization = double('authorization')
+      allow(authorization).to receive(:http01).and_return(challenge1, challenge2)
+
+      client = double('client')
+      allow(client).to receive(:authorize).and_return(authorization)
+
+      dv = LetsencryptWebfaction::DomainValidator.new domains, client, public_dir
+
+      # Speed up sleep
+      allow_any_instance_of(Object).to receive(:sleep)
+
+      dv.validate!
+
+      public_dir.map { |dir| Pathname.new(dir) }.each do |path|
+        expect(path.join('file01.txt')).to be_exist
+        expect(path.join('file02.txt')).to be_exist
+      end
+    end
   end
 
   context 'when not reachable' do

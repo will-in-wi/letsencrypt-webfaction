@@ -29,7 +29,7 @@ RSpec.describe LetsencryptWebfaction::ArgsParser do
     end
 
     it 'requires public' do
-      expect(args_parser.errors[:public]).to eq ["Invalid public ''"]
+      expect(args_parser.errors[:public]).to eq ["Invalid public '[]'"]
     end
 
     it 'requires username' do
@@ -78,7 +78,7 @@ RSpec.describe LetsencryptWebfaction::ArgsParser do
     end
 
     it 'overrides public' do
-      expect(args_parser.public).to eq '/home/myuser/webapps/myapp/public_html'
+      expect(args_parser.public).to eq ['/home/myuser/webapps/myapp/public_html']
     end
 
     it 'overrides output_dir' do
@@ -212,7 +212,7 @@ RSpec.describe LetsencryptWebfaction::ArgsParser do
     end
 
     it 'overrides public' do
-      expect(args_parser.public).to eq '/home/myuser/webapps/myapp1/public_html'
+      expect(args_parser.public).to eq ['/home/myuser/webapps/myapp1/public_html']
     end
 
     it 'overrides output_dir' do
@@ -255,7 +255,7 @@ RSpec.describe LetsencryptWebfaction::ArgsParser do
     end
 
     it 'does not have public' do
-      expect(args_parser.public).to eq ''
+      expect(args_parser.public).to eq []
     end
 
     it 'does not have username' do
