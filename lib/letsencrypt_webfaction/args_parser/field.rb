@@ -17,6 +17,10 @@ module LetsencryptWebfaction
         validators.reject { |validator| validator.valid?(val) }.empty?
       end
 
+      def value?
+        true
+      end
+
       class IntegerField < Field
         def sanitize(val)
           val.to_i
@@ -26,6 +30,16 @@ module LetsencryptWebfaction
       class ListField < Field
         def sanitize(val)
           val.split(',').map(&:strip).compact
+        end
+      end
+
+      class BooleanField < Field
+        def sanitize(val)
+          val || false
+        end
+
+        def value?
+          false
         end
       end
     end

@@ -26,11 +26,19 @@ module LetsencryptWebfaction
       Field.new(:password, 'The password for your Webfaction account.', [StringValidator.new]),
       Field.new(:servername, 'The server on which this application resides (e.g. Web123).', [StringValidator.new]),
       Field.new(:cert_name, 'The name of the certificate in the Webfaction UI.', [StringValidator.new]),
+      Field::BooleanField.new(:quiet, 'Whether to display text on success.', []),
     ].freeze
 
     # Set up getters.
     FIELDS.map(&:identifier).each do |field|
       attr_reader field
+    end
+
+    # Set up boolean getters
+    FIELDS.reject(&:value?).map(&:identifier).each do |field|
+      define_method "#{field}?" do
+        instance_variable_get("@#{field}") || false
+      end
     end
 
     # EMail config is special, as it only comes from the config file, due to complexity.
@@ -100,7 +108,9 @@ module LetsencryptWebfaction
     end
 
     def handle_field(opts, field)
-      opts.on("--#{field.identifier}=#{field.identifier.upcase}", field.description) do |val|
+      argument = "--#{field.identifier}"
+      argument += "=#{field.identifier.upcase}" if field.value?
+      opts.on(argument, field.description) do |val|
         instance_variable_set("@#{field.identifier}", field.sanitize(val))
       end
     end

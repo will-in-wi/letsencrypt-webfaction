@@ -51,9 +51,21 @@ RSpec.describe LetsencryptWebfaction::Application do
     end
 
     it 'writes validation file' do
-      application.run!
+      expect do
+        application.run!
+      end.to output(/Your new certificate is now created and installed/).to_stdout
 
       expect(PUBLIC_DIR.join('challenge1.txt')).to exist
+    end
+
+    context 'with quiet param' do
+      let(:args) { super() + ['--quiet'] }
+
+      it 'does not output message' do
+        expect do
+          application.run!
+        end.to_not output(/Your new certificate is now created and installed/).to_stdout
+      end
     end
 
     context 'with invalid credentials' do

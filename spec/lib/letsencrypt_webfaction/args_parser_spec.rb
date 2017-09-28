@@ -54,6 +54,7 @@ RSpec.describe LetsencryptWebfaction::ArgsParser do
         '--password', 'mypassword',
         '--servername', 'Web123',
         '--cert_name', 'blah_server',
+        '--quiet',
       ]
     end
 
@@ -107,6 +108,10 @@ RSpec.describe LetsencryptWebfaction::ArgsParser do
 
     it 'has an empty hash of email_configuration' do
       expect(args_parser.email_configuration).to eq({})
+    end
+
+    it 'is quiet' do
+      expect(args_parser.quiet?).to eq true
     end
   end
 
@@ -237,6 +242,10 @@ RSpec.describe LetsencryptWebfaction::ArgsParser do
 
     it 'has api_url' do
       expect(args_parser.api_url).to eq 'https://api.webfaction.com/'
+    end
+
+    it 'is not quiet' do
+      expect(args_parser.quiet?).to eq false
     end
 
     it 'has servername' do

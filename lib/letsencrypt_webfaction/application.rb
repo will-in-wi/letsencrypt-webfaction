@@ -30,6 +30,8 @@ module LetsencryptWebfaction
 
       # Write the obtained certificates.
       certificate_installer.install!
+
+      output_success_help
     end
 
     private
@@ -78,6 +80,13 @@ module LetsencryptWebfaction
 
     def private_key
       OpenSSL::PKey::RSA.new(@options.key_size)
+    end
+
+    def output_success_help
+      return if @options.quiet?
+      puts 'Your new certificate is now created and installed.'
+      puts "You will need to change your application to use the #{@options.cert_name} certificate."
+      puts 'Add the `--quiet` parameter in your cron task to remove this message.'
     end
   end
 end
