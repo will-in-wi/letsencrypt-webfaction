@@ -167,9 +167,11 @@ Normally, you will run the script manually once to get the certificate, and then
 Your Cron task could look something like:
 
     # System Ruby Installation
-    0 4 1 */2 *     PATH=$PATH:$GEM_HOME/bin:/usr/local/bin GEM_HOME=$HOME/.letsencrypt_webfaction/gems RUBYLIB=$GEM_HOME/lib ruby2.2 $HOME/.letsencrypt_webfaction/gems/bin/letsencrypt_webfaction --letsencrypt_account_email [you@youremail.com] --domains [yourdomain.com,www.yourdomain.com] --public ~/webapps/[yourapp/your_public_html]/
+    0 4 1 */2 *     PATH=$PATH:$GEM_HOME/bin:/usr/local/bin GEM_HOME=$HOME/.letsencrypt_webfaction/gems RUBYLIB=$GEM_HOME/lib ruby2.2 $HOME/.letsencrypt_webfaction/gems/bin/letsencrypt_webfaction --letsencrypt_account_email [you@youremail.com] --domains [yourdomain.com,www.yourdomain.com] --public ~/webapps/[yourapp/your_public_html]/ --quiet
     # RBEnv Installation
-    0 4 1 */2 *     RBENV_ROOT=~/.rbenv RBENV_VERSION=2.3.1 ~/.rbenv/bin/rbenv exec letsencrypt_webfaction --letsencrypt_account_email [you@youremail.com] --domains [yourdomain.com,www.yourdomain.com] --public ~/webapps/[yourapp/your_public_html]/
+    0 4 1 */2 *     RBENV_ROOT=~/.rbenv RBENV_VERSION=2.3.1 ~/.rbenv/bin/rbenv exec letsencrypt_webfaction --letsencrypt_account_email [you@youremail.com] --domains [yourdomain.com,www.yourdomain.com] --public ~/webapps/[yourapp/your_public_html]/ --quiet
+
+*Note the usage of `--quiet` to keep the success message from being shown and emailed.*
 
 This [would run](http://crontab.guru/#0_4_1_*/2_*) at 4 a.m. on the first day of January, March, May, July, September, and November. Certificates expire three months after issuance, so modify as desired (for example, you may want to run the task every two months initially, to be sure that everything is working before extending the period). Change the date of the Cron task so that WebFaction staff don't simultaneously receive all certificate change requests on the first day of the month.
 
