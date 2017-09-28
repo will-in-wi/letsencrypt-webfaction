@@ -1,3 +1,7 @@
+v2.1.0
+
+* Allow multiple public directories to be used. The authorization responses will be duplicated across all of them, allowing a single cert to serve multiple applications. Fixes #96 (thanks @lsemprini for the suggestion!)
+
 v2.0.1
 
 * Check WebFaction credentials before issuing cert.
