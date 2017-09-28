@@ -69,7 +69,7 @@ After saving `~/.bash_profile`, run the command `source $HOME/.bash_profile` to 
 
 Now, you are ready to run `letsencrypt_webfaction` from your SSH session to get certificates. See below for usage.
 
-### RBEnv
+### RBEnv (advanced)
 
 This method is useful if you are already using RBEnv to manage Ruby, or if you are already a Ruby developer. If neither of these cases are true, just use the system Ruby method.
 
@@ -138,6 +138,8 @@ Here is a basic example which issues one certificate for both yourdomain.com and
     $ letsencrypt_webfaction --letsencrypt_account_email you@youremail.com --domains yourdomain.com,www.yourdomain.com --public ~/webapps/yourapp/wordpress/ --username myusername --password mypassword
 
 *Note: Passing the password via the command line as seen here is insecure. You should use the `--config` mechanism mentioned later.*
+
+After you run this command, you will see a new certificate in the webfaction admin panel, called yourdomain_com (in this case). You need to change your application to point to this certificate after the certificate has been issued. Future runs of this command will update the existing certificate entry and not require a change in the admin. You can change the name in the admin interface using the `--cert_name` parameter.
 
 ### Testing
 
