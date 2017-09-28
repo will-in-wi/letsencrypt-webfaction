@@ -1,3 +1,7 @@
+v2.2.0
+
+* Output helpful message on success unless `--quiet` flag is used. Fixes #86.
+
 v2.1.0
 
 * Allow multiple public directories to be used. The authorization responses will be duplicated across all of them, allowing a single cert to serve multiple applications. Fixes #96 (thanks @lsemprini for the suggestion!)
