@@ -80,7 +80,7 @@ module LetsencryptWebfaction
       config = YAML.load_file(config_path)
       FIELDS.each do |field|
         next unless config[field.identifier.to_s]
-        instance_variable_set("@#{field.identifier}", config[field.identifier.to_s])
+        instance_variable_set("@#{field.identifier}", field.sanitize(config[field.identifier.to_s]))
       end
 
       @email_configuration = config['email_configuration'] || {}

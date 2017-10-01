@@ -143,7 +143,7 @@ RSpec.describe LetsencryptWebfaction::ArgsParser do
     end
 
     it 'sets public' do
-      expect(args_parser.public).to eq '/home/myuser/webapps/myapp/public_html'
+      expect(args_parser.public).to eq ['/home/myuser/webapps/myapp/public_html']
     end
 
     it 'sets output_dir' do
@@ -171,7 +171,7 @@ RSpec.describe LetsencryptWebfaction::ArgsParser do
     end
 
     it 'sets public' do
-      expect(args_parser.public).to eq '/home/myuser/webapps/myapp/public_html'
+      expect(args_parser.public).to eq ['/home/myuser/webapps/myapp/public_html']
     end
 
     it 'sets output_dir' do
@@ -181,6 +181,14 @@ RSpec.describe LetsencryptWebfaction::ArgsParser do
     it 'has cert_name' do
       # Uses a converted common name
       expect(args_parser.cert_name).to eq 'example_com'
+    end
+  end
+
+  context 'with config public array' do
+    let(:args) { ['--config', 'spec/fixtures/test_public.config.yml'] }
+
+    it 'sets public' do
+      expect(args_parser.public).to eq ['/home/myuser/webapps/myapp/public_html', '/home/myuser/webapps/myapp/public_html1']
     end
   end
 

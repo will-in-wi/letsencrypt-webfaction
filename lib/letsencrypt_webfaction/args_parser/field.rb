@@ -29,6 +29,7 @@ module LetsencryptWebfaction
 
       class ListField < Field
         def sanitize(val)
+          return val if val.kind_of?(Array)
           val.split(',').map(&:strip).compact
         end
       end

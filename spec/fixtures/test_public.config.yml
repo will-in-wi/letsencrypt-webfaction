@@ -1,0 +1,14 @@
+key_size: 2048
+endpoint: 'https://acme.example.com/'
+domains:
+  - 'example.com'
+  - 'www.example.com'
+# The webroot of the application.
+public:
+  - '/home/myuser/webapps/myapp/public_html'
+  - '/home/myuser/webapps/myapp/public_html1'
+output_dir: '/home/myuser/le2_certs/'
+letsencrypt_account_email: 'myacct@example.com'
+username: 'myusername'
+password: 'mypassword'
+servername: 'myserver'
