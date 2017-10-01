@@ -1,3 +1,7 @@
+v2.2.1
+
+* Fixes issue where older (pre-2.1.0) configs would have a string as the domain. Converts this to array internally.
+
 v2.2.0
 
 * Output helpful message on success unless `--quiet` flag is used. Fixes #86.
