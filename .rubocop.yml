@@ -21,6 +21,10 @@ Metrics/BlockLength:
 Layout/IndentHeredoc:
   Enabled: false
 
+# When we use $stderr.puts, we don't see that as verbose.
+Style/StderrPuts:
+  Enabled: false
+
 # Extra cops:
 
 # Encourages block syntax for things like File.open
