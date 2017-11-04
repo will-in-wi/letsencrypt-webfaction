@@ -3,8 +3,6 @@
 key_size: 4096
 endpoint: 'https://acme-v01.api.letsencrypt.org/'
 letsencrypt_account_email: 'me@example.com'
-domains:
-  - 'example.com'
-  - 'www.example.com'
+domains: ['example.com','www.example.com']
 # The webroot of the application.
 public: '/home/myuser/webapps/myapp/public_html'
