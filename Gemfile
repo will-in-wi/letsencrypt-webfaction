@@ -9,7 +9,7 @@ group :development, :test do
   gem 'pry-byebug', '~> 3.3'
   gem 'rake', '~> 10.0'
   gem 'rspec', '~> 3.4'
-  gem 'rubocop', '~> 0.37'
+  gem 'rubocop', '~> 0.51'
   gem 'simplecov', '~> 0.11'
   gem 'webmock', '~> 2.1'
 end
