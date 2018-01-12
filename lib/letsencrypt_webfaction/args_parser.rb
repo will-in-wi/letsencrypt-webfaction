@@ -139,6 +139,7 @@ module LetsencryptWebfaction
       if @cert_name.nil? || @cert_name == ''
         @cert_name = @domains[0].tr('.', '_') if @domains.any?
       end
+      # rubocop:enable Style/GuardClause
     end
   end
 end
