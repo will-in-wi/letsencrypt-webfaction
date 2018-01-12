@@ -177,7 +177,7 @@ This [would run](http://crontab.guru/#0_4_1_*/2_*) at 4 a.m. on the first day of
 
 If you have more than one Cron task running like this, you may want to set the environment variables at the top of the file, and create a config file containing the contact information.
 
-If you want to be notified upon failure, you can add `MAILTO=[you@youremail.com]` to the top of the crontab. This will send you an email whenever any cron job outputs standard out or standard error, which is generally good practice.
+If you want to be notified upon failure, you can add `MAILTO=[you@youremail.com]` to the top of the crontab. This will send you an email whenever any cron job outputs standard out or standard error, which is generally good practice. According to the Webfaction [Cron documentaion](https://docs.webfaction.com/software/general.html#scheduling-tasks-with-cron) some webfaction servers also require you to add `MAILFROM=[you@youremail.com]` to the top of the crontab.
 
 ## Upgrading
 
