@@ -19,7 +19,6 @@ module LetsencryptWebfaction
       Field.new(:endpoint, 'ACME endpoint (e.g. https://acme-v01.api.letsencrypt.org/)', [StringValidator.new]),
       Field::ListField.new(:domains, 'Comma separated list of domains. The first one will be the common name.', [ArrayValidator.new]),
       Field::ListField.new(:public, 'Locations on the filesystem served by the desired sites (e.g. "~/webapps/myapp/public_html,~/webapps/myapp1/public_html")', [ArrayValidator.new]),
-      Field.new(:output_dir, 'Location on the filesystem to which the certs will be saved.', [StringValidator.new]),
       Field.new(:letsencrypt_account_email, 'The email address associated with your account.', [StringValidator.new]),
       Field.new(:api_url, 'The URL to the Webfaction API.', [StringValidator.new]),
       Field.new(:username, 'The username for your Webfaction account.', [StringValidator.new]),

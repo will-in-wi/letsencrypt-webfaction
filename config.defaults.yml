@@ -3,7 +3,6 @@ key_size: 4096
 endpoint: 'https://acme-v01.api.letsencrypt.org/'
 domains: []
 public: []
-output_dir: '~/le_certs/'
 letsencrypt_account_email: ''
 api_url: 'https://api.webfaction.com/'
 username: ''

@@ -48,7 +48,6 @@ RSpec.describe LetsencryptWebfaction::ArgsParser do
         '--endpoint', 'https://acme.example.com/',
         '--domains', 'example.com,www.example.com',
         '--public', '/home/myuser/webapps/myapp/public_html',
-        '--output_dir', '/home/myuser/le1_certs/',
         '--letsencrypt_account_email', 'acct2@example.com',
         '--username', 'myusername',
         '--password', 'mypassword',
@@ -80,10 +79,6 @@ RSpec.describe LetsencryptWebfaction::ArgsParser do
 
     it 'overrides public' do
       expect(args_parser.public).to eq ['/home/myuser/webapps/myapp/public_html']
-    end
-
-    it 'overrides output_dir' do
-      expect(args_parser.output_dir).to eq '/home/myuser/le1_certs/'
     end
 
     it 'overrides letsencrypt_account_email' do
@@ -145,10 +140,6 @@ RSpec.describe LetsencryptWebfaction::ArgsParser do
     it 'sets public' do
       expect(args_parser.public).to eq ['/home/myuser/webapps/myapp/public_html']
     end
-
-    it 'sets output_dir' do
-      expect(args_parser.output_dir).to eq '/home/myuser/le2_certs/'
-    end
   end
 
   context 'loads partial config' do
@@ -174,10 +165,6 @@ RSpec.describe LetsencryptWebfaction::ArgsParser do
       expect(args_parser.public).to eq ['/home/myuser/webapps/myapp/public_html']
     end
 
-    it 'sets output_dir' do
-      expect(args_parser.output_dir).to eq '~/le_certs/'
-    end
-
     it 'has cert_name' do
       # Uses a converted common name
       expect(args_parser.cert_name).to eq 'example_com'
@@ -200,7 +187,6 @@ RSpec.describe LetsencryptWebfaction::ArgsParser do
         '--endpoint', 'https://acme1.example.com/',
         '--domains', 'example.org,www1.example.org',
         '--public', '/home/myuser/webapps/myapp1/public_html',
-        '--output_dir', '/home/myuser/le1_certs/',
       ]
     end
 
@@ -227,10 +213,6 @@ RSpec.describe LetsencryptWebfaction::ArgsParser do
     it 'overrides public' do
       expect(args_parser.public).to eq ['/home/myuser/webapps/myapp1/public_html']
     end
-
-    it 'overrides output_dir' do
-      expect(args_parser.output_dir).to eq '/home/myuser/le1_certs/'
-    end
   end
 
   context 'with default configuration' do
@@ -242,10 +224,6 @@ RSpec.describe LetsencryptWebfaction::ArgsParser do
 
     it 'has endpoint' do
       expect(args_parser.endpoint).to eq 'https://acme-v01.api.letsencrypt.org/'
-    end
-
-    it 'has output_dir' do
-      expect(args_parser.output_dir).to eq '~/le_certs/'
     end
 
     it 'has api_url' do

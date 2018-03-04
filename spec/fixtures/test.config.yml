@@ -5,7 +5,6 @@ domains:
   - 'www.example.com'
 # The webroot of the application.
 public: '/home/myuser/webapps/myapp/public_html'
-output_dir: '/home/myuser/le2_certs/'
 letsencrypt_account_email: 'myacct@example.com'
 username: 'myusername'
 password: 'mypassword'

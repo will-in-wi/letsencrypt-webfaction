@@ -28,7 +28,6 @@ RSpec.describe LetsencryptWebfaction::Application do
       '--letsencrypt_account_email', 'contact@example.com',
       '--domains', 'www.example.com,example.com',
       '--public', PUBLIC_DIR.to_s,
-      '--output_dir', TEMP_DIR.join('out').to_s,
       '--endpoint', 'http://localhost:4002',
       '--username', 'myusername',
       '--password', 'mypassword',

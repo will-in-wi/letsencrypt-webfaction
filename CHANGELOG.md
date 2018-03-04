@@ -1,3 +1,7 @@
+v2.2.2
+
+* Removes `output_dir` from configuration as it hasn't been used since 1..
+
 v2.2.1
 
 * Fixes issue where older (pre-2.1.0) configs would have a string as the domain. Converts this to array internally.
