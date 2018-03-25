@@ -11,6 +11,9 @@ Metrics/LineLength:
 # This requires leading comments which can tend to be redundant.
 Style/Documentation:
   Enabled: false
+# I prefer my underscore convention.
+Naming/MemoizedInstanceVariableName:
+  Enabled: false
 
 Metrics/BlockLength:
   Exclude:

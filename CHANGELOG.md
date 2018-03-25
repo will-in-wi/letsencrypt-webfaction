@@ -1,6 +1,7 @@
 v2.2.2
 
 * Removes `output_dir` from configuration as it hasn't been used since 1..
+* Rubocop cleanups.
 
 v2.2.1
 
