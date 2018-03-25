@@ -2,6 +2,7 @@ v2.2.2
 
 * Removes `output_dir` from configuration as it hasn't been used since 1..
 * Rubocop cleanups.
+* Fix situation where cert_name has invalid chars. Fixes #114.
 
 v2.2.1
 

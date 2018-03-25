@@ -110,6 +110,58 @@ RSpec.describe LetsencryptWebfaction::ArgsParser do
     end
   end
 
+  context 'with cert_name containing invalid characters' do
+    let(:cert_name) { 'blah server' }
+    let(:args) do
+      [
+        '--key_size', '2048',
+        '--endpoint', 'https://acme.example.com/',
+        '--domains', 'example.com,www.example.com',
+        '--public', '/home/myuser/webapps/myapp/public_html',
+        '--letsencrypt_account_email', 'acct2@example.com',
+        '--username', 'myusername',
+        '--password', 'mypassword',
+        '--servername', 'Web123',
+        '--cert_name', cert_name,
+        '--quiet',
+      ]
+    end
+
+    subject { args_parser.cert_name }
+
+    context 'like spaces' do
+      let(:cert_name) { 'blah server' }
+
+      it 'overrides cert_name' do
+        is_expected.to eq 'blah_server'
+      end
+    end
+
+    context 'like dashes' do
+      let(:cert_name) { 'blah-server' }
+
+      it 'overrides cert_name' do
+        is_expected.to eq 'blah_server'
+      end
+    end
+
+    context 'like dots' do
+      let(:cert_name) { 'blah.server' }
+
+      it 'overrides cert_name' do
+        is_expected.to eq 'blah_server'
+      end
+    end
+
+    context 'like emoji' do
+      let(:cert_name) { 'blah😊server' }
+
+      it 'overrides cert_name' do
+        is_expected.to eq 'blah_server'
+      end
+    end
+  end
+
   context 'returns help information' do
     let(:args) { ['--help'] }
 

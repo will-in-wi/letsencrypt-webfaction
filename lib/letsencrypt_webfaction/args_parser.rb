@@ -126,7 +126,6 @@ module LetsencryptWebfaction
     end
 
     def parse!
-      # rubocop:disable Style/GuardClause
       opt_parser.parse!(@options)
 
       # Set default hostname
@@ -136,9 +135,9 @@ module LetsencryptWebfaction
 
       # Set default cert_name
       if @cert_name.nil? || @cert_name == ''
-        @cert_name = @domains[0].tr('.', '_') if @domains.any?
+        @cert_name = @domains[0] if @domains.any?
       end
-      # rubocop:enable Style/GuardClause
+      @cert_name = @cert_name.gsub(/[^a-zA-Z\d_]/, '_')
     end
   end
 end
