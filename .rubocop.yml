@@ -50,7 +50,9 @@ Lint/LiteralInInterpolation:
   Enabled: true
 
 # Personal preference. Makes the diffs smaller.
-Style/TrailingCommaInLiteral:
+Style/TrailingCommaInArrayLiteral:
+  EnforcedStyleForMultiline: consistent_comma
+Style/TrailingCommaInHashLiteral:
   EnforcedStyleForMultiline: consistent_comma
 Style/TrailingCommaInArguments:
   EnforcedStyleForMultiline: consistent_comma
