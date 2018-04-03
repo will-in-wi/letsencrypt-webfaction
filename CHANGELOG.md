@@ -1,3 +1,9 @@
+v2.2.3
+
+* Fix issue where Acme::Client v0.5.0 changed API. Require newer version and use differently. Fixes #120
+* Fix timing issue where it always took 10 seconds to fail.
+* Upgrade required Acme::Client to v0.6.0.
+
 v2.2.2
 
 * Removes `output_dir` from configuration as it hasn't been used since 1..
