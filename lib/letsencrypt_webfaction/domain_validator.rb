@@ -66,7 +66,7 @@ module LetsencryptWebfaction
         @challenge = challenge
       end
 
-      def print_error
+      def print_error # rubocop:disable Metrics/MethodLength
         case @challenge.authorization.verify_status
         when 'valid'
           $stderr.puts "#{@domain}: Success"
