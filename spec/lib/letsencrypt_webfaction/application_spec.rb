@@ -40,7 +40,8 @@ RSpec.describe LetsencryptWebfaction::Application do
   describe '#run!' do
     before :each do
       # Set up doubles to avoid actual verification and communication with LE.
-      challenge = double('challenge', filename: 'challenge1.txt', file_content: 'woohoo!', request_verification: nil, verify_status: 'valid')
+      authorization = double('authorization', verify_status: 'valid')
+      challenge = double('challenge', filename: 'challenge1.txt', file_content: 'woohoo!', request_verification: nil, authorization: authorization)
       certificate = double('certificate', to_pem: 'CERTIFICATE', chain_to_pem: 'CHAIN!', fullchain_to_pem: 'FULLCHAIN!!')
       allow(certificate).to receive_message_chain(:request, :private_key, to_pem: 'PRIVATE KEY')
       client = double('client', new_certificate: certificate)

@@ -33,7 +33,7 @@ module LetsencryptWebfaction
     end
 
     def all_challenges_valid?
-      challenges.reject { |challenge| challenge.verify_status == 'valid' }.empty?
+      challenges.reject { |challenge| challenge.authorization.verify_status == 'valid' }.empty?
     end
 
     def write_files!
@@ -61,11 +61,16 @@ module LetsencryptWebfaction
       end
 
       def print_error
-        if @challenge.verify_status == 'valid'
+        case @challenge.authorization.verify_status
+        when 'valid'
           $stderr.puts "#{@domain}: Success"
-        else
+        when 'invalid'
           $stderr.puts "#{@domain}: #{@challenge.error['detail']}"
           $stderr.puts "Make sure that you can access #{url}"
+        when 'pending'
+          $stderr.puts "#{@domain}: Still pending, but timed out"
+        else
+          $stderr.puts "#{@domain}: Unexpected authorization status #{@challenge.authorization.verify_status}"
         end
       end
 
