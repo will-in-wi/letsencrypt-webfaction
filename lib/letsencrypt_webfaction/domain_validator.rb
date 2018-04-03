@@ -14,9 +14,11 @@ module LetsencryptWebfaction
       challenges.each(&:request_verification)
 
       10.times do
-        return true if all_challenges_valid?
+        break if no_challenges_pending?
         sleep(1)
       end
+
+      return true if all_challenges_valid?
 
       print_errors
       false
@@ -30,6 +32,10 @@ module LetsencryptWebfaction
 
     def challenges
       @challenges ||= authorizations.map(&:http01)
+    end
+
+    def no_challenges_pending?
+      challenges.none? { |challenge| challenge.authorization.verify_status == 'pending' }
     end
 
     def all_challenges_valid?
