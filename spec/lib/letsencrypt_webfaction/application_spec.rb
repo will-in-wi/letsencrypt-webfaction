@@ -1,96 +1,45 @@
 require 'letsencrypt_webfaction/application'
 
 RSpec.describe LetsencryptWebfaction::Application do
-  PUBLIC_DIR = TEMP_DIR.join('example').freeze
-  before :each do
-    FileUtils.mkdir_p TEMP_DIR
-    FileUtils.mkdir_p PUBLIC_DIR
-  end
+  describe '.new' do
+    let(:args) { [] }
+    subject { described_class.new(args) }
 
-  after :each do
-    FileUtils.rm_rf TEMP_DIR
-  end
+    context 'with "init"' do
+      let(:args) { %w[init --arg1] }
 
-  before :each do
-    stub_request(:post, 'https://wfserverapi.example.com/')
-      .with(body: "<?xml version=\"1.0\" ?><methodCall><methodName>login</methodName><params><param><value><string>myusername</string></value></param><param><value><string>mypassword</string></value></param><param><value><string>myservername</string></value></param><param><value><i4>2</i4></value></param></params></methodCall>\n")
-      .to_return(status: 200, body: fixture('login_response.xml'))
-    stub_request(:post, 'https://wfserverapi.example.com/')
-      .with(body: "<?xml version=\"1.0\" ?><methodCall><methodName>list_certificates</methodName><params><param><value><string>oz7e1xz9r0mf0wgue22hsj8tgkhqyo74</string></value></param></params></methodCall>\n")
-      .to_return(status: 200, body: fixture('list_certificates_response.xml'))
-    stub_request(:post, 'https://wfserverapi.example.com/')
-      .with(body: "<?xml version=\"1.0\" ?><methodCall><methodName>create_certificate</methodName><params><param><value><string>oz7e1xz9r0mf0wgue22hsj8tgkhqyo74</string></value></param><param><value><string>www_example_com</string></value></param><param><value><string>CERTIFICATE</string></value></param><param><value><string>PRIVATE KEY</string></value></param><param><value><string>CHAIN!</string></value></param></params></methodCall>\n")
-      .to_return(status: 200, body: fixture('create_certificate_response.xml'))
-  end
-
-  let(:args) do
-    [
-      '--letsencrypt_account_email', 'contact@example.com',
-      '--domains', 'www.example.com,example.com',
-      '--public', PUBLIC_DIR.to_s,
-      '--endpoint', 'http://localhost:4002',
-      '--username', 'myusername',
-      '--password', 'mypassword',
-      '--servername', 'myservername',
-      '--api_url', 'https://wfserverapi.example.com/',
-    ]
-  end
-  let(:application) { LetsencryptWebfaction::Application.new(args) }
-
-  describe '#run!' do
-    before :each do
-      # Set up doubles to avoid actual verification and communication with LE.
-      authorization = double('authorization', verify_status: 'valid')
-      challenge = double('challenge', filename: 'challenge1.txt', file_content: 'woohoo!', request_verification: nil, authorization: authorization)
-      certificate = double('certificate', to_pem: 'CERTIFICATE', chain_to_pem: 'CHAIN!', fullchain_to_pem: 'FULLCHAIN!!')
-      allow(certificate).to receive_message_chain(:request, :private_key, to_pem: 'PRIVATE KEY')
-      client = double('client', new_certificate: certificate)
-      allow(client).to receive_message_chain(:authorize, http01: challenge)
-      allow(client).to receive_message_chain(:register, agree_terms: nil)
-      allow(Acme::Client).to receive(:new) { client }
+      it { is_expected.to be_a LetsencryptWebfaction::Application::Init }
     end
 
-    it 'writes validation file' do
-      expect do
-        application.run!
-      end.to output(/Your new certificate is now created and installed/).to_stdout
+    context 'with "run"' do
+      let(:args) { %w[run --arg1] }
 
-      expect(PUBLIC_DIR.join('challenge1.txt')).to exist
+      it { is_expected.to be_a LetsencryptWebfaction::Application::Run }
     end
 
-    context 'with quiet param' do
-      let(:args) { super() + ['--quiet'] }
+    context 'with unsupported command' do
+      let(:args) { %w[blahblah --arg1] }
 
-      it 'does not output message' do
+      it 'shows error message' do
         expect do
-          application.run!
-        end.to_not output(/Your new certificate is now created and installed/).to_stdout
-      end
-    end
-
-    context 'with invalid credentials' do
-      before :each do
-        stub_request(:post, 'https://wfserverapi.example.com/')
-          .with(body: "<?xml version=\"1.0\" ?><methodCall><methodName>login</methodName><params><param><value><string>myusername</string></value></param><param><value><string>mypassword</string></value></param><param><value><string>myservername</string></value></param><param><value><i4>2</i4></value></param></params></methodCall>\n")
-          .to_raise(XMLRPC::FaultException.new(1, 'LoginError'))
+          subject
+        end.to output(/Unsupported command `blahblah`/).to_stderr
       end
 
-      it 'exits due to invalid credentials' do
+      it 'shows valid commands' do
         expect do
-          application.run!
-        end.to output(/Login failed/).to_stderr.and raise_error SystemExit
+          subject
+        end.to output(/Must be one of init, run/).to_stderr
       end
     end
-  end
 
-  describe '#run!' do
-    context 'with invalid options' do
+    context 'with nothing' do
       let(:args) { [] }
 
-      it 'raises argument error' do
+      it 'shows error message' do
         expect do
-          application.run!
-        end.to raise_error ArgumentError
+          subject
+        end.to output(/Missing command/).to_stderr
       end
     end
   end
