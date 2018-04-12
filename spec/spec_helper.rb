@@ -104,4 +104,15 @@ RSpec.configure do |config|
   # test failures related to randomization by passing the same `--seed` value
   # as the one that triggered the failure.
   Kernel.srand config.seed
+
+  config.before(:each) do
+    # Override Dir.home so that we can test.
+    allow(Dir).to receive(:home) { TEMP_DIR.to_s }
+  end
+
+  config.around(:each, uses_tmp_dir: true) do |example|
+    FileUtils.mkdir_p TEMP_DIR
+    example.run
+    FileUtils.rm_rf TEMP_DIR
+  end
 end
