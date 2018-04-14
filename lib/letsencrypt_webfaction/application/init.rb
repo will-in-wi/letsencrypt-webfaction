@@ -1,3 +1,5 @@
+require 'letsencrypt_webfaction/options'
+
 require 'pathname'
 require 'openssl'
 
@@ -16,7 +18,7 @@ module LetsencryptWebfaction
 
       def copy_config_file
         source = File.expand_path(File.join(__dir__, '../../../templates/letsencrypt_webfaction.toml'))
-        if LetsencryptWebfaction::Options::OPTIONS_PATH.exist?
+        if Options.default_options_path.exist?
           puts 'Config file already exists. Skipping copy...'
         else
           FileUtils.cp(source, Dir.home)
@@ -26,17 +28,16 @@ module LetsencryptWebfaction
 
       def create_private_key
         # Create config dir.
-        config_path = Pathname.new(Dir.home).join('.config', 'letsencrypt_webfaction')
-        FileUtils.mkdir_p(config_path)
+        FileUtils.mkdir_p(Options.default_config_path)
 
-        key_path = config_path.join('account_key.pem')
+        key_path = Options.default_config_path.join('account_key.pem')
         if key_path.exist?
           puts 'Account private key already exists. Skipping generation...'
         else
           # Create private key
           # TODO: Make key size configurable.
           private_key = OpenSSL::PKey::RSA.new(4096)
-          config_path.join('account_key.pem').write(private_key.to_pem)
+          Options.default_config_path.join('account_key.pem').write(private_key.to_pem)
           puts 'Generated and stored account private key'
         end
       end

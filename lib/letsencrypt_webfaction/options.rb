@@ -5,8 +5,6 @@ require 'letsencrypt_webfaction/options/certificate'
 
 module LetsencryptWebfaction
   class Options
-    OPTIONS_PATH = Pathname.new(Dir.home).join('letsencrypt_webfaction.toml').freeze
-
     NON_BLANK_FIELDS = %i[username password letsencrypt_account_email endpoint api_url servername].freeze
 
     WEBFACTION_API_URL = 'https://api.webfaction.com/'.freeze
@@ -17,8 +15,16 @@ module LetsencryptWebfaction
       # Validate options
     end
 
-    def self.from_toml(path = OPTIONS_PATH)
+    def self.from_toml(path)
       new TomlRB.parse(path.read)
+    end
+
+    def self.default_options_path
+      Pathname.new(Dir.home).join('letsencrypt_webfaction.toml')
+    end
+
+    def self.default_config_path
+      Pathname.new(Dir.home).join('.config', 'letsencrypt_webfaction')
     end
 
     def username
