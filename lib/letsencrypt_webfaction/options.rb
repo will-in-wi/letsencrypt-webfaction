@@ -58,5 +58,9 @@ module LetsencryptWebfaction
         e[:certificate] = cert_errors if cert_errors.any?
       end
     end
+
+    def valid?
+      errors.none?
+    end
   end
 end

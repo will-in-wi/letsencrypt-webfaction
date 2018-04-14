@@ -29,6 +29,16 @@ RSpec.describe LetsencryptWebfaction::Options do
 
   describe '#valid?' do
     subject { options.valid? }
+
+    context 'with no errors' do
+      it { is_expected.to eq true }
+    end
+
+    context 'with errors' do
+      let(:username) { nil }
+
+      it { is_expected.to eq false }
+    end
   end
 
   describe '#endpoint' do
