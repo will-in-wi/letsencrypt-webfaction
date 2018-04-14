@@ -16,7 +16,7 @@ module LetsencryptWebfaction
 
       def copy_config_file
         source = File.expand_path(File.join(__dir__, '../../../templates/letsencrypt_webfaction.toml'))
-        if Pathname.new(Dir.home).join('letsencrypt_webfaction.toml').exist?
+        if LetsencryptWebfaction::Options::OPTIONS_PATH.exist?
           puts 'Config file already exists. Skipping copy...'
         else
           FileUtils.cp(source, Dir.home)
