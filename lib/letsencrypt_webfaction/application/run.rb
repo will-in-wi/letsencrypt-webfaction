@@ -106,6 +106,10 @@ module LetsencryptWebfaction
 
         # You'll may need to agree to the term (that's up the to the server to require it or not but boulder does by default)
         registration.agree_terms
+      rescue Acme::Client::Error::Malformed => e
+        # Stupid hack if the registration already exists.
+        return if e.message == 'Registration key is already in use'
+        raise
       end
     end
   end
