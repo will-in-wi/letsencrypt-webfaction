@@ -11,8 +11,6 @@ module LetsencryptWebfaction
     end
 
     def call
-      # TODO: Figure out if I need to renew/issue the cert.
-
       # Validate the domains.
       return unless validator.validate!
 
