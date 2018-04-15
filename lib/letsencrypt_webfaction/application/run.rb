@@ -1,6 +1,7 @@
 require 'letsencrypt_webfaction/options'
 require 'letsencrypt_webfaction/errors'
 require 'letsencrypt_webfaction/webfaction_api_credentials'
+require 'letsencrypt_webfaction/certificate_issuer'
 
 require 'acme-client'
 
