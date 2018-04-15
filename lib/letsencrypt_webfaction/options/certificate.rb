@@ -35,7 +35,7 @@ module LetsencryptWebfaction
         @args['key_size'] || 4096
       end
 
-      def errors
+      def errors # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
         {}.tap do |e|
           e[:domains] = "can't be empty" if domains.none?
           e[:method] = 'must be "http01"' unless SUPPORTED_VALIDATION_METHODS.include?(validation_method)
