@@ -25,7 +25,7 @@ module LetsencryptWebfaction
     private
 
     def validator
-      @_validator ||= LetsencryptWebfaction::DomainValidator.new @cert_config.domains, @client, @cert_config.public
+      @_validator ||= LetsencryptWebfaction::DomainValidator.new @cert_config.domains, @client, @cert_config.public_dirs
     end
 
     def certificate_installer
