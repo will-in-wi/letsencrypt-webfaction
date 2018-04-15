@@ -19,6 +19,10 @@ Metrics/BlockLength:
   Exclude:
     # Tests involve long blocks.
     - 'spec/**/*'
+Metrics/ModuleLength:
+  Exclude:
+    # Tests involve piles of code.
+    - 'spec/**/*'
 
 # I'm not pulling in a library, or forcing Ruby 2.3+
 Layout/IndentHeredoc:

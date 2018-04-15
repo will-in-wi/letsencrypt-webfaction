@@ -1,3 +1,3 @@
 def fixture(filename)
-  FIXTURE_DIR.join(filename).open.read
+  FIXTURE_DIR.join(filename).read
 end
