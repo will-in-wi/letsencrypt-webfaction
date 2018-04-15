@@ -1,3 +1,7 @@
+require 'acme-client'
+require 'letsencrypt_webfaction/domain_validator'
+require 'letsencrypt_webfaction/certificate_installer'
+
 module LetsencryptWebfaction
   class CertificateIssuer
     def initialize(certificate:, api_credentials:, client:)
