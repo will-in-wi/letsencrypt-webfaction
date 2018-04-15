@@ -43,7 +43,7 @@ module LetsencryptWebfaction
           if wf_cert.nil?
             # Issue because nonexistent
             puts "Issuing #{cert.cert_name} for the first time."
-          elsif wf_cert['domains'].sort == cert.domains.sort
+          elsif Array(wf_cert['domains']).sort == cert.domains.sort
             days_remaining = (Date.parse(wf_cert['expiry_date']) - Date.now)
             if days_remaining < RENEWAL_DELTA
               # Renew because nearing expiration
