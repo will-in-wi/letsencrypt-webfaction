@@ -2,6 +2,8 @@ require 'letsencrypt_webfaction/options'
 require 'letsencrypt_webfaction/errors'
 require 'letsencrypt_webfaction/webfaction_api_credentials'
 
+require 'acme-client'
+
 module LetsencryptWebfaction
   module Application
     class Run
