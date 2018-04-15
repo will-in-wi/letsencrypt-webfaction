@@ -92,7 +92,7 @@ module LetsencryptWebfaction
             $stderr.puts 'Account key missing'
             raise AppExitError, 'Account key missing'
           end
-          OpenSSL::PKey::RSA.new(Options.default_config_path.join('account_key.pem'))
+          OpenSSL::PKey::RSA.new(Options.default_config_path.join('account_key.pem').read)
         end
       end
 
