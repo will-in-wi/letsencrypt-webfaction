@@ -26,16 +26,20 @@ module LetsencryptWebfaction
     let(:application) { described_class.new(args) }
 
     describe '#run!' do
+      let(:certificate_double) do
+        double('certificate', to_pem: 'CERTIFICATE', chain_to_pem: 'CHAIN!', fullchain_to_pem: 'FULLCHAIN!!').tap do |cert|
+          allow(cert).to receive_message_chain(:request, :private_key, to_pem: 'PRIVATE KEY')
+        end
+      end
+      let(:client_double) { double('client', new_certificate: certificate_double) }
+
       before :each do
         # Set up doubles to avoid actual verification and communication with LE.
         authorization = double('authorization', verify_status: 'valid')
         challenge = double('challenge', filename: 'challenge1.txt', file_content: 'woohoo!', request_verification: nil, authorization: authorization)
-        certificate = double('certificate', to_pem: 'CERTIFICATE', chain_to_pem: 'CHAIN!', fullchain_to_pem: 'FULLCHAIN!!')
-        allow(certificate).to receive_message_chain(:request, :private_key, to_pem: 'PRIVATE KEY')
-        client = double('client', new_certificate: certificate)
-        allow(client).to receive_message_chain(:authorize, http01: challenge)
-        allow(client).to receive_message_chain(:register, agree_terms: nil)
-        allow(Acme::Client).to receive(:new) { client }
+        allow(client_double).to receive_message_chain(:authorize, http01: challenge)
+        allow(client_double).to receive_message_chain(:register, agree_terms: nil)
+        allow(Acme::Client).to receive(:new) { client_double }
       end
 
       context 'with missing configuration file' do
@@ -73,6 +77,52 @@ module LetsencryptWebfaction
           expect do
             application.run!
           end.to raise_error(AppExitError).and output(/Login failed/).to_stderr
+        end
+      end
+
+      context 'with missing account key' do
+        before :each do
+          FileUtils.cp FIXTURE_DIR.join('test_valid_config.toml'), TEMP_DIR.join('letsencrypt_webfaction.toml')
+        end
+
+        it 'outputs helpful error message' do
+          expect { application.run! }.to raise_error(AppExitError).and output(/Account key missing/).to_stderr
+        end
+      end
+
+      context 'with previously registered key', :uses_tmp_dir do
+        before :each do
+          stub_request(:post, 'https://wfserverapi.example.com/')
+            .with(body: "<?xml version=\"1.0\" ?><methodCall><methodName>create_certificate</methodName><params><param><value><string>oz7e1xz9r0mf0wgue22hsj8tgkhqyo74</string></value></param><param><value><string>myname</string></value></param><param><value><string>CERTIFICATE</string></value></param><param><value><string>PRIVATE KEY</string></value></param><param><value><string>CHAIN!</string></value></param></params></methodCall>\n")
+            .to_return(status: 200, body: fixture('create_certificate_response.xml'), headers: {})
+        end
+
+        before :each do
+          allow(client_double).to receive(:register).and_raise(Acme::Client::Error::Malformed.new('Registration key is already in use'))
+        end
+
+        before :each do
+          FileUtils.cp FIXTURE_DIR.join('test_valid_config.toml'), TEMP_DIR.join('letsencrypt_webfaction.toml')
+        end
+
+        before :each do
+          # Low security key for test speed and size.
+          FileUtils.mkdir_p Options.default_config_path
+          Options.default_config_path.join('account_key.pem').write(OpenSSL::PKey::RSA.new(256).to_pem)
+        end
+
+        it 'goes on if registration has already occurred' do
+          expect { application.run! }.to output(/Issuing myname for the first time/).to_stdout
+        end
+
+        context 'with unrelated error' do
+          before :each do
+            allow(client_double).to receive(:register).and_raise(Acme::Client::Error::Malformed.new('Unrelated error'))
+          end
+
+          it 'throws error' do
+            expect { application.run! }.to raise_error(Acme::Client::Error::Malformed)
+          end
         end
       end
 

@@ -76,7 +76,9 @@ module LetsencryptWebfaction
           when Array
             error.each { |inner_field, inner_err| print_error("#{field} #{inner_field}", inner_err) }
           else
+            # :nocov:
             raise 'Unexpected internal error type'
+            # :nocov:
           end
         end
         raise AppExitError, 'config invalid'
