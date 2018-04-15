@@ -11,8 +11,12 @@ RSpec.describe LetsencryptWebfaction::Application do
       it { is_expected.to be_a LetsencryptWebfaction::Application::Init }
     end
 
-    context 'with "run"' do
+    context 'with "run"', :uses_tmp_dir do
       let(:args) { %w[run --arg1] }
+
+      before :each do
+        FileUtils.cp FIXTURE_DIR.join('test_valid_config.toml'), TEMP_DIR.join('letsencrypt_webfaction.toml')
+      end
 
       it { is_expected.to be_a LetsencryptWebfaction::Application::Run }
     end
