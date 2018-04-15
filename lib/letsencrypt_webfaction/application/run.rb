@@ -41,20 +41,20 @@ module LetsencryptWebfaction
           wf_cert = wf_cert_list.find { |c| c['name'] == cert.cert_name }
           if wf_cert.nil?
             # Issue because nonexistent
-            puts "Issuing #{cert.name} for the first time."
+            puts "Issuing #{cert.cert_name} for the first time."
           elsif wf_cert['domains'].sort == cert.domains.sort
             days_remaining = (Date.parse(wf_cert['expiry_date']) - Date.now)
             if days_remaining < RENEWAL_DELTA
               # Renew because nearing expiration
-              puts "#{days_remaining} days until expiration of #{cert.name}. Renewing..."
+              puts "#{days_remaining} days until expiration of #{cert.cert_name}. Renewing..."
             else
               # Ignore because active
-              puts "#{days_remaining} days until expiration of #{cert.name}. Skipping..."
+              puts "#{days_remaining} days until expiration of #{cert.cert_name}. Skipping..."
               next
             end
           else
             # Reissue because different
-            puts "Reissuing #{cert.name} due to a change in the domain list."
+            puts "Reissuing #{cert.cert_name} due to a change in the domain list."
           end
 
           CertificateIssuer.new(certificate: cert, api_credentials: api_credentials, client: client).call
