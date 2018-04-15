@@ -12,6 +12,10 @@ module LetsencryptWebfaction
         copy_config_file
         create_private_key
         output_next_steps
+        # TODO: Create crontab entry
+        # TODO: Make sure that configuration file has a "this has been configured" flag
+        # TODO: Add a bash binary type thingy
+        # TODO: Add an installer command?
       end
 
       private
