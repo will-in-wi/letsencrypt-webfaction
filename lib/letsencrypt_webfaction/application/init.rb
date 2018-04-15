@@ -1,6 +1,7 @@
 require 'letsencrypt_webfaction/options'
 
 require 'pathname'
+require 'fileutils'
 require 'openssl'
 
 module LetsencryptWebfaction
