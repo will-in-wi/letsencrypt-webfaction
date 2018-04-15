@@ -38,7 +38,7 @@ module LetsencryptWebfaction
       def process_certs # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
         wf_cert_list = api_credentials.call('list_certificates')
         @options.certificates.each do |cert|
-          wf_cert = wf_cert_list.find { |c| c['name'] == cert.name }
+          wf_cert = wf_cert_list.find { |c| c['name'] == cert.cert_name }
           if wf_cert.nil?
             # Issue because nonexistent
             puts "Issuing #{cert.name} for the first time."
