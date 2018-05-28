@@ -1,11 +1,14 @@
---quiet flag
+Features
+* --quiet flag
+* "This has been configured" flag in default config
+* Rewrite README
 
-Bash binary in default PATH
-Create crontab entry
-"This has been configured" flag in default config
-Installer one-liner
-Configurable key size?
-Param for defining a custom config location
+Init improvements
+* Bash binary in default PATH
+* Installer one-liner
+* Write migration task
 
-Write migration task
-Rewrite README
+Optional (Not MVP):
+* Create crontab entry
+* Param for defining a custom config location
+* Configurable key size?
