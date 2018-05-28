@@ -1,0 +1,11 @@
+--quiet flag
+
+Bash binary in default PATH
+Create crontab entry
+"This has been configured" flag in default config
+Installer one-liner
+Configurable key size?
+Param for defining a custom config location
+
+Write migration task
+Rewrite README
