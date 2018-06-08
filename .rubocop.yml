@@ -63,3 +63,8 @@ Style/TrailingCommaInHashLiteral:
   EnforcedStyleForMultiline: consistent_comma
 Style/TrailingCommaInArguments:
   EnforcedStyleForMultiline: consistent_comma
+
+
+# Seems buggy for now.
+Layout/ClosingHeredocIndentation:
+  Enabled: false
