@@ -44,11 +44,11 @@ This utility works on [CentOS 6 and 7 boxes](https://docs.webfaction.com/user-gu
 
 All places where you need to substitute a value specific to your setup will be denoted with square brackets, e.g. [yourdomain.com]. There are cases where shell variables are used, such as `$HOME`. These should be typed verbatim.
 
-You can install LetsEncrypt WebFaction using the system Ruby or using RBEnv.
+You can install LetsEncrypt WebFaction using the system Ruby.
+
+*NOTE: You can install letsencrypt_webfaction using rbenv if you are an advanced Ruby user. Replace the following section with [these instructions](docs/rbenv.md) if you choose to do so.*
 
 ### System Ruby
-
-This is the simpler method and is preferred.
 
 Run the following command in an SSH session to install the letsencrypt_webfaction package via the [RubyGems package management site](https://rubygems.org/gems/letsencrypt_webfaction):
 
@@ -68,22 +68,6 @@ This will simplify the running of the LetsEncrypt WebFaction command, by setting
 After saving `~/.bash_profile`, run the command `source $HOME/.bash_profile` to apply the new settings.
 
 Now, you are ready to run `letsencrypt_webfaction` from your SSH session to get certificates. See below for usage.
-
-### RBEnv (advanced)
-
-This method is useful if you are already using RBEnv to manage Ruby, or if you are already a Ruby developer. If neither of these cases are true, just use the system Ruby method.
-
-Follow the instructions to [set up RBEnv](https://github.com/rbenv/rbenv) and [Ruby Build](https://github.com/rbenv/ruby-build#readme) on your WebFaction server.
-
-Once you have done so, install Ruby 2.1+, but <2.4 (probably 2.3.1 at time of writing). Then set the local Ruby and install the Gem. Finally unset the local Ruby so that you don't run into problems.
-
-    $ rbenv install 2.3.1 # Installs Ruby 2.3.1
-    $ rbenv local 2.3.1 # Sets Ruby 2.3.1 as the default version in the current folder.
-    $ gem install letsencrypt_webfaction # Installs this utility from RubyGems.
-    $ rbenv rehash # Makes RBenv aware of the letsencrypt_webfaction utility.
-    $ rm .ruby-version # Unsets Ruby 2.3.1 as the default version in the current folder.
-
-*Ruby 2.4.0+ is not supported since they removed the XMLRPC library from core and moved it to a gem. This Gem doesn't work in Ruby <2.3, leaving us with an issue as the majority of system Rubies used with this project are <2.4. So don't use 2.4 for now. If you absolutely want to, make sure you install the xmlrpc gem manually.*
 
 ## Usage
 
@@ -166,10 +150,9 @@ Normally, you will run the script manually once to get the certificate, and then
 
 Your Cron task could look something like:
 
-    # System Ruby Installation
-    0 4 1 */2 *     PATH=$PATH:$GEM_HOME/bin:/usr/local/bin GEM_HOME=$HOME/.letsencrypt_webfaction/gems RUBYLIB=$GEM_HOME/lib ruby2.2 $HOME/.letsencrypt_webfaction/gems/bin/letsencrypt_webfaction --letsencrypt_account_email [you@youremail.com] --domains [yourdomain.com,www.yourdomain.com] --public ~/webapps/[yourapp/your_public_html]/ --quiet --username [yourusername] --password [yourpassword]
-    # RBEnv Installation
-    0 4 1 */2 *     RBENV_ROOT=~/.rbenv RBENV_VERSION=2.3.1 ~/.rbenv/bin/rbenv exec letsencrypt_webfaction --letsencrypt_account_email [you@youremail.com] --domains [yourdomain.com,www.yourdomain.com] --public ~/webapps/[yourapp/your_public_html]/ --quiet --username [yourusername] --password [yourpassword]
+```cron
+18 3 * * *     PATH=$PATH:$GEM_HOME/bin:/usr/local/bin GEM_HOME=$HOME/.letsencrypt_webfaction/gems RUBYLIB=$GEM_HOME/lib ruby2.2 $HOME/.letsencrypt_webfaction/gems/bin/letsencrypt_webfaction --letsencrypt_account_email [you@youremail.com] --domains [yourdomain.com,www.yourdomain.com] --public ~/webapps/[yourapp/your_public_html]/ --quiet --username [yourusername] --password [yourpassword]
+```
 
 *Note the usage of `--quiet` to keep the success message from being shown and emailed.*
 
@@ -191,14 +174,10 @@ LetsEncrypt WebFaction follows [Semantic Versioning](http://semver.org/). In a n
 
 TL;DR: Be careful with major version upgrades and you should be fine with upgrading to minor or patch releases.
 
-To upgrade, run one of the following two commands to fetch and install the newest version from RubyGems:
+To upgrade, run the following command to fetch and install the newest version from RubyGems:
 
 ```sh
-# For system Ruby:
 GEM_HOME=$HOME/.letsencrypt_webfaction/gems RUBYLIB=$GEM_HOME/lib gem2.2 install letsencrypt_webfaction
-
-# For RBenv
-RBENV_VERSION=2.3.1 gem install letsencrypt_webfaction
 ```
 
 ### More detailed examples
