@@ -8,7 +8,7 @@ module LetsencryptWebfaction
       'run' => LetsencryptWebfaction::Application::Run,
     }.freeze
 
-    def self.new(args)
+    def self.new(args) # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
       if args[0].nil?
         $stderr.puts "Missing command. Must be one of #{SUPPORTED_COMMANDS.keys.join(', ')}"
         raise LetsencryptWebfaction::AppExitError, 'Missing command'
