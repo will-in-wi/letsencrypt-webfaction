@@ -37,6 +37,16 @@ RSpec.describe LetsencryptWebfaction::Application do
       end
     end
 
+    context 'with v2 command' do
+      let(:args) { ['--domains', 'example.com,test.example.com', '--public', '~/webapps/mysite/', '--cert_name', 'mycert'] }
+
+      it 'shows error message' do
+        expect do
+          subject
+        end.to raise_error(LetsencryptWebfaction::AppExitError).and output(/It looks like you are trying to run a version 2 command/).to_stderr
+      end
+    end
+
     context 'with nothing' do
       let(:args) { [] }
 
