@@ -27,13 +27,13 @@ RSpec.describe LetsencryptWebfaction::Application do
       it 'shows error message' do
         expect do
           subject
-        end.to output(/Unsupported command `blahblah`/).to_stderr
+        end.to raise_error(LetsencryptWebfaction::AppExitError).and output(/Unsupported command `blahblah`/).to_stderr
       end
 
       it 'shows valid commands' do
         expect do
           subject
-        end.to output(/Must be one of init, run/).to_stderr
+        end.to raise_error(LetsencryptWebfaction::AppExitError).and output(/Must be one of init, run/).to_stderr
       end
     end
 
@@ -43,7 +43,7 @@ RSpec.describe LetsencryptWebfaction::Application do
       it 'shows error message' do
         expect do
           subject
-        end.to output(/Missing command/).to_stderr
+        end.to raise_error(LetsencryptWebfaction::AppExitError).and output(/Missing command/).to_stderr
       end
     end
   end
