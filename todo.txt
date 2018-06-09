@@ -1,5 +1,4 @@
 Features
-* --quiet flag
 * "This has been configured" flag in default config
 * Rewrite README
 
