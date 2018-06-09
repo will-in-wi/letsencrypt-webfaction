@@ -6,13 +6,13 @@ RSpec.describe LetsencryptWebfaction::Application do
     subject { described_class.new(args) }
 
     context 'with "init"' do
-      let(:args) { %w[init --arg1] }
+      let(:args) { %w[init] }
 
       it { is_expected.to be_a LetsencryptWebfaction::Application::Init }
     end
 
     context 'with "run"', :uses_tmp_dir do
-      let(:args) { %w[run --arg1] }
+      let(:args) { %w[run] }
 
       before :each do
         FileUtils.cp FIXTURE_DIR.join('test_valid_config.toml'), TEMP_DIR.join('letsencrypt_webfaction.toml')
@@ -22,7 +22,7 @@ RSpec.describe LetsencryptWebfaction::Application do
     end
 
     context 'with unsupported command' do
-      let(:args) { %w[blahblah --arg1] }
+      let(:args) { %w[blahblah] }
 
       it 'shows error message' do
         expect do

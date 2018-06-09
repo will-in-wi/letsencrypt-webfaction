@@ -276,7 +276,19 @@ module LetsencryptWebfaction
 
           it 'reissues cert' do
             Timecop.freeze(Date.new(2017, 1, 1)) do
-              expect { application.run! }.to output(/Reissuing myname due to a change in the domain list/).to_stdout
+              expect { application.run! }.to output.to_stdout
+            end
+          end
+
+          context 'with quiet param' do
+            let(:args) { super() + ['--quiet'] }
+
+            it 'does not output message' do
+              Timecop.freeze(Date.new(2017, 1, 1)) do
+                expect do
+                  application.run!
+                end.to_not output(/Your new certificate is now created and installed/).to_stdout
+              end
             end
           end
         end
@@ -289,17 +301,7 @@ module LetsencryptWebfaction
       #
       #   expect(PUBLIC_DIR.join('challenge1.txt')).to exist
       # end
-      #
-      # context 'with quiet param' do
-      #   let(:args) { super() + ['--quiet'] }
-      #
-      #   it 'does not output message' do
-      #     expect do
-      #       application.run!
-      #     end.to_not output(/Your new certificate is now created and installed/).to_stdout
-      #   end
-      # end
-      #
+
       # context 'with invalid credentials' do
       #   before :each do
       #     stub_request(:post, 'https://wfserverapi.example.com/')

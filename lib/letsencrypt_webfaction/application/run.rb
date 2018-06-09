@@ -2,16 +2,20 @@ require 'letsencrypt_webfaction/options'
 require 'letsencrypt_webfaction/errors'
 require 'letsencrypt_webfaction/webfaction_api_credentials'
 require 'letsencrypt_webfaction/certificate_issuer'
+require 'letsencrypt_webfaction/logger_output'
 
 require 'acme-client'
+require 'optparse'
 
 module LetsencryptWebfaction
   module Application
     class Run
       RENEWAL_DELTA = 14 # days
 
-      def initialize(_args)
-        # TODO: args should be supported: --quiet --config
+      def initialize(args)
+        parse_quiet(args)
+
+        # TODO: args should be supported: --config
         unless Options.default_options_path.exist?
           $stderr.puts 'The configuration file is missing.'
           $stderr.puts 'You may need to run `letsencrypt_webfaction init`'
@@ -36,26 +40,36 @@ module LetsencryptWebfaction
 
       private
 
+      def parse_quiet(args)
+        OptionParser.new do |opts|
+          opts.banner = 'Usage: letsencrypt_webfaction run [options]'
+
+          opts.on('--quiet', 'Run with minimal output (useful for cron)') do |q|
+            Out.quiet = q
+          end
+        end.parse!(args)
+      end
+
       def process_certs # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
         wf_cert_list = api_credentials.call('list_certificates')
         @options.certificates.each do |cert|
           wf_cert = wf_cert_list.find { |c| c['name'] == cert.cert_name }
           if wf_cert.nil?
             # Issue because nonexistent
-            puts "Issuing #{cert.cert_name} for the first time."
+            Out.puts "Issuing #{cert.cert_name} for the first time."
           elsif wf_cert['domains'].split(',').map(&:strip).sort == cert.domains.sort
             days_remaining = (Date.parse(wf_cert['expiry_date']) - Date.today).to_i
             if days_remaining < RENEWAL_DELTA
               # Renew because nearing expiration
-              puts "#{days_remaining} days until expiration of #{cert.cert_name}. Renewing..."
+              Out.puts "#{days_remaining} days until expiration of #{cert.cert_name}. Renewing..."
             else
               # Ignore because active
-              puts "#{days_remaining} days until expiration of #{cert.cert_name}. Skipping..."
+              Out.puts "#{days_remaining} days until expiration of #{cert.cert_name}. Skipping..."
               next
             end
           else
             # Reissue because different
-            puts "Reissuing #{cert.cert_name} due to a change in the domain list."
+            Out.puts "Reissuing #{cert.cert_name} due to a change in the domain list."
           end
 
           CertificateIssuer.new(certificate: cert, api_credentials: api_credentials, client: client).call

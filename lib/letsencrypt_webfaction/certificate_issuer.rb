@@ -44,10 +44,9 @@ module LetsencryptWebfaction
     end
 
     def output_success_help
-      # TODO: Handle quiet
-      puts 'Your new certificate is now created and installed.'
-      puts "You will need to change your application to use the #{@cert_config.cert_name} certificate."
-      # puts 'Add the `--quiet` parameter in your cron task to remove this message.'
+      Out.puts 'Your new certificate is now created and installed.'
+      Out.puts "You will need to change your application to use the #{@cert_config.cert_name} certificate."
+      Out.puts 'Add the `--quiet` parameter in your cron task to remove this message.'
     end
   end
 end

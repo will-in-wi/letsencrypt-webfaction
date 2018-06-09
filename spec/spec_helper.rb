@@ -107,6 +107,8 @@ RSpec.configure do |config|
   # as the one that triggered the failure.
   Kernel.srand config.seed
 
+  config.before(:each) { LetsencryptWebfaction::Out.quiet = false }
+
   config.before(:each) do
     # Override Dir.home so that we can test.
     allow(Dir).to receive(:home) { TEMP_DIR.to_s }
