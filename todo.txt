@@ -1,6 +1,6 @@
 Features
-* "This has been configured" flag in default config
 * Rewrite README
+* Detect usage of old params and output helpful message.
 
 Init improvements
 * Bash binary in default PATH
