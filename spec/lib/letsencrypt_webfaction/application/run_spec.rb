@@ -4,7 +4,7 @@ require 'letsencrypt_webfaction/application/run'
 require 'letsencrypt_webfaction/options'
 
 module LetsencryptWebfaction
-  RSpec.describe Application::Run do
+  RSpec.describe Application::Run, :uses_tmp_dir do
     PUBLIC_DIR = TEMP_DIR.join('example').freeze
     before :each do
       FileUtils.mkdir_p PUBLIC_DIR
@@ -50,7 +50,7 @@ module LetsencryptWebfaction
         end
       end
 
-      context 'with invalid configuration file', :uses_tmp_dir do
+      context 'with invalid configuration file' do
         before :each do
           FileUtils.cp FIXTURE_DIR.join('test_invalid_config.toml'), TEMP_DIR.join('letsencrypt_webfaction.toml')
         end
@@ -62,7 +62,7 @@ module LetsencryptWebfaction
         end
       end
 
-      context 'with invalid credentials', :uses_tmp_dir do
+      context 'with invalid credentials' do
         before :each do
           stub_request(:post, 'https://wfserverapi.example.com/')
             .with(body: "<?xml version=\"1.0\" ?><methodCall><methodName>login</methodName><params><param><value><string>myusername</string></value></param><param><value><string>mypassword</string></value></param><param><value><string>myservername</string></value></param><param><value><i4>2</i4></value></param></params></methodCall>\n")
@@ -90,7 +90,7 @@ module LetsencryptWebfaction
         end
       end
 
-      context 'with previously registered key', :uses_tmp_dir do
+      context 'with previously registered key' do
         before :each do
           stub_request(:post, 'https://wfserverapi.example.com/')
             .with(body: "<?xml version=\"1.0\" ?><methodCall><methodName>create_certificate</methodName><params><param><value><string>oz7e1xz9r0mf0wgue22hsj8tgkhqyo74</string></value></param><param><value><string>myname</string></value></param><param><value><string>CERTIFICATE</string></value></param><param><value><string>PRIVATE KEY</string></value></param><param><value><string>CHAIN!</string></value></param></params></methodCall>\n")
