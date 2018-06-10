@@ -27,16 +27,16 @@ module LetsencryptWebfaction
 
     describe '#run!' do
       let(:certificate_double) do
-        double('certificate', to_pem: 'CERTIFICATE', chain_to_pem: 'CHAIN!', fullchain_to_pem: 'FULLCHAIN!!').tap do |cert|
+        instance_double(Acme::Client::Certificate, to_pem: 'CERTIFICATE', chain_to_pem: 'CHAIN!', fullchain_to_pem: 'FULLCHAIN!!').tap do |cert|
           allow(cert).to receive_message_chain(:request, :private_key, to_pem: 'PRIVATE KEY')
         end
       end
-      let(:client_double) { double('client', new_certificate: certificate_double) }
+      let(:client_double) { instance_double(Acme::Client, new_certificate: certificate_double) }
 
       before :each do
         # Set up doubles to avoid actual verification and communication with LE.
-        authorization = double('authorization', verify_status: 'valid')
-        challenge = double('challenge', filename: 'challenge1.txt', file_content: 'woohoo!', request_verification: true, authorization: authorization)
+        authorization = instance_double(Acme::Client::Resources::Authorization, verify_status: 'valid')
+        challenge = instance_double(Acme::Client::Resources::Challenges::HTTP01, filename: 'challenge1.txt', file_content: 'woohoo!', request_verification: true, authorization: authorization)
         allow(client_double).to receive_message_chain(:authorize, http01: challenge)
         allow(client_double).to receive_message_chain(:register, agree_terms: nil)
         allow(Acme::Client).to receive(:new) { client_double }
