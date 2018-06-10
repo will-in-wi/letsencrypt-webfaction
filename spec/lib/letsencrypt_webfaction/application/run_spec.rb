@@ -36,7 +36,7 @@ module LetsencryptWebfaction
       before :each do
         # Set up doubles to avoid actual verification and communication with LE.
         authorization = double('authorization', verify_status: 'valid')
-        challenge = double('challenge', filename: 'challenge1.txt', file_content: 'woohoo!', request_verification: nil, authorization: authorization)
+        challenge = double('challenge', filename: 'challenge1.txt', file_content: 'woohoo!', request_verification: true, authorization: authorization)
         allow(client_double).to receive_message_chain(:authorize, http01: challenge)
         allow(client_double).to receive_message_chain(:register, agree_terms: nil)
         allow(Acme::Client).to receive(:new) { client_double }

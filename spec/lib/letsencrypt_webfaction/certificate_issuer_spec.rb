@@ -11,7 +11,7 @@ module LetsencryptWebfaction
       end
     end
     let(:client) do
-      challenge = instance_double('Acme::Client::Resources::Challenges::HTTP01', request_verification: nil)
+      challenge = instance_double('Acme::Client::Resources::Challenges::HTTP01', request_verification: true)
       authorization = instance_double('Acme::Client::Resources::Authorization', http01: challenge, verify_status: 'valid')
       allow(challenge).to receive(:authorization).and_return(authorization)
       cert = instance_double('::Acme::Client::Certificate', to_pem: 'CERT', chain_to_pem: 'CHAIN')

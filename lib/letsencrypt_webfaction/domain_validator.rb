@@ -8,10 +8,14 @@ module LetsencryptWebfaction
       @public_dirs = public_dirs.map { |dir| File.expand_path(dir) }
     end
 
-    def validate!
+    def validate! # rubocop:disable Metrics/MethodLength
       write_files!
 
-      challenges.each(&:request_verification)
+      challenges.map(&:request_verification).tap do |requests|
+        next unless requests.any?(&:!)
+        $stderr.puts 'Failed to request validations.'
+        return false
+      end
 
       10.times do
         break if no_challenges_pending?
@@ -27,7 +31,7 @@ module LetsencryptWebfaction
     private
 
     def authorizations
-      @domains.map { |domain| @client.authorize(domain: domain) }
+      @authorizations ||= @domains.map { |domain| @client.authorize(domain: domain) }
     end
 
     def challenges
