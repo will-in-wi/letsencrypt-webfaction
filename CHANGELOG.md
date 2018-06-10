@@ -1,3 +1,12 @@
+v3.0.0
+
+*NOTE: Backwards incompatible, and requires changes to upgrade*
+
+* One command to update all certs
+* Checks cert validity and only renews if needed (Run daily instead of every other month)
+* Uses config file instead of command line arguments
+* Creates a single private key to serve as the registration cert, and reuses. (fixes #122)
+
 v2.2.3
 
 * Fix issue where Acme::Client v0.5.0 changed API. Require newer version and use differently. Fixes #120
