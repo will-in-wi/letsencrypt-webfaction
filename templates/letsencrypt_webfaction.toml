@@ -1,0 +1,58 @@
+# Your Webfaction username and password
+username = "myusername"
+password = "mypassword"
+
+# The email address which will be used to register with Let's Encrypt.
+letsencrypt_account_email = "me@example.com"
+
+# The ACME endpoint. Use the staging server until you get everything working.
+# Then switch to the production endpoint.
+endpoint = "https://acme-staging.api.letsencrypt.org/" # Staging
+#endpoint = "https://acme-v01.api.letsencrypt.org/" # Production
+
+# The URL to the WebFaction API. You should not change this under normal
+# circumstances.
+#api_url = "https://api.webfaction.com/"
+
+# The hostname of the server you are on. Should be autodetected and not need to
+# be changed.
+#servername = "web123"
+
+[[certificate]]
+# The list of domains for which the cert should be issued. The first will be
+# the common name.
+domains = [
+  "test.example.com",
+  "test1.example.com",
+]
+
+# Right now, only http01 is available. This is the default.
+#method = "http01"
+
+# The path to the root of your website. Can be an array as in the second example.
+public = "~/webapps/myapp/public_html"
+# public = [
+#   "~/webapps/myapp/public_html",
+#   "~/webapps/myapp/public_html1",
+# ]
+
+# The name of your cert in the WebFaction admin interface. Will default to
+# the cert common name with the dots replaced by underscores. (Optional)
+# NOTE: If you change this and do not also rename it in the webfaction admin,
+#       a new certificate will be issued.
+name = "mycertname1"
+
+# The size of the private key. 4096 is the default. You can use 2048.
+#key_size = 4096
+
+
+# A second certificate. All the same keys as above. You should create a
+# new [[certificate]] entry for every certificate you want issued. This is a
+# simplistic example.
+#[[certificate]]
+#domains = [
+#  "test2.example.com",
+#  "test3.example.com",
+#]
+#public = "~/webapps/myapp/public_html"
+#name = "mycertname1"

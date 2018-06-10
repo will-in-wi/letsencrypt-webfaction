@@ -1,6 +1,11 @@
 #!/usr/bin/env ruby
 
 require 'letsencrypt_webfaction/application'
+require 'letsencrypt_webfaction/errors'
 
-res = LetsencryptWebfaction::Application.new(ARGV).run!
-exit(res ? 0 : 1)
+begin
+  res = LetsencryptWebfaction::Application.new(ARGV).run!
+  exit(res ? 0 : 1)
+rescue LetsencryptWebfaction::AppExitError
+  exit 1
+end

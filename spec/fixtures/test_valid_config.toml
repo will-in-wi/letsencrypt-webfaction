@@ -1,0 +1,16 @@
+username = "myusername"
+password = "mypassword"
+letsencrypt_account_email = "me@example.com"
+endpoint = "https://acme-staging.api.letsencrypt.org/" # Staging
+api_url = "https://wfserverapi.example.com/"
+servername = "myservername"
+
+[[certificate]]
+domains = [
+  "test.example.com",
+  "test1.example.com",
+]
+#method = "http01"
+public = "~/webapps/myapp/public_html"
+name = "myname"
+#key_size = 4096

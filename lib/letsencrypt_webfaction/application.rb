@@ -1,92 +1,40 @@
-require 'openssl'
-require 'acme-client'
-
-require 'letsencrypt_webfaction/args_parser'
-require 'letsencrypt_webfaction/domain_validator'
-require 'letsencrypt_webfaction/certificate_installer'
-require 'letsencrypt_webfaction/webfaction_api_credentials'
+require 'letsencrypt_webfaction/application/init'
+require 'letsencrypt_webfaction/application/run'
 
 module LetsencryptWebfaction
-  class Application
-    def initialize(args)
-      @options = LetsencryptWebfaction::ArgsParser.new(args)
-    end
+  module Application
+    SUPPORTED_COMMANDS = {
+      'init' => LetsencryptWebfaction::Application::Init,
+      'run' => LetsencryptWebfaction::Application::Run,
+    }.freeze
 
-    def run!
-      # Validate that the correct options were passed.
-      validate_options!
+    V2_COMMANDS = %i[key_size endpoint domains public letsencrypt_account_email api_url username password servername cert_name].freeze
 
-      # Check credentials
-      unless api_credentials.valid?
-        $stderr.puts 'WebFaction API username, password, and/or servername are incorrect. Login failed.'
-        exit 1
+    class << self
+      def new(args) # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
+        if args[0].nil?
+          $stderr.puts "Missing command. Must be one of #{SUPPORTED_COMMANDS.keys.join(', ')}"
+          raise LetsencryptWebfaction::AppExitError, 'Missing command'
+        elsif v2_command?(args)
+          $stderr.puts 'It looks like you are trying to run a version 2 command in version 3'
+          $stderr.puts 'See https://github.com/will-in-wi/letsencrypt-webfaction/blob/master/docs/upgrading.md'
+          raise LetsencryptWebfaction::AppExitError, 'v2 command'
+        else
+          klass = SUPPORTED_COMMANDS[args[0]]
+          if klass.nil?
+            $stderr.puts "Unsupported command `#{args[0]}`. Must be one of #{SUPPORTED_COMMANDS.keys.join(', ')}"
+            raise LetsencryptWebfaction::AppExitError, 'Unsupported command'
+          else
+            klass.new(args[1..-1])
+          end
+        end
       end
 
-      # Register the private key.
-      register_key!
+      private
 
-      # Validate the domains.
-      return unless validator.validate!
-
-      # Write the obtained certificates.
-      certificate_installer.install!
-
-      output_success_help
-    end
-
-    private
-
-    def api_credentials
-      @_api_credentials ||= LetsencryptWebfaction::WebfactionApiCredentials.new username: @options.username, password: @options.password, servername: @options.servername, api_server: @options.api_url
-    end
-
-    def certificate_installer
-      @certificate_installer ||= LetsencryptWebfaction::CertificateInstaller.new(@options.cert_name, certificate, api_credentials)
-    end
-
-    def certificate
-      # We can now request a certificate, you can pass anything that returns
-      # a valid DER encoded CSR when calling to_der on it, for example a
-      # OpenSSL::X509::Request too.
-      @certificate ||= client.new_certificate(csr)
-    end
-
-    def csr
-      # We're going to need a certificate signing request. If not explicitly
-      # specified, the first name listed becomes the common name.
-      @csr ||= Acme::Client::CertificateRequest.new(names: @options.domains)
-    end
-
-    def validator
-      @validator ||= LetsencryptWebfaction::DomainValidator.new @options.domains, client, @options.public
-    end
-
-    def client
-      @client ||= Acme::Client.new(private_key: private_key, endpoint: @options.endpoint)
-    end
-
-    def register_key!
-      # If the private key is not known to the server, we need to register it for the first time.
-      registration = client.register(contact: "mailto:#{@options.letsencrypt_account_email}")
-
-      # You'll may need to agree to the term (that's up the to the server to require it or not but boulder does by default)
-      registration.agree_terms
-    end
-
-    def validate_options!
-      return if @options.valid?
-      raise ArgumentError, @options.errors.values.join("\n")
-    end
-
-    def private_key
-      OpenSSL::PKey::RSA.new(@options.key_size)
-    end
-
-    def output_success_help
-      return if @options.quiet?
-      puts 'Your new certificate is now created and installed.'
-      puts "You will need to change your application to use the #{@options.cert_name} certificate."
-      puts 'Add the `--quiet` parameter in your cron task to remove this message.'
+      def v2_command?(args)
+        (args & (V2_COMMANDS.map { |arg| "--#{arg}" })).any?
+      end
     end
   end
 end

@@ -11,5 +11,6 @@ group :development, :test do
   gem 'rspec', '~> 3.4'
   gem 'rubocop', '~> 0.51'
   gem 'simplecov', '~> 0.11'
+  gem 'timecop', '~> 0.9.1'
   gem 'webmock', '~> 2.1'
 end

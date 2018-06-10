@@ -2,8 +2,6 @@ require 'xmlrpc/client'
 
 module LetsencryptWebfaction
   class CertificateInstaller
-    WEBFACTION_API_VERSION = 2
-
     def initialize(cert_name, certificate, credentials)
       @cert_name = cert_name
       @certificate = certificate
