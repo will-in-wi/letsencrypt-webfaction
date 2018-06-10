@@ -1,3 +1,7 @@
+Unreleased
+
+* Improves messaging when requesting validation fails
+
 v3.0.0
 
 *NOTE: Backwards incompatible, and requires changes to upgrade*
