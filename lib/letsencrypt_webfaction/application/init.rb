@@ -48,7 +48,7 @@ module LetsencryptWebfaction
       end
 
       def output_next_steps
-        puts 'Your system is set up. Next, edit the config file: run `nano ~/letsencrypt_webfaction.yml`.'
+        puts 'Your system is set up. Next, edit the config file: run `nano ~/letsencrypt_webfaction.toml`.'
       end
     end
   end
