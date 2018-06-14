@@ -1,6 +1,8 @@
-Unreleased
+v3.0.1
 
 * Improves messaging when requesting validation fails
+* [#127](https://github.com/will-in-wi/letsencrypt-webfaction/pull/127) - Fix output to reference TOML instead of YAML. (@basetta)
+* Update Acme::Client to require stable 1.0
 
 v3.0.0
 
