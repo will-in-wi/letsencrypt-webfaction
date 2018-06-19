@@ -67,9 +67,9 @@ After saving `~/.bash_profile`, run the command `source $HOME/.bash_profile` to 
 
 Run `letsencrypt_webfaction init` to generate a registration cert and the config file. Open the config file `nano -w ~/letsencrypt_webfaction.toml` and edit to reflect your configuration.
 
-Now, you are ready to run `letsencrypt_webfaction run` from your SSH session to get certificates.
+Now, you are ready to run `letsencrypt_webfaction run` from your SSH session to get certificates. Note that by default the config file `(letsencrypt_webfaction.toml)` is pointed at the LetsEncrypt staging endpoint (the line that says: `endpoint = "https://acme-staging.api.letsencrypt.org/"`); meaning you will only get "test" certificates installed while using the stage endpoint. To issue live certificates you will need to comment out default line, and uncomment the production line (the line that says: `endpoint = "https://acme-v01.api.letsencrypt.org/" # Production`).
 
-After you run this command, you will see new certificates in the webfaction admin panel, with the names you have provided. You need to change your application to point to this certificate after the certificate has been issued. Future runs of this command will update the existing certificate entry and not require a change in the admin.
+After you run this command, you will see new certificates in the webfaction admin panel (under `Domains / Websites`, then `SSL certificates`), with the names you have provided (ie, the `name = ` variable in the `letsencrypt_webfaction.toml` config file). You need to change your application to point to this certificate after the certificate has been issued. Future runs of this command will update the existing certificate entry and not require a change in the admin.
 
 ## Usage
 
