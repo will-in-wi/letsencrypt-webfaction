@@ -15,7 +15,7 @@ The basic procedure to upgrade is:
 
 ## Upgrade the program
 
-Follow the [instructions in the readme](README.md#Upgrading).
+Follow the [instructions in the readme](/README.md#Upgrading).
 
 ## Initialize the config file
 
