@@ -6,6 +6,7 @@ gemspec
 group :development, :test do
   gem 'bundler', '~> 1.11'
   gem 'pry', '~> 0.10'
+  gem 'pry-doc'
   gem 'pry-byebug', '~> 3.3'
   gem 'rake', '~> 12.0'
   gem 'rspec', '~> 3.4'
