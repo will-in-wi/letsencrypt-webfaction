@@ -1,3 +1,7 @@
+Unreleased
+
+* Set config file permissions to 600 on creation.
+
 v3.0.1
 
 * Improves messaging when requesting validation fails

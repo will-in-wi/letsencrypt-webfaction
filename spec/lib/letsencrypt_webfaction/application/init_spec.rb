@@ -6,6 +6,8 @@ RSpec.describe LetsencryptWebfaction::Application::Init, :uses_tmp_dir do
       described_class.new([]).run!
     end.to output(/Copied configuration file/).to_stdout
     expect(TEMP_DIR.join('letsencrypt_webfaction.toml')).to be_exist
+    stat = TEMP_DIR.join('letsencrypt_webfaction.toml').stat
+    expect(stat.mode).to eq 0o100600
   end
 
   it 'does not overwrite the configuration file' do

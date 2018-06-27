@@ -27,6 +27,7 @@ module LetsencryptWebfaction
           puts 'Config file already exists. Skipping copy...'
         else
           FileUtils.cp(source, Dir.home)
+          File.chmod(0o600, File.join(Dir.home, 'letsencrypt_webfaction.toml'))
           puts 'Copied configuration file'
         end
       end
