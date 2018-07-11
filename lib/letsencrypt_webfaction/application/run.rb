@@ -14,7 +14,7 @@ module LetsencryptWebfaction
       RENEWAL_DELTA = 14 # days
 
       def initialize(args)
-        @config_path = ConfigPath.new
+        @config_path = DefaultConfigPath.new
         parse_options(args)
         @config_path.validate!
 
@@ -37,28 +37,36 @@ module LetsencryptWebfaction
 
       private
 
-      class ConfigPath
+      class DefaultConfigPath
         attr_reader :path
 
         def initialize
-          @custom = false
           @path = Options.default_options_path
-        end
-
-        def path=(val)
-          @custom = true
-          @path = Pathname.new(val)
         end
 
         def validate!
           return true if @path.exist?
-          if @custom
-            $stderr.puts 'The given configuration file does not exist'
-          else
-            $stderr.puts 'The configuration file is missing.'
-            $stderr.puts 'You may need to run `letsencrypt_webfaction init`'
-          end
+          print_error
           raise AppExitError, 'config missing'
+        end
+
+        private
+
+        def print_error
+          $stderr.puts 'The configuration file is missing.'
+          $stderr.puts 'You may need to run `letsencrypt_webfaction init`'
+        end
+      end
+
+      class CustomConfigPath < DefaultConfigPath
+        def initialize(path)
+          @path = Pathname.new(path)
+        end
+
+        private
+
+        def print_error
+          $stderr.puts 'The given configuration file does not exist'
         end
       end
 
@@ -71,7 +79,7 @@ module LetsencryptWebfaction
           end
 
           opts.on('--config=CONFIG', 'Alternative configuration path') do |c|
-            @config_path.path = c
+            @config_path = CustomConfigPath.new(c)
           end
         end.parse!(args)
       end
