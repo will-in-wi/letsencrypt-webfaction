@@ -1,11 +1,13 @@
 require 'letsencrypt_webfaction/application/init'
 require 'letsencrypt_webfaction/application/run'
+require 'letsencrypt_webfaction/application/version'
 
 module LetsencryptWebfaction
   module Application
     SUPPORTED_COMMANDS = {
       'init' => LetsencryptWebfaction::Application::Init,
       'run' => LetsencryptWebfaction::Application::Run,
+      '--version' => LetsencryptWebfaction::Application::Version,
     }.freeze
 
     V2_COMMANDS = %i[key_size endpoint domains public letsencrypt_account_email api_url username password servername cert_name].freeze

@@ -56,5 +56,11 @@ RSpec.describe LetsencryptWebfaction::Application do
         end.to raise_error(LetsencryptWebfaction::AppExitError).and output(/Missing command/).to_stderr
       end
     end
+
+    context 'with version' do
+      let(:args) { ['--version'] }
+
+      it { is_expected.to be_a LetsencryptWebfaction::Application::Version }
+    end
   end
 end

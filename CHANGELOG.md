@@ -1,6 +1,7 @@
 Unreleased
 
 * Set config file permissions to 600 on creation.
+* Output version number with `--version` flag. Fixes [#139](https://github.com/will-in-wi/letsencrypt-webfaction/issues/139)
 
 v3.0.1
 
