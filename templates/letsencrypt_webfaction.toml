@@ -40,7 +40,7 @@ public = "~/webapps/myapp/public_html"
 # the cert common name with the dots replaced by underscores. (Optional)
 # NOTE: If you change this and do not also rename it in the webfaction admin,
 #       a new certificate will be issued.
-# name = "mycertname1"
+#name = "mycertname1"
 
 # The size of the private key. 4096 is the default. You can use 2048.
 #key_size = 4096
