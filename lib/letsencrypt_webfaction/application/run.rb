@@ -6,6 +6,7 @@ require 'letsencrypt_webfaction/logger_output'
 
 require 'acme-client'
 require 'optparse'
+require 'pathname'
 
 module LetsencryptWebfaction
   module Application
@@ -13,15 +14,9 @@ module LetsencryptWebfaction
       RENEWAL_DELTA = 14 # days
 
       def initialize(args)
-        parse_quiet(args)
+        parse_options(args)
 
-        # TODO: args should be supported: --config
-        unless Options.default_options_path.exist?
-          $stderr.puts 'The configuration file is missing.'
-          $stderr.puts 'You may need to run `letsencrypt_webfaction init`'
-          raise AppExitError, 'config missing'
-        end
-        @options = LetsencryptWebfaction::Options.from_toml(Options.default_options_path)
+        @options = LetsencryptWebfaction::Options.from_toml(@config_path)
       end
 
       def run!
@@ -40,14 +35,31 @@ module LetsencryptWebfaction
 
       private
 
-      def parse_quiet(args)
+      def parse_options(args)
+        @config_path = Options.default_options_path
+        @custom_config_path = false
         OptionParser.new do |opts|
           opts.banner = 'Usage: letsencrypt_webfaction run [options]'
 
           opts.on('--quiet', 'Run with minimal output (useful for cron)') do |q|
             Out.quiet = q
           end
+
+          opts.on('--config=CONFIG', 'Alternative configuration path') do |c|
+            @custom_config_path = true
+            @config_path = Pathname.new(c)
+          end
         end.parse!(args)
+
+        unless @config_path.exist?
+          if @custom_config_path
+            $stderr.puts 'The given configuration file does not exist'
+          else
+            $stderr.puts 'The configuration file is missing.'
+            $stderr.puts 'You may need to run `letsencrypt_webfaction init`'
+          end
+          raise AppExitError, 'config missing'
+        end
       end
 
       def process_certs # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
