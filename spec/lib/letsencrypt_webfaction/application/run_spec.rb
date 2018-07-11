@@ -50,6 +50,26 @@ module LetsencryptWebfaction
         end
       end
 
+      context 'with custom configuration file path' do
+        let(:args) { ['--config', FIXTURE_DIR.join('test_invalid_config.toml').to_s] }
+
+        it 'uses different config file' do
+          expect do
+            application.run!
+          end.to raise_error(AppExitError).and output(/The configuration file has an error/).to_stderr
+        end
+      end
+
+      context 'with invalid custom configuration file path' do
+        let(:args) { ['--config', 'a_location_which_does_not_exist.toml'] }
+
+        it 'uses different config file' do
+          expect do
+            application.run!
+          end.to raise_error(AppExitError).and output(/The given configuration file does not exist/).to_stderr
+        end
+      end
+
       context 'with invalid configuration file' do
         before :each do
           FileUtils.cp FIXTURE_DIR.join('test_invalid_config.toml'), TEMP_DIR.join('letsencrypt_webfaction.toml')

@@ -6,6 +6,7 @@ require 'letsencrypt_webfaction/logger_output'
 
 require 'acme-client'
 require 'optparse'
+require 'pathname'
 
 module LetsencryptWebfaction
   module Application
@@ -13,15 +14,11 @@ module LetsencryptWebfaction
       RENEWAL_DELTA = 14 # days
 
       def initialize(args)
-        parse_quiet(args)
+        @config_path = DefaultConfigPath.new
+        parse_options(args)
+        @config_path.validate!
 
-        # TODO: args should be supported: --config
-        unless Options.default_options_path.exist?
-          $stderr.puts 'The configuration file is missing.'
-          $stderr.puts 'You may need to run `letsencrypt_webfaction init`'
-          raise AppExitError, 'config missing'
-        end
-        @options = LetsencryptWebfaction::Options.from_toml(Options.default_options_path)
+        @options = LetsencryptWebfaction::Options.from_toml(@config_path.path)
       end
 
       def run!
@@ -40,12 +37,49 @@ module LetsencryptWebfaction
 
       private
 
-      def parse_quiet(args)
+      class DefaultConfigPath
+        attr_reader :path
+
+        def initialize
+          @path = Options.default_options_path
+        end
+
+        def validate!
+          return true if @path.exist?
+          print_error
+          raise AppExitError, 'config missing'
+        end
+
+        private
+
+        def print_error
+          $stderr.puts 'The configuration file is missing.'
+          $stderr.puts 'You may need to run `letsencrypt_webfaction init`'
+        end
+      end
+
+      class CustomConfigPath < DefaultConfigPath
+        def initialize(path)
+          @path = Pathname.new(path)
+        end
+
+        private
+
+        def print_error
+          $stderr.puts 'The given configuration file does not exist'
+        end
+      end
+
+      def parse_options(args)
         OptionParser.new do |opts|
           opts.banner = 'Usage: letsencrypt_webfaction run [options]'
 
           opts.on('--quiet', 'Run with minimal output (useful for cron)') do |q|
             Out.quiet = q
+          end
+
+          opts.on('--config=CONFIG', 'Alternative configuration path') do |c|
+            @config_path = CustomConfigPath.new(c)
           end
         end.parse!(args)
       end
