@@ -7,4 +7,3 @@ RSpec.describe LetsencryptWebfaction::Application::Version do
     end.to output(/\A\d+\.\d+\.\d+\Z/).to_stdout
   end
 end
-
