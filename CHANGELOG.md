@@ -4,6 +4,7 @@ Unreleased
 * Output version number with `--version` flag. Fixes [#139](https://github.com/will-in-wi/letsencrypt-webfaction/issues/139)
 * Drop support for Ruby 2.1. It's unsupported upstream and third party libraries are dropping support. Feel free to file a ticket if you need this for some reason.
 * Restore ability to define custom configuration files paths. Fixes [#136](https://github.com/will-in-wi/letsencrypt-webfaction/issues/136)
+* [#144](https://github.com/will-in-wi/letsencrypt-webfaction/pull/144) - Tiny fix so that "default" does what it says on the tin. Thanks to @nootrope for raising this UX issue!
 
 v3.0.1
 
