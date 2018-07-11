@@ -14,9 +14,11 @@ module LetsencryptWebfaction
       RENEWAL_DELTA = 14 # days
 
       def initialize(args)
+        @config_path = ConfigPath.new
         parse_options(args)
+        @config_path.validate!
 
-        @options = LetsencryptWebfaction::Options.from_toml(@config_path)
+        @options = LetsencryptWebfaction::Options.from_toml(@config_path.path)
       end
 
       def run!
@@ -35,9 +37,32 @@ module LetsencryptWebfaction
 
       private
 
+      class ConfigPath
+        attr_reader :path
+
+        def initialize
+          @custom = false
+          @path = Options.default_options_path
+        end
+
+        def path=(val)
+          @custom = true
+          @path = Pathname.new(val)
+        end
+
+        def validate!
+          return true if @path.exist?
+          if @custom
+            $stderr.puts 'The given configuration file does not exist'
+          else
+            $stderr.puts 'The configuration file is missing.'
+            $stderr.puts 'You may need to run `letsencrypt_webfaction init`'
+          end
+          raise AppExitError, 'config missing'
+        end
+      end
+
       def parse_options(args)
-        @config_path = Options.default_options_path
-        @custom_config_path = false
         OptionParser.new do |opts|
           opts.banner = 'Usage: letsencrypt_webfaction run [options]'
 
@@ -46,20 +71,9 @@ module LetsencryptWebfaction
           end
 
           opts.on('--config=CONFIG', 'Alternative configuration path') do |c|
-            @custom_config_path = true
-            @config_path = Pathname.new(c)
+            @config_path.path = c
           end
         end.parse!(args)
-
-        unless @config_path.exist?
-          if @custom_config_path
-            $stderr.puts 'The given configuration file does not exist'
-          else
-            $stderr.puts 'The configuration file is missing.'
-            $stderr.puts 'You may need to run `letsencrypt_webfaction init`'
-          end
-          raise AppExitError, 'config missing'
-        end
       end
 
       def process_certs # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
