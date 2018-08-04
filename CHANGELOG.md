@@ -1,5 +1,9 @@
 Unreleased
 
+* Your change here!
+
+v3.1.0
+
 * Set config file permissions to 600 on creation.
 * Output version number with `--version` flag. Fixes [#139](https://github.com/will-in-wi/letsencrypt-webfaction/issues/139)
 * Drop support for Ruby 2.1. It's unsupported upstream and third party libraries are dropping support. Feel free to file a ticket if you need this for some reason.
