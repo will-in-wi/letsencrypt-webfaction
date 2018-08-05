@@ -1,5 +1,6 @@
 Unreleased
 
+* Fixed a missing require when fetching version.
 * Your change here!
 
 v3.1.0
