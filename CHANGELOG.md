@@ -1,7 +1,10 @@
 Unreleased
 
-* Fixed a missing require when fetching version.
 * Your change here!
+
+v3.1.1
+
+* Fixed a missing require when fetching version. Fixes [#146](https://github.com/will-in-wi/letsencrypt-webfaction/issues/146)
 
 v3.1.0
 
