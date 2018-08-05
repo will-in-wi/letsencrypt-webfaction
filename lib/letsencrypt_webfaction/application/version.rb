@@ -1,3 +1,5 @@
+require 'letsencrypt_webfaction'
+
 module LetsencryptWebfaction
   module Application
     class Version
