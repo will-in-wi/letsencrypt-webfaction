@@ -11,7 +11,7 @@ require 'pathname'
 module LetsencryptWebfaction
   module Application
     class Run
-      RENEWAL_DELTA = 14 # days
+      RENEWAL_DELTA = 30 # days
 
       def initialize(args)
         @config_path = DefaultConfigPath.new
