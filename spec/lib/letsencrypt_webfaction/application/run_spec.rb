@@ -257,12 +257,12 @@ module LetsencryptWebfaction
         end
 
         context 'with still valid cert' do
-          let(:expiration) { '2017-01-30' }
+          let(:expiration) { '2017-02-28' }
           let(:domains) { ['test.example.com', 'test1.example.com'] }
 
           it 'skips cert' do
             Timecop.freeze(Date.new(2017, 1, 1)) do
-              expect { application.run! }.to output(/29 days until expiration of myname\. Skipping\.\.\./).to_stdout
+              expect { application.run! }.to output(/58 days until expiration of myname\. Skipping\.\.\./).to_stdout
             end
           end
         end

@@ -1,5 +1,6 @@
 Unreleased
 
+* [#147](https://github.com/will-in-wi/letsencrypt-webfaction/pull/147) - Changed `RENEWAL_DELTA` to 30 days per LetsEncrypt's recommendation. (@shannonturner)
 * Your change here!
 
 v3.1.1
