@@ -58,7 +58,7 @@ Add the following to `~/.bash_profile` (using, for example, an FTP client or you
 
 ```sh
 function letsencrypt_webfaction {
-    PATH=$PATH:$GEM_HOME/bin GEM_HOME=$HOME/.letsencrypt_webfaction/gems RUBYLIB=$GEM_HOME/lib ruby2.2 $HOME/.letsencrypt_webfaction/gems/bin/letsencrypt_webfaction $*
+    GEM_HOME=$HOME/.letsencrypt_webfaction/gems PATH=$PATH:$GEM_HOME/bin RUBYLIB=$GEM_HOME/lib ruby2.2 $HOME/.letsencrypt_webfaction/gems/bin/letsencrypt_webfaction $*
 }
 ```
 This will simplify the running of the LetsEncrypt WebFaction command, by setting some variables in advance.
