@@ -6,7 +6,8 @@ password = "mypassword"
 letsencrypt_account_email = "me@example.com"
 
 # The ACME endpoint. Use the staging server until you get everything working.
-# Then switch to the production endpoint.
+# Then switch to the production endpoint. You may want to run with the --force
+# command after switching to reissue all certificates.
 endpoint = "https://acme-staging.api.letsencrypt.org/" # Staging
 #endpoint = "https://acme-v01.api.letsencrypt.org/" # Production
 

@@ -91,6 +91,8 @@ The commands are `init` and `run`. You can add the `--quiet` argument to the `ru
 
 To test certificate issuance, consider using the [LetsEncrypt staging server](https://community.letsencrypt.org/t/testing-against-the-lets-encrypt-staging-environment/6763). This doesn't have the rate limit of 5 certs per domain every 7 days. You can change the `endpoint` config line to be `https://acme-staging.api.letsencrypt.org/` in order to test the system.
 
+After switching endpoints, you will likely want to run the command with `--force` in order to reissue all certificates from the new endpoint.
+
 ### Operation
 
 When letsencrypt_webfaction runs, it places verification files into the public directory specified, validates the domains with LetsEncrypt, and then uploads the certificate to WebFaction's API.
