@@ -1,7 +1,10 @@
 Unreleased
 
-* New `--force` argument for easier handling of `endpoint` switching. Fixes [#132](https://github.com/will-in-wi/letsencrypt-webfaction/issues/132)
 * Your change here!
+
+v3.2.0
+
+* New `--force` argument for easier handling of `endpoint` switching. Fixes [#132](https://github.com/will-in-wi/letsencrypt-webfaction/issues/132)
 
 v3.1.2
 
