@@ -267,6 +267,24 @@ module LetsencryptWebfaction
           end
         end
 
+        context 'with force-issued cert' do
+          let(:args) { ['--force'] }
+          let(:expiration) { '2017-02-28' }
+          let(:domains) { ['test.example.com', 'test1.example.com'] }
+
+          before :each do
+            stub_request(:post, 'https://wfserverapi.example.com/')
+              .with(body: "<?xml version=\"1.0\" ?><methodCall><methodName>update_certificate</methodName><params><param><value><string>oz7e1xz9r0mf0wgue22hsj8tgkhqyo74</string></value></param><param><value><string>myname</string></value></param><param><value><string>CERTIFICATE</string></value></param><param><value><string>PRIVATE KEY</string></value></param><param><value><string>CHAIN!</string></value></param></params></methodCall>\n")
+              .to_return(status: 200, body: fixture('create_certificate_response.xml'), headers: {})
+          end
+
+          it 'issues cert' do
+            Timecop.freeze(Date.new(2017, 1, 1)) do
+              expect { application.run! }.to output(/Force issuing myname\./).to_stdout
+            end
+          end
+        end
+
         context 'with expires shortly cert' do
           let(:expiration) { '2017-01-30' }
           let(:domains) { ['test.example.com', 'test1.example.com'] }

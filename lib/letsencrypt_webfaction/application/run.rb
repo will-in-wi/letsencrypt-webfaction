@@ -70,7 +70,7 @@ module LetsencryptWebfaction
         end
       end
 
-      def parse_options(args)
+      def parse_options(args) # rubocop:disable Metrics/MethodLength
         OptionParser.new do |opts|
           opts.banner = 'Usage: letsencrypt_webfaction run [options]'
 
@@ -81,6 +81,10 @@ module LetsencryptWebfaction
           opts.on('--config=CONFIG', 'Alternative configuration path') do |c|
             @config_path = CustomConfigPath.new(c)
           end
+
+          opts.on('--force', 'When passed, all certs are re-issued regardless of expiration') do |d|
+            @force_refresh = d
+          end
         end.parse!(args)
       end
 
@@ -88,7 +92,10 @@ module LetsencryptWebfaction
         wf_cert_list = api_credentials.call('list_certificates')
         @options.certificates.each do |cert|
           wf_cert = wf_cert_list.find { |c| c['name'] == cert.cert_name }
-          if wf_cert.nil?
+          if @force_refresh
+            # Issue because nonexistent
+            Out.puts "Force issuing #{cert.cert_name}."
+          elsif wf_cert.nil?
             # Issue because nonexistent
             Out.puts "Issuing #{cert.cert_name} for the first time."
           elsif wf_cert['domains'].split(',').map(&:strip).sort == cert.domains.sort
