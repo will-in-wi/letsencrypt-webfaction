@@ -1,4 +1,4 @@
-# Your Webfaction username and password
+# Your Webfaction username and password, for the API & control panel, not SSH
 username = "myusername"
 password = "mypassword"
 
