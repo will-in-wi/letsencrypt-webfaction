@@ -121,7 +121,7 @@ If you want to be notified upon failure, you can add `MAILTO=[you@youremail.com]
 
 While WebFaction staff maintain your standard server software, the support team will not upgrade your installation of LetsEncrypt WebFaction. You won't usually need to do this unless you have an issue but, as is good practice with most software, it's best kept up to date.
 
-You can find the current version by running `letsencrypt_webfaction --version`. Sort of. In versions >= 1.1.4, this will work. In older versions, this will just print `letsencrypt_webfaction: version unknown` due to an oversight on my part. So if you get the latter output, just upgrade.
+You can find the current version by running `letsencrypt_webfaction --version`. Sort of. In versions >= 1.1.4 (except for versions v3.0.0-v3.0.1), this will work. In older versions, this will just print `letsencrypt_webfaction: version unknown` due to an oversight on my part. So if you get the latter output, just upgrade.
 
 [The changelog](CHANGELOG.md) describes changes from version to version.
 
