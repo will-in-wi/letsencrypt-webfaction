@@ -13,12 +13,14 @@ module LetsencryptWebfaction
 
       challenges.map(&:request_verification).tap do |requests|
         next unless requests.any?(&:!)
+
         $stderr.puts 'Failed to request validations.'
         return false
       end
 
       10.times do
         break if no_challenges_pending?
+
         sleep(1)
       end
 

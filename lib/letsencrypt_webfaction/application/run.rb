@@ -46,6 +46,7 @@ module LetsencryptWebfaction
 
         def validate!
           return true if @path.exist?
+
           print_error
           raise AppExitError, 'config missing'
         end
@@ -123,6 +124,7 @@ module LetsencryptWebfaction
 
       def validate_options # rubocop:disable Metrics/MethodLength
         return if @options.valid?
+
         $stderr.puts 'The configuration file has an error:'
         @options.errors.each do |field, error|
           case error
@@ -167,6 +169,7 @@ module LetsencryptWebfaction
       rescue Acme::Client::Error::Malformed => e
         # Stupid hack if the registration already exists.
         return if e.message == 'Registration key is already in use'
+
         raise
       end
     end

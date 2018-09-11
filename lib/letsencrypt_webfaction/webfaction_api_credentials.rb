@@ -24,6 +24,7 @@ module LetsencryptWebfaction
       !session_id.nil?
     rescue XMLRPC::FaultException => e
       return false if e.message == 'LoginError'
+
       raise
     end
 

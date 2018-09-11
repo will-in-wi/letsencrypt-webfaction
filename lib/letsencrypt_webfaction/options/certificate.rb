@@ -11,6 +11,7 @@ module LetsencryptWebfaction
 
       def domains
         return [] if @args['domains'].nil? || @args['domains'] == ''
+
         Array(@args['domains'])
       end
 
@@ -20,6 +21,7 @@ module LetsencryptWebfaction
 
       def public_dirs
         return [] if @args['public'].nil? || @args['public'] == ''
+
         Array(@args['public'])
       end
 
