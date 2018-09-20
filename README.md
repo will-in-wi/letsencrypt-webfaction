@@ -83,9 +83,22 @@ Finally, if you would like the `http` site to redirect to your `https`, follow t
 
 The syntax of the letsencrypt_webfaction command is as follows:
 
-    $ letsencrypt_webfaction [cmd] [*args]
+    $ letsencrypt_webfaction [init|run] [*options]
 
-The commands are `init` and `run`. You can add the `--quiet` argument to the `run` command to keep normal output from appearing (useful in cron).
+The commands are `init` and `run`. You can also use `--version` to get the currently installed version of letsencrypt_webfaction.
+
+#### `init`
+
+Generate registration cert and config file.
+
+#### `run`
+
+Generate certs and add to them to the control panel. This command has the following options:
+
+* `--config=CONFIG`: Use alternative configuration path
+* `--force`: Re-issue certs regardless of expiration
+* `--help`: Show help for this command
+* `--quiet`: Run with minimal output (useful for cron)
 
 ### Testing
 
