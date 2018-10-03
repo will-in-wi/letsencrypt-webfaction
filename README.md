@@ -2,6 +2,16 @@
 
 LetsEncrypt utility client for WebFaction hosts.
 
+## *WebFaction has released first-party support for Let's Encrypt Certs!*
+
+The long-awaited support by [webfaction is here!](https://blog.webfaction.com/2018/09/issue-lets-encrypt-ssl-certificates-with-the-control-panel/) See [the blog post for details about how to use it](https://blog.webfaction.com/2018/09/issue-lets-encrypt-ssl-certificates-with-the-control-panel/), it's really easy! I've switched all of my personal certificates over to their implementation. If you are looking to start adding certificates to your site, start there, not with this tool.
+
+I am not going to abandon this application outright. Too many people have worked too hard on this to suddenly drop it. But I am not planning any further work on it, unless people find actual bugs. If you can't use the WebFaction control panel to issue your Let's Encrypt certs for some reason and so are using this tool, please file a support ticket with WebFaction and also [comment on this ticket](https://github.com/will-in-wi/letsencrypt-webfaction/issues/160).
+
+And finally, THANK YOU to all of you who have filed issues, contributed code and documentation, and helped others solve tickets. You have made this a tremendously fun and rewarding project to work on, and helped out so many fellow WebFaction customers.
+
+## Previous Readme
+
 *NOTE: Version 3 is out and requires some manual changes. See [the upgrade guide for details](docs/upgrading.md).*
 
 This tool automates the process of using LetsEncrypt on WebFaction hosts. It can be added to the Cron scheduled task runner where it will validate your domains automatically, obtain the certificates, and then install them using the Webfaction API.
