@@ -5,7 +5,7 @@ require 'letsencrypt_webfaction/options/certificate'
 
 module LetsencryptWebfaction
   class Options
-    NON_BLANK_FIELDS = %i[username password letsencrypt_account_email endpoint api_url servername].freeze
+    NON_BLANK_FIELDS = %i[username password letsencrypt_account_email v2_endpoint api_url servername].freeze
 
     WEBFACTION_API_URL = 'https://api.webfaction.com/'.freeze
 
@@ -39,8 +39,8 @@ module LetsencryptWebfaction
       @config['letsencrypt_account_email']
     end
 
-    def endpoint
-      @config['endpoint']
+    def v2_endpoint
+      @config['v2_endpoint']
     end
 
     def api_url
@@ -57,6 +57,7 @@ module LetsencryptWebfaction
 
     def errors
       {}.tap do |e|
+        e[:endpoint] = 'needs to be updated to v2_endpoint. See upgrade documentation.' if @config.key?('endpoint')
         NON_BLANK_FIELDS.each do |field|
           e[field] = "can't be blank" if public_send(field).nil? || public_send(field) == ''
         end
