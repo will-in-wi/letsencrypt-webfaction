@@ -1,3 +1,11 @@
+# Upgrading from v3 to v4
+
+Switching to ACMEv2 broke backwards compatibility in a couple ways.
+
+- You need to change the `endpoint` entry in your config to `v2_endpoint` and update it to staging or production.
+  v2_endpoint = "https://acme-staging-v02.api.letsencrypt.org/directory" # Staging
+  #v2_endpoint = "https://acme-v02.api.letsencrypt.org/directory" # Production
+
 # Upgrading from v2 to v3
 
 Version 3 has a number of major ease of use improvements that break backwards compatibility:
