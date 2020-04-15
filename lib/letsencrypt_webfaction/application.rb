@@ -18,7 +18,7 @@ module LetsencryptWebfaction
           $stderr.puts "Missing command. Must be one of #{SUPPORTED_COMMANDS.keys.join(', ')}"
           raise LetsencryptWebfaction::AppExitError, 'Missing command'
         elsif v2_command?(args)
-          $stderr.puts 'It looks like you are trying to run a version 2 command in version 3'
+          $stderr.puts 'It looks like you are trying to run a version 2 command in version 4'
           $stderr.puts 'See https://github.com/will-in-wi/letsencrypt-webfaction/blob/master/docs/upgrading.md'
           raise LetsencryptWebfaction::AppExitError, 'v2 command'
         else
