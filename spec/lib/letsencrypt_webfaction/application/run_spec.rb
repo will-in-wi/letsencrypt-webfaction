@@ -29,19 +29,11 @@ module LetsencryptWebfaction
     let(:application) { described_class.new(args) }
 
     describe '#run!' do
-      # let(:certificate_double) do
-      #   instance_double(Acme::Client::Certificate, to_pem: 'CERTIFICATE', chain_to_pem: 'CHAIN!', fullchain_to_pem: 'FULLCHAIN!!').tap do |cert|
-      #     allow(cert).to receive_message_chain(:request, :private_key, to_pem: 'PRIVATE KEY')
-      #   end
-      # end
       let(:order_double) { instance_double(Acme::Client::Resources::Order, authorizations: [], finalize: true, status: 'processed', certificate: 'CERTIFICATE') }
       let(:client_double) { instance_double(Acme::Client, new_order: order_double, kid: nil, new_account: nil) }
 
       before :each do
         # Set up doubles to avoid actual verification and communication with LE.
-        # challenge = instance_double(Acme::Client::Resources::Challenges::HTTP01, filename: 'challenge1.txt', file_content: 'woohoo!', request_validation: true, status: 'valid')
-        # allow(client_double).to receive_message_chain(:authorize, http01: challenge)
-        # allow(client_double).to receive_message_chain(:register, agree_terms: nil)
         allow(Acme::Client).to receive(:new) { client_double }
       end
 
@@ -118,10 +110,6 @@ module LetsencryptWebfaction
           stub_request(:post, 'https://wfserverapi.example.com/')
             .with(body: "<?xml version=\"1.0\" ?><methodCall><methodName>create_certificate</methodName><params><param><value><string>oz7e1xz9r0mf0wgue22hsj8tgkhqyo74</string></value></param><param><value><string>myname</string></value></param><param><value><string>CERTIFICATE</string></value></param><param><value><string>PRIVATE KEY</string></value></param></params></methodCall>\n")
             .to_return(status: 200, body: fixture('create_certificate_response.xml'), headers: {})
-        end
-
-        before :each do
-          # allow(client_double).to receive(:register).and_raise(Acme::Client::Error::Malformed.new('Registration key is already in use'))
         end
 
         before :each do
