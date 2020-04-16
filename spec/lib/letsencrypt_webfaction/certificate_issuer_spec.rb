@@ -10,9 +10,18 @@ module LetsencryptWebfaction
         allow(creds).to receive(:call).and_return({}, nil)
       end
     end
-    let(:order) { instance_double(Acme::Client::Resources::Order, authorizations: [], finalize: true, status: 'processed', certificate: 'CERTIFICATE') }
+    let(:order) do
+      instance_double(Acme::Client::Resources::Order, authorizations: [], finalize: true, certificate: 'CERTIFICATE', reload: nil).tap do |o|
+        allow(o).to receive(:status).and_return('processing', 'processed')
+      end
+    end
     let(:client) { instance_double('Acme::Client', new_order: order) }
     let(:issuer) { described_class.new(certificate: cert_config, api_credentials: api_credentials, client: client) }
+
+    before :each do
+      # Speed up sleep
+      allow_any_instance_of(Object).to receive(:sleep)
+    end
 
     describe '#call' do
       subject { issuer.call }
