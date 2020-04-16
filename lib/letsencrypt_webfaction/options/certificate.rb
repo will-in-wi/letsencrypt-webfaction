@@ -2,7 +2,7 @@ module LetsencryptWebfaction
   class Options
     class Certificate
       SUPPORTED_VALIDATION_METHODS = ['http01'].freeze
-      VALID_CERT_NAME = /[^a-zA-Z\d_]/
+      VALID_CERT_NAME = /[^a-zA-Z\d_]/.freeze
       VALID_KEY_SIZES = [2048, 4096].freeze
 
       def initialize(args)

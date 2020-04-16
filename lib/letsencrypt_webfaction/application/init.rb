@@ -7,7 +7,7 @@ require 'openssl'
 module LetsencryptWebfaction
   module Application
     class Init
-      def initialize(_); end # rubocop:disable Naming/UncommunicativeMethodParamName
+      def initialize(_); end
 
       def run!
         copy_config_file

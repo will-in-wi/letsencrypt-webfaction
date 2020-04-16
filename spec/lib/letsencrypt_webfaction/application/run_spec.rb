@@ -163,7 +163,7 @@ module LetsencryptWebfaction
         before :each do
           stub_request(:post, 'https://wfserverapi.example.com/')
             .with(body: "<?xml version=\"1.0\" ?><methodCall><methodName>list_certificates</methodName><params><param><value><string>oz7e1xz9r0mf0wgue22hsj8tgkhqyo74</string></value></param></params></methodCall>\n")
-            .to_return(status: 200, body: <<-RESPONSE
+            .to_return(status: 200, body: <<-RESPONSE,
   <?xml version='1.0'?>
   <methodResponse>
   	<params>
