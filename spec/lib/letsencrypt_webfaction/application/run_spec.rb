@@ -35,7 +35,7 @@ module LetsencryptWebfaction
       #   end
       # end
       let(:order_double) { instance_double(Acme::Client::Resources::Order, authorizations: [], finalize: true, status: 'processed', certificate: 'CERTIFICATE') }
-      let(:client_double) { instance_double(Acme::Client, new_order: order_double, kid: 'blah') }
+      let(:client_double) { instance_double(Acme::Client, new_order: order_double, kid: nil, new_account: nil) }
 
       before :each do
         # Set up doubles to avoid actual verification and communication with LE.
