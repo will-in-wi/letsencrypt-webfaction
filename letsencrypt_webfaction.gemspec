@@ -28,7 +28,7 @@ Gem::Specification.new do |spec|
   spec.required_ruby_version = '>= 2.2.0'
 
   spec.add_runtime_dependency 'acme-client', '~> 2.0'
-  spec.add_runtime_dependency 'toml-rb', '~> 2.0'
+  spec.add_runtime_dependency 'toml-rb', '~> 1.1'
 
   # This will be required for Ruby 2.4. But it is incompatible for Ruby <2.3. Unsupporting Ruby 2.4 for the moment.
   # spec.add_runtime_dependency 'xmlrpc', '~> 0.3.0'
