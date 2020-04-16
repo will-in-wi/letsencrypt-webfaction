@@ -5,6 +5,7 @@ Unreleased
 v4.0.0
 
 * Support ACMEv2
+* No longer adds intermediate certs to bundle, as these don't appear to be provided.
 
 v3.2.0
 

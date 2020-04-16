@@ -10,14 +10,8 @@ module LetsencryptWebfaction
         allow(creds).to receive(:call).and_return({}, nil)
       end
     end
-    let(:client) do
-      challenge = instance_double('Acme::Client::Resources::Challenges::HTTP01', request_verification: true)
-      authorization = instance_double('Acme::Client::Resources::Authorization', http01: challenge, verify_status: 'valid')
-      allow(challenge).to receive(:authorization).and_return(authorization)
-      cert = instance_double('::Acme::Client::Certificate', to_pem: 'CERT', chain_to_pem: 'CHAIN')
-      allow(cert).to receive_message_chain(:request, :private_key, :to_pem) { 'PRIVATE KEY' }
-      instance_double('Acme::Client', authorize: authorization, new_certificate: cert)
-    end
+    let(:order) { instance_double(Acme::Client::Resources::Order, authorizations: [], finalize: true, status: 'processed', certificate: 'CERTIFICATE') }
+    let(:client) { instance_double('Acme::Client', new_order: order) }
     let(:issuer) { described_class.new(certificate: cert_config, api_credentials: api_credentials, client: client) }
 
     describe '#call' do

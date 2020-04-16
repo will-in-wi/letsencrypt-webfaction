@@ -31,7 +31,7 @@ module LetsencryptWebfaction
     end
 
     def certificate_installer
-      @_certificate_installer ||= LetsencryptWebfaction::CertificateInstaller.new(@cert_config.cert_name, certificate, @api_credentials)
+      @_certificate_installer ||= LetsencryptWebfaction::CertificateInstaller.new(@cert_config.cert_name, certificate, csr.private_key, @api_credentials)
     end
 
     def certificate

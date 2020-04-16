@@ -18,27 +18,30 @@ module LetsencryptWebfaction
         .with(body: "<?xml version=\"1.0\" ?><methodCall><methodName>list_certificates</methodName><params><param><value><string>oz7e1xz9r0mf0wgue22hsj8tgkhqyo74</string></value></param></params></methodCall>\n")
         .to_return(status: 200, body: fixture('list_certificates_response.xml'))
       stub_request(:post, 'https://wfserverapi.example.com/')
-        .with(body: "<?xml version=\"1.0\" ?><methodCall><methodName>create_certificate</methodName><params><param><value><string>oz7e1xz9r0mf0wgue22hsj8tgkhqyo74</string></value></param><param><value><string>www_example_com</string></value></param><param><value><string>CERTIFICATE</string></value></param><param><value><string>PRIVATE KEY</string></value></param><param><value><string>CHAIN!</string></value></param></params></methodCall>\n")
+        .with(body: "<?xml version=\"1.0\" ?><methodCall><methodName>create_certificate</methodName><params><param><value><string>oz7e1xz9r0mf0wgue22hsj8tgkhqyo74</string></value></param><param><value><string>myname</string></value></param><param><value><string>CERTIFICATE</string></value></param><param><value><string>PRIVATE KEY</string></value></param></params></methodCall>\n")
         .to_return(status: 200, body: fixture('create_certificate_response.xml'))
+
+      pkey_double = instance_double(OpenSSL::PKey::RSA, to_pem: 'PRIVATE KEY')
+      allow(OpenSSL::PKey::RSA).to receive(:new).and_return(pkey_double)
     end
 
     let(:args) { [] }
     let(:application) { described_class.new(args) }
 
     describe '#run!' do
-      let(:certificate_double) do
-        instance_double(Acme::Client::Certificate, to_pem: 'CERTIFICATE', chain_to_pem: 'CHAIN!', fullchain_to_pem: 'FULLCHAIN!!').tap do |cert|
-          allow(cert).to receive_message_chain(:request, :private_key, to_pem: 'PRIVATE KEY')
-        end
-      end
-      let(:client_double) { instance_double(Acme::Client, new_certificate: certificate_double) }
+      # let(:certificate_double) do
+      #   instance_double(Acme::Client::Certificate, to_pem: 'CERTIFICATE', chain_to_pem: 'CHAIN!', fullchain_to_pem: 'FULLCHAIN!!').tap do |cert|
+      #     allow(cert).to receive_message_chain(:request, :private_key, to_pem: 'PRIVATE KEY')
+      #   end
+      # end
+      let(:order_double) { instance_double(Acme::Client::Resources::Order, authorizations: [], finalize: true, status: 'processed', certificate: 'CERTIFICATE') }
+      let(:client_double) { instance_double(Acme::Client, new_order: order_double, kid: 'blah') }
 
       before :each do
         # Set up doubles to avoid actual verification and communication with LE.
-        authorization = instance_double(Acme::Client::Resources::Authorization, verify_status: 'valid')
-        challenge = instance_double(Acme::Client::Resources::Challenges::HTTP01, filename: 'challenge1.txt', file_content: 'woohoo!', request_verification: true, authorization: authorization)
-        allow(client_double).to receive_message_chain(:authorize, http01: challenge)
-        allow(client_double).to receive_message_chain(:register, agree_terms: nil)
+        # challenge = instance_double(Acme::Client::Resources::Challenges::HTTP01, filename: 'challenge1.txt', file_content: 'woohoo!', request_validation: true, status: 'valid')
+        # allow(client_double).to receive_message_chain(:authorize, http01: challenge)
+        # allow(client_double).to receive_message_chain(:register, agree_terms: nil)
         allow(Acme::Client).to receive(:new) { client_double }
       end
 
@@ -113,12 +116,12 @@ module LetsencryptWebfaction
       context 'with previously registered key' do
         before :each do
           stub_request(:post, 'https://wfserverapi.example.com/')
-            .with(body: "<?xml version=\"1.0\" ?><methodCall><methodName>create_certificate</methodName><params><param><value><string>oz7e1xz9r0mf0wgue22hsj8tgkhqyo74</string></value></param><param><value><string>myname</string></value></param><param><value><string>CERTIFICATE</string></value></param><param><value><string>PRIVATE KEY</string></value></param><param><value><string>CHAIN!</string></value></param></params></methodCall>\n")
+            .with(body: "<?xml version=\"1.0\" ?><methodCall><methodName>create_certificate</methodName><params><param><value><string>oz7e1xz9r0mf0wgue22hsj8tgkhqyo74</string></value></param><param><value><string>myname</string></value></param><param><value><string>CERTIFICATE</string></value></param><param><value><string>PRIVATE KEY</string></value></param></params></methodCall>\n")
             .to_return(status: 200, body: fixture('create_certificate_response.xml'), headers: {})
         end
 
         before :each do
-          allow(client_double).to receive(:register).and_raise(Acme::Client::Error::Malformed.new('Registration key is already in use'))
+          # allow(client_double).to receive(:register).and_raise(Acme::Client::Error::Malformed.new('Registration key is already in use'))
         end
 
         before :each do
@@ -133,16 +136,6 @@ module LetsencryptWebfaction
 
         it 'goes on if registration has already occurred' do
           expect { application.run! }.to output(/Issuing myname for the first time/).to_stdout
-        end
-
-        context 'with unrelated error' do
-          before :each do
-            allow(client_double).to receive(:register).and_raise(Acme::Client::Error::Malformed.new('Unrelated error'))
-          end
-
-          it 'throws error' do
-            expect { application.run! }.to raise_error(Acme::Client::Error::Malformed)
-          end
         end
       end
 
@@ -184,7 +177,7 @@ module LetsencryptWebfaction
   									<name>private_key</name>
   									<value>
   										<string>-----BEGIN RSA PRIVATE KEY-----
-  PRIVATE_KEY
+  PRIVATE KEY
   -----END RSA PRIVATE KEY-----</string>
   									</value>
   								</member>
@@ -247,7 +240,7 @@ module LetsencryptWebfaction
 
           before :each do
             stub_request(:post, 'https://wfserverapi.example.com/')
-              .with(body: "<?xml version=\"1.0\" ?><methodCall><methodName>create_certificate</methodName><params><param><value><string>oz7e1xz9r0mf0wgue22hsj8tgkhqyo74</string></value></param><param><value><string>myname</string></value></param><param><value><string>CERTIFICATE</string></value></param><param><value><string>PRIVATE KEY</string></value></param><param><value><string>CHAIN!</string></value></param></params></methodCall>\n")
+              .with(body: "<?xml version=\"1.0\" ?><methodCall><methodName>create_certificate</methodName><params><param><value><string>oz7e1xz9r0mf0wgue22hsj8tgkhqyo74</string></value></param><param><value><string>myname</string></value></param><param><value><string>CERTIFICATE</string></value></param><param><value><string>PRIVATE KEY</string></value></param></params></methodCall>\n")
               .to_return(status: 200, body: fixture('create_certificate_response.xml'), headers: {})
           end
 
@@ -274,7 +267,7 @@ module LetsencryptWebfaction
 
           before :each do
             stub_request(:post, 'https://wfserverapi.example.com/')
-              .with(body: "<?xml version=\"1.0\" ?><methodCall><methodName>update_certificate</methodName><params><param><value><string>oz7e1xz9r0mf0wgue22hsj8tgkhqyo74</string></value></param><param><value><string>myname</string></value></param><param><value><string>CERTIFICATE</string></value></param><param><value><string>PRIVATE KEY</string></value></param><param><value><string>CHAIN!</string></value></param></params></methodCall>\n")
+              .with(body: "<?xml version=\"1.0\" ?><methodCall><methodName>update_certificate</methodName><params><param><value><string>oz7e1xz9r0mf0wgue22hsj8tgkhqyo74</string></value></param><param><value><string>myname</string></value></param><param><value><string>CERTIFICATE</string></value></param><param><value><string>PRIVATE KEY</string></value></param></params></methodCall>\n")
               .to_return(status: 200, body: fixture('create_certificate_response.xml'), headers: {})
           end
 
@@ -291,7 +284,7 @@ module LetsencryptWebfaction
 
           before :each do
             stub_request(:post, 'https://wfserverapi.example.com/')
-              .with(body: "<?xml version=\"1.0\" ?><methodCall><methodName>update_certificate</methodName><params><param><value><string>oz7e1xz9r0mf0wgue22hsj8tgkhqyo74</string></value></param><param><value><string>myname</string></value></param><param><value><string>CERTIFICATE</string></value></param><param><value><string>PRIVATE KEY</string></value></param><param><value><string>CHAIN!</string></value></param></params></methodCall>\n")
+              .with(body: "<?xml version=\"1.0\" ?><methodCall><methodName>update_certificate</methodName><params><param><value><string>oz7e1xz9r0mf0wgue22hsj8tgkhqyo74</string></value></param><param><value><string>myname</string></value></param><param><value><string>CERTIFICATE</string></value></param><param><value><string>PRIVATE KEY</string></value></param></params></methodCall>\n")
               .to_return(status: 200, body: fixture('create_certificate_response.xml'), headers: {})
           end
 
@@ -308,7 +301,7 @@ module LetsencryptWebfaction
 
           before :each do
             stub_request(:post, 'https://wfserverapi.example.com/')
-              .with(body: "<?xml version=\"1.0\" ?><methodCall><methodName>update_certificate</methodName><params><param><value><string>oz7e1xz9r0mf0wgue22hsj8tgkhqyo74</string></value></param><param><value><string>myname</string></value></param><param><value><string>CERTIFICATE</string></value></param><param><value><string>PRIVATE KEY</string></value></param><param><value><string>CHAIN!</string></value></param></params></methodCall>\n")
+              .with(body: "<?xml version=\"1.0\" ?><methodCall><methodName>update_certificate</methodName><params><param><value><string>oz7e1xz9r0mf0wgue22hsj8tgkhqyo74</string></value></param><param><value><string>myname</string></value></param><param><value><string>CERTIFICATE</string></value></param><param><value><string>PRIVATE KEY</string></value></param></params></methodCall>\n")
               .to_return(status: 200, body: fixture('create_certificate_response.xml'), headers: {})
           end
 

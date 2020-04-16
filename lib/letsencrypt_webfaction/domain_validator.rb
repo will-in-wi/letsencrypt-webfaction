@@ -58,7 +58,7 @@ module LetsencryptWebfaction
     end
 
     def print_errors
-      validations = authorizations.map(&:domain).zip(challenges)
+      validations = @order.authorizations.map(&:domain).zip(challenges)
       $stderr.puts 'Failed to verify statuses.'
       validations.each { |tuple| Validation.new(*tuple).print_error }
     end
@@ -70,7 +70,7 @@ module LetsencryptWebfaction
       end
 
       def print_error # rubocop:disable Metrics/MethodLength
-        case @challenge.authorization.verify_status
+        case @challenge.status
         when 'valid'
           $stderr.puts "#{@domain}: Success"
         when 'invalid'
@@ -79,7 +79,7 @@ module LetsencryptWebfaction
         when 'pending'
           $stderr.puts "#{@domain}: Still pending, but timed out"
         else
-          $stderr.puts "#{@domain}: Unexpected authorization status #{@challenge.authorization.verify_status}"
+          $stderr.puts "#{@domain}: Unexpected authorization status #{@challenge.status}"
         end
       end
 
