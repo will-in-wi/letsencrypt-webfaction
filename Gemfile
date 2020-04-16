@@ -4,7 +4,7 @@ source 'https://rubygems.org'
 gemspec
 
 group :development, :test do
-  gem 'bundler', '~> 2.0'
+  gem 'bundler', '~> 1.0'
   gem 'pry', '~> 0.10'
   gem 'pry-byebug', '~> 3.3'
   gem 'pry-doc'
