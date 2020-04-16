@@ -1,7 +1,7 @@
 username = "myusername"
 password = "mypassword"
 letsencrypt_account_email = "me@example.com"
-endpoint = "https://acme-staging.api.letsencrypt.org/" # Staging
+directory = "https://acme-staging.api.letsencrypt.org/" # Staging
 api_url = "https://wfserverapi.example.com/"
 servername = "myservername"
 

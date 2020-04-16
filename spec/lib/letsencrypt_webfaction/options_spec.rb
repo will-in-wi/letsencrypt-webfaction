@@ -4,7 +4,7 @@ RSpec.describe LetsencryptWebfaction::Options do
   let(:username) { 'myusername' }
   let(:password) { 'mypassword' }
   let(:letsencrypt_account_email) { 'me@example.com' }
-  let(:endpoint) { 'https://acme.example.com/' }
+  let(:directory) { 'https://acme.example.com/' }
   let(:additional_config) { '' }
   let(:cert_name) { 'mycertname1' }
   let(:toml) do
@@ -12,7 +12,7 @@ RSpec.describe LetsencryptWebfaction::Options do
       username = "#{username}"
       password = "#{password}"
       letsencrypt_account_email = "#{letsencrypt_account_email}"
-      endpoint = "#{endpoint}"
+      directory = "#{directory}"
       #{additional_config}
       [[certificate]]
       domains = [
@@ -41,8 +41,8 @@ RSpec.describe LetsencryptWebfaction::Options do
     end
   end
 
-  describe '#endpoint' do
-    subject { options.endpoint }
+  describe '#directory' do
+    subject { options.directory }
     it { is_expected.to eq 'https://acme.example.com/' }
   end
 
@@ -103,10 +103,16 @@ RSpec.describe LetsencryptWebfaction::Options do
       it { is_expected.to eq(letsencrypt_account_email: "can't be blank") }
     end
 
-    context 'with invalid endpoint' do
-      let(:endpoint) { '' }
+    context 'with ACMEv1 endpoint' do
+      let(:additional_config) { 'endpoint = "blah"' }
 
-      it { is_expected.to eq(endpoint: "can't be blank") }
+      it { is_expected.to eq(endpoint: 'needs to be updated to directory. See upgrade documentation.') }
+    end
+
+    context 'with invalid directory' do
+      let(:directory) { '' }
+
+      it { is_expected.to eq(directory: "can't be blank") }
     end
 
     context 'with invalid api_url' do

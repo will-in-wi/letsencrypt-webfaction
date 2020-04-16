@@ -2,6 +2,11 @@ Unreleased
 
 * Your change here!
 
+v4.0.0
+
+* Support ACMEv2
+* No longer adds intermediate certs to bundle, as these don't appear to be provided.
+
 v3.2.0
 
 * New `--force` argument for easier handling of `endpoint` switching. Fixes [#132](https://github.com/will-in-wi/letsencrypt-webfaction/issues/132)

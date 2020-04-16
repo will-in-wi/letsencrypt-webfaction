@@ -12,7 +12,7 @@ And finally, THANK YOU to all of you who have filed issues, contributed code and
 
 ## Previous Readme
 
-*NOTE: Version 3 is out and requires some manual changes. See [the upgrade guide for details](docs/upgrading.md).*
+*NOTE: Version 4 is out and requires some manual changes. See [the upgrade guide for details](docs/upgrading.md).*
 
 This tool automates the process of using LetsEncrypt on WebFaction hosts. It can be added to the Cron scheduled task runner where it will validate your domains automatically, obtain the certificates, and then install them using the Webfaction API.
 
@@ -77,7 +77,7 @@ After saving `~/.bash_profile`, run the command `source $HOME/.bash_profile` to 
 
 Run `letsencrypt_webfaction init` to generate a registration cert and the config file. Open the config file `nano -w ~/letsencrypt_webfaction.toml` and edit to reflect your configuration.
 
-Now, you are ready to run `letsencrypt_webfaction run` from your SSH session to get certificates. Note that by default the config file `letsencrypt_webfaction.toml` is pointed at the LetsEncrypt staging endpoint (the line that says: `endpoint = "https://acme-staging.api.letsencrypt.org/"`); meaning you will only get "test" certificates installed while using the stage endpoint. To issue live certificates you will need to comment out default line, and uncomment the production endpoint line (the line that says: `endpoint = "https://acme-v01.api.letsencrypt.org/" # Production`).
+Now, you are ready to run `letsencrypt_webfaction run` from your SSH session to get certificates. Note that by default the config file `letsencrypt_webfaction.toml` is pointed at the LetsEncrypt staging endpoint (the line that says: `directory = "https://acme-staging-v02.api.letsencrypt.org/directory"`); meaning you will only get "test" certificates installed while using the stage endpoint. To issue live certificates you will need to comment out default line, and uncomment the production endpoint line (the line that says: `directory = "https://acme-v02.api.letsencrypt.org/directory" # Production`).
 
 When you have tested with staging, you can remove the certificate from WebFaction control panel (make sure no webapps are using it first) and re-run with the production endpoint.
 
@@ -112,7 +112,7 @@ Generate certs and add to them to the control panel. This command has the follow
 
 ### Testing
 
-To test certificate issuance, consider using the [LetsEncrypt staging server](https://community.letsencrypt.org/t/testing-against-the-lets-encrypt-staging-environment/6763). This doesn't have the rate limit of 5 certs per domain every 7 days. You can change the `endpoint` config line to be `https://acme-staging.api.letsencrypt.org/` in order to test the system.
+To test certificate issuance, consider using the [LetsEncrypt staging server](https://community.letsencrypt.org/t/testing-against-the-lets-encrypt-staging-environment/6763). This doesn't have the rate limit of 5 certs per domain every 7 days. You can change the `directory` config line to be `https://acme-staging-v02.api.letsencrypt.org/directory` in order to test the system.
 
 After switching endpoints, you will likely want to run the command with `--force` in order to reissue all certificates from the new endpoint.
 

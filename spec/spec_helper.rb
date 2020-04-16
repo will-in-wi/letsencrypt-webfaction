@@ -9,7 +9,7 @@ SimpleCov.start
 
 require 'support/fixtures'
 
-require 'pry'
+# require 'pry'
 
 require 'webmock/rspec'
 require 'timecop'

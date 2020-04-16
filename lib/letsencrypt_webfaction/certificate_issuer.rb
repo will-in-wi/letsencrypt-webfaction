@@ -22,19 +22,31 @@ module LetsencryptWebfaction
 
     private
 
+    def order
+      @_order ||= @client.new_order(identifiers: @cert_config.domains)
+    end
+
     def validator
-      @_validator ||= LetsencryptWebfaction::DomainValidator.new @cert_config.domains, @client, @cert_config.public_dirs
+      @_validator ||= LetsencryptWebfaction::DomainValidator.new order, @client, @cert_config.public_dirs
     end
 
     def certificate_installer
-      @_certificate_installer ||= LetsencryptWebfaction::CertificateInstaller.new(@cert_config.cert_name, certificate, @api_credentials)
+      @_certificate_installer ||= LetsencryptWebfaction::CertificateInstaller.new(@cert_config.cert_name, certificate, csr.private_key, @api_credentials)
     end
 
     def certificate
       # We can now request a certificate, you can pass anything that returns
       # a valid DER encoded CSR when calling to_der on it, for example a
       # OpenSSL::X509::Request too.
-      @_certificate ||= @client.new_certificate(csr)
+      @_certificate ||= begin
+        order.finalize(csr: csr)
+        while order.status == 'processing'
+          sleep(2)
+          order.reload
+        end
+
+        order.certificate
+      end
     end
 
     def csr

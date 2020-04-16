@@ -2,9 +2,10 @@ require 'xmlrpc/client'
 
 module LetsencryptWebfaction
   class CertificateInstaller
-    def initialize(cert_name, certificate, credentials)
+    def initialize(cert_name, certificate, private_key, credentials)
       @cert_name = cert_name
       @certificate = certificate
+      @private_key = private_key
       @credentials = credentials
     end
 
@@ -15,7 +16,7 @@ module LetsencryptWebfaction
                else
                  'create_certificate'
                end
-      @credentials.call(action, @cert_name, @certificate.to_pem, @certificate.request.private_key.to_pem, @certificate.chain_to_pem)
+      @credentials.call(action, @cert_name, @certificate, @private_key.to_pem)
 
       true
     end

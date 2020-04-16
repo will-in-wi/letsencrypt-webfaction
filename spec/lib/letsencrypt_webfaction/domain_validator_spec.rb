@@ -11,29 +11,27 @@ RSpec.describe LetsencryptWebfaction::DomainValidator do
   end
 
   it '#validate! works' do
-    challenge1 = instance_double(Acme::Client::Resources::Challenges::HTTP01)
+    challenge1 = instance_double(Acme::Client::Resources::Challenges::HTTP01, reload: nil)
     allow(challenge1).to receive(:filename).and_return('file01.txt')
     allow(challenge1).to receive(:file_content).and_return('file01 content')
-    allow(challenge1).to receive(:request_verification).and_return(true)
+    allow(challenge1).to receive(:request_validation).and_return(true)
+    allow(challenge1).to receive(:status).and_return('pending', 'valid')
     authorization1 = instance_double(Acme::Client::Resources::Authorization)
-    allow(authorization1).to receive(:verify_status).and_return('pending', 'valid')
-    allow(challenge1).to receive(:authorization).and_return(authorization1)
+    allow(authorization1).to receive(:http).and_return(challenge1)
 
-    challenge2 = instance_double(Acme::Client::Resources::Challenges::HTTP01)
+    challenge2 = instance_double(Acme::Client::Resources::Challenges::HTTP01, reload: nil)
     allow(challenge2).to receive(:filename).and_return('file02.txt')
     allow(challenge2).to receive(:file_content).and_return('file02 content')
-    allow(challenge2).to receive(:request_verification).and_return(true)
+    allow(challenge2).to receive(:request_validation).and_return(true)
+    allow(challenge2).to receive(:status).and_return('pending', 'valid')
     authorization2 = instance_double(Acme::Client::Resources::Authorization)
-    allow(authorization2).to receive(:verify_status).and_return('pending', 'valid')
-    allow(challenge2).to receive(:authorization).and_return(authorization2)
+    allow(authorization2).to receive(:http).and_return(challenge2)
 
-    authorization = instance_double(Acme::Client::Resources::Authorization)
-    allow(authorization).to receive(:http01).and_return(challenge1, challenge2)
+    order = instance_double(Acme::Client::Resources::Order, authorizations: [authorization1, authorization2])
 
     client = instance_double(Acme::Client)
-    allow(client).to receive(:authorize).and_return(authorization)
 
-    dv = LetsencryptWebfaction::DomainValidator.new domains, client, public_dir
+    dv = LetsencryptWebfaction::DomainValidator.new order, client, public_dir
 
     # Speed up sleep
     allow_any_instance_of(Object).to receive(:sleep)
@@ -49,29 +47,27 @@ RSpec.describe LetsencryptWebfaction::DomainValidator do
     let(:public_dir) { ['spec/tmp/test2/', 'spec/tmp/test1/'] }
 
     it 'creates multiple files' do
-      challenge1 = instance_double(Acme::Client::Resources::Challenges::HTTP01)
+      challenge1 = instance_double(Acme::Client::Resources::Challenges::HTTP01, reload: nil)
       allow(challenge1).to receive(:filename).and_return('file01.txt')
       allow(challenge1).to receive(:file_content).and_return('file01 content')
-      allow(challenge1).to receive(:request_verification).and_return(true)
+      allow(challenge1).to receive(:request_validation).and_return(true)
+      allow(challenge1).to receive(:status).and_return('pending', 'valid')
       authorization1 = instance_double(Acme::Client::Resources::Authorization)
-      allow(authorization1).to receive(:verify_status).and_return('pending', 'valid')
-      allow(challenge1).to receive(:authorization).and_return(authorization1)
+      allow(authorization1).to receive(:http).and_return(challenge1)
 
-      challenge2 = instance_double(Acme::Client::Resources::Challenges::HTTP01)
+      challenge2 = instance_double(Acme::Client::Resources::Challenges::HTTP01, reload: nil)
       allow(challenge2).to receive(:filename).and_return('file02.txt')
       allow(challenge2).to receive(:file_content).and_return('file02 content')
-      allow(challenge2).to receive(:request_verification).and_return(true)
+      allow(challenge2).to receive(:request_validation).and_return(true)
+      allow(challenge2).to receive(:status).and_return('pending', 'valid')
       authorization2 = instance_double(Acme::Client::Resources::Authorization)
-      allow(authorization2).to receive(:verify_status).and_return('pending', 'valid')
-      allow(challenge2).to receive(:authorization).and_return(authorization2)
+      allow(authorization2).to receive(:http).and_return(challenge2)
 
-      authorization = instance_double(Acme::Client::Resources::Authorization)
-      allow(authorization).to receive(:http01).and_return(challenge1, challenge2)
+      order = instance_double(Acme::Client::Resources::Order, authorizations: [authorization1, authorization2])
 
       client = instance_double(Acme::Client)
-      allow(client).to receive(:authorize).and_return(authorization)
 
-      dv = LetsencryptWebfaction::DomainValidator.new domains, client, public_dir
+      dv = LetsencryptWebfaction::DomainValidator.new order, client, public_dir
 
       # Speed up sleep
       allow_any_instance_of(Object).to receive(:sleep)
@@ -87,23 +83,22 @@ RSpec.describe LetsencryptWebfaction::DomainValidator do
 
   context 'when not reachable' do
     it 'outputs helpful text' do
-      challenge = instance_double(Acme::Client::Resources::Challenges::HTTP01)
-      allow(challenge).to receive(:filename).and_return('file01.txt', 'file02.txt')
-      allow(challenge).to receive(:file_content).and_return('file01 content', 'file02 content')
-      allow(challenge).to receive(:request_verification).and_return(true)
-      authorization = instance_double(Acme::Client::Resources::Authorization)
-      allow(authorization).to receive(:verify_status).and_return('invalid')
-      allow(challenge).to receive(:authorization).and_return(authorization)
-      allow(challenge).to receive(:error).and_return('detail' => 'Pretend failure')
+      authorizations = domains.map do |domain|
+        challenge = instance_double(Acme::Client::Resources::Challenges::HTTP01, reload: nil)
+        allow(challenge).to receive(:filename).and_return('file01.txt', 'file02.txt')
+        allow(challenge).to receive(:file_content).and_return('file01 content', 'file02 content')
+        allow(challenge).to receive(:request_validation).and_return(true)
+        allow(challenge).to receive(:status).and_return('invalid')
+        allow(challenge).to receive(:error).and_return('detail' => 'Pretend failure')
 
-      authorization = instance_double(Acme::Client::Resources::Authorization)
-      allow(authorization).to receive(:http01).and_return(challenge)
-      allow(authorization).to receive(:domain).and_return(*domains)
+        instance_double(Acme::Client::Resources::Authorization, http: challenge, domain: domain)
+      end
+
+      order = instance_double(Acme::Client::Resources::Order, authorizations: authorizations)
 
       client = instance_double(Acme::Client)
-      allow(client).to receive(:authorize).and_return(authorization)
 
-      dv = LetsencryptWebfaction::DomainValidator.new domains, client, public_dir
+      dv = LetsencryptWebfaction::DomainValidator.new order, client, public_dir
 
       # Speed up sleep
       allow_any_instance_of(Object).to receive(:sleep)
@@ -124,31 +119,26 @@ Make sure that you can access http://www.example.com/file02.txt
 
   context 'when partially reachable' do
     it 'outputs helpful text' do
-      challenge1 = instance_double(Acme::Client::Resources::Challenges::HTTP01)
+      challenge1 = instance_double(Acme::Client::Resources::Challenges::HTTP01, reload: nil)
       allow(challenge1).to receive(:filename).and_return('file01.txt')
       allow(challenge1).to receive(:file_content).and_return('file01 content')
-      allow(challenge1).to receive(:request_verification).and_return(true)
-      authorization1 = instance_double(Acme::Client::Resources::Authorization)
-      allow(authorization1).to receive(:verify_status).and_return('invalid')
-      allow(challenge1).to receive(:authorization).and_return(authorization1)
+      allow(challenge1).to receive(:request_validation).and_return(true)
+      allow(challenge1).to receive(:status).and_return('invalid')
+      authorization1 = instance_double(Acme::Client::Resources::Authorization, http: challenge1, domain: 'example.com')
       allow(challenge1).to receive(:error).and_return('detail' => 'Pretend failure')
 
-      challenge2 = instance_double(Acme::Client::Resources::Challenges::HTTP01)
+      challenge2 = instance_double(Acme::Client::Resources::Challenges::HTTP01, reload: nil)
       allow(challenge2).to receive(:filename).and_return('file02.txt')
       allow(challenge2).to receive(:file_content).and_return('file02 content')
-      allow(challenge2).to receive(:request_verification).and_return(true)
-      authorization2 = instance_double(Acme::Client::Resources::Authorization)
-      allow(authorization2).to receive(:verify_status).and_return('valid')
-      allow(challenge2).to receive(:authorization).and_return(authorization2)
-
-      authorization = instance_double(Acme::Client::Resources::Authorization)
-      allow(authorization).to receive(:http01).and_return(challenge1, challenge2)
-      allow(authorization).to receive(:domain).and_return(*domains)
+      allow(challenge2).to receive(:request_validation).and_return(true)
+      allow(challenge2).to receive(:status).and_return('valid')
+      authorization2 = instance_double(Acme::Client::Resources::Authorization, http: challenge2, domain: 'www.example.com')
 
       client = instance_double(Acme::Client)
-      allow(client).to receive(:authorize).and_return(authorization)
 
-      dv = LetsencryptWebfaction::DomainValidator.new domains, client, public_dir
+      order = instance_double(Acme::Client::Resources::Order, authorizations: [authorization1, authorization2])
+
+      dv = LetsencryptWebfaction::DomainValidator.new order, client, public_dir
 
       # Speed up sleep
       allow_any_instance_of(Object).to receive(:sleep)
@@ -169,22 +159,21 @@ www.example.com: Success
   context 'when never resolves' do
     let(:domains) { ['example.com'] }
     it 'outputs helpful text' do
-      challenge = instance_double(Acme::Client::Resources::Challenges::HTTP01)
+      challenge = instance_double(Acme::Client::Resources::Challenges::HTTP01, reload: nil)
       allow(challenge).to receive(:filename).and_return('file01.txt')
       allow(challenge).to receive(:file_content).and_return('file01 content')
-      allow(challenge).to receive(:request_verification).and_return(true)
+      allow(challenge).to receive(:request_validation).and_return(true)
+      allow(challenge).to receive(:status).and_return('pending')
       authorization = instance_double(Acme::Client::Resources::Authorization)
-      allow(authorization).to receive(:verify_status).and_return('pending')
-      allow(challenge).to receive(:authorization).and_return(authorization)
-      # allow(challenge).to receive(:error).and_return('detail' => 'Pretend failure')
 
-      allow(authorization).to receive(:http01).and_return(challenge)
+      allow(authorization).to receive(:http).and_return(challenge)
       allow(authorization).to receive(:domain).and_return(*domains)
 
       client = instance_double(Acme::Client)
-      allow(client).to receive(:authorize).and_return(authorization)
 
-      dv = LetsencryptWebfaction::DomainValidator.new domains, client, public_dir
+      order = instance_double(Acme::Client::Resources::Order, authorizations: [authorization])
+
+      dv = LetsencryptWebfaction::DomainValidator.new order, client, public_dir
 
       # Speed up sleep
       allow_any_instance_of(Object).to receive(:sleep)
@@ -203,20 +192,20 @@ example.com: Still pending, but timed out
   context 'with failed validation request' do
     let(:domains) { ['example.com'] }
     it 'outputs helpful text' do
-      challenge = instance_double(Acme::Client::Resources::Challenges::HTTP01)
+      challenge = instance_double(Acme::Client::Resources::Challenges::HTTP01, reload: nil)
       allow(challenge).to receive(:filename).and_return('file01.txt')
       allow(challenge).to receive(:file_content).and_return('file01 content')
-      allow(challenge).to receive(:request_verification).and_return(false)
+      allow(challenge).to receive(:request_validation).and_return(false)
       authorization = instance_double(Acme::Client::Resources::Authorization)
-      allow(challenge).to receive(:authorization).and_return(authorization)
 
-      allow(authorization).to receive(:http01).and_return(challenge)
+      allow(authorization).to receive(:http).and_return(challenge)
       allow(authorization).to receive(:domain).and_return(*domains)
 
       client = instance_double(Acme::Client)
-      allow(client).to receive(:authorize).and_return(authorization)
 
-      dv = LetsencryptWebfaction::DomainValidator.new domains, client, public_dir
+      order = instance_double(Acme::Client::Resources::Order, authorizations: [authorization])
+
+      dv = LetsencryptWebfaction::DomainValidator.new order, client, public_dir
 
       # Speed up sleep
       allow_any_instance_of(Object).to receive(:sleep)
@@ -228,22 +217,23 @@ example.com: Still pending, but timed out
   context 'with unexpected response status' do
     let(:domains) { ['example.com'] }
     it 'outputs helpful text' do
-      challenge = instance_double(Acme::Client::Resources::Challenges::HTTP01)
+      challenge = instance_double(Acme::Client::Resources::Challenges::HTTP01, reload: nil)
       allow(challenge).to receive(:filename).and_return('file01.txt')
       allow(challenge).to receive(:file_content).and_return('file01 content')
-      allow(challenge).to receive(:request_verification).and_return(true)
+      allow(challenge).to receive(:request_validation).and_return(true)
+      allow(challenge).to receive(:status).and_return('ARRRGH!!!!')
       authorization = instance_double(Acme::Client::Resources::Authorization)
-      allow(authorization).to receive(:verify_status).and_return('ARRRGH!!!!')
-      allow(challenge).to receive(:authorization).and_return(authorization)
+      # allow(challenge).to receive(:authorization).and_return(authorization)
       # allow(challenge).to receive(:error).and_return('detail' => 'Pretend failure')
 
-      allow(authorization).to receive(:http01).and_return(challenge)
+      allow(authorization).to receive(:http).and_return(challenge)
       allow(authorization).to receive(:domain).and_return(*domains)
 
       client = instance_double(Acme::Client)
-      allow(client).to receive(:authorize).and_return(authorization)
 
-      dv = LetsencryptWebfaction::DomainValidator.new domains, client, public_dir
+      order = instance_double(Acme::Client::Resources::Order, authorizations: [authorization])
+
+      dv = LetsencryptWebfaction::DomainValidator.new order, client, public_dir
 
       # Speed up sleep
       allow_any_instance_of(Object).to receive(:sleep)
