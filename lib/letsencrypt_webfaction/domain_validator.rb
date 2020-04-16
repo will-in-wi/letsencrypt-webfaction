@@ -2,8 +2,8 @@ require 'fileutils'
 
 module LetsencryptWebfaction
   class DomainValidator
-    def initialize(domains, client, public_dirs)
-      @domains = domains
+    def initialize(order, client, public_dirs)
+      @order = order
       @client = client
       @public_dirs = public_dirs.map { |dir| File.expand_path(dir) }
     end
@@ -11,7 +11,7 @@ module LetsencryptWebfaction
     def validate! # rubocop:disable Metrics/MethodLength
       write_files!
 
-      challenges.map(&:request_verification).tap do |requests|
+      challenges.map(&:request_validation).tap do |requests|
         next unless requests.any?(&:!)
 
         $stderr.puts 'Failed to request validations.'
@@ -19,9 +19,10 @@ module LetsencryptWebfaction
       end
 
       10.times do
+        challenges.each(&:reload)
         break if no_challenges_pending?
 
-        sleep(1)
+        sleep(2)
       end
 
       return true if all_challenges_valid?
@@ -32,20 +33,16 @@ module LetsencryptWebfaction
 
     private
 
-    def authorizations
-      @authorizations ||= @domains.map { |domain| @client.authorize(domain: domain) }
-    end
-
     def challenges
-      @challenges ||= authorizations.map(&:http01)
+      @challenges ||= @order.authorizations.map(&:http)
     end
 
     def no_challenges_pending?
-      challenges.none? { |challenge| challenge.authorization.verify_status == 'pending' }
+      challenges.none? { |challenge| challenge.status == 'pending' }
     end
 
     def all_challenges_valid?
-      challenges.reject { |challenge| challenge.authorization.verify_status == 'valid' }.empty?
+      challenges.reject { |challenge| challenge.status == 'valid' }.empty?
     end
 
     def write_files!
