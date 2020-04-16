@@ -2,9 +2,9 @@
 
 Switching to ACMEv2 broke backwards compatibility in a couple ways.
 
-- You need to change the `endpoint` entry in your config to `v2_endpoint` and update it to staging or production.
-  v2_endpoint = "https://acme-staging-v02.api.letsencrypt.org/directory" # Staging
-  #v2_endpoint = "https://acme-v02.api.letsencrypt.org/directory" # Production
+- You need to change the `endpoint` entry in your config to `directory` and update it to staging or production.
+  directory = "https://acme-staging-v02.api.letsencrypt.org/directory" # Staging
+  #directory = "https://acme-v02.api.letsencrypt.org/directory" # Production
 
 # Upgrading from v2 to v3
 

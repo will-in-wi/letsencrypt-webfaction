@@ -8,8 +8,8 @@ letsencrypt_account_email = "me@example.com"
 # The ACME endpoint. Use the staging server until you get everything working.
 # Then switch to the production endpoint. You may want to run with the --force
 # command after switching to reissue all certificates.
-v2_endpoint = "https://acme-staging-v02.api.letsencrypt.org/directory" # Staging
-#v2_endpoint = "https://acme-v02.api.letsencrypt.org/directory" # Production
+directory = "https://acme-staging-v02.api.letsencrypt.org/directory" # Staging
+#directory = "https://acme-v02.api.letsencrypt.org/directory" # Production
 
 # The URL to the WebFaction API. You should not change this under normal
 # circumstances.

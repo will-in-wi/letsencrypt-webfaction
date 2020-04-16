@@ -157,7 +157,7 @@ module LetsencryptWebfaction
       end
 
       def client
-        @_client ||= Acme::Client.new(private_key: private_key, endpoint: @options.endpoint)
+        @_client ||= Acme::Client.new(private_key: private_key, directory: @options.directory)
       end
 
       def register_key

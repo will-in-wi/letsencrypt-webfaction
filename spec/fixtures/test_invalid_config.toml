@@ -7,8 +7,8 @@ letsencrypt_account_email = "me@example.com"
 
 # The ACME endpoint. Use the staging server until you get everything working.
 # Then switch to the production endpoint.
-endpoint = "https://acme-staging.api.letsencrypt.org/" # Staging
-#endpoint = "https://acme-v01.api.letsencrypt.org/" # Production
+directory = "https://acme-staging.api.letsencrypt.org/" # Staging
+#directory = "https://acme-v01.api.letsencrypt.org/" # Production
 
 # The URL to the WebFaction API. You should not change this under normal
 # circumstances.
