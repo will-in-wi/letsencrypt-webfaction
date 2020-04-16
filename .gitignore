@@ -18,3 +18,5 @@
 /spec/.examples.txt
 
 /.ruby-version
+
+/spec/tmp
