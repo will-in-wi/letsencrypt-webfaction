@@ -7,6 +7,23 @@ Switching to ACMEv2 broke backwards compatibility in a couple ways.
 directory = "https://acme-staging-v02.api.letsencrypt.org/directory" # Staging
 #directory = "https://acme-v02.api.letsencrypt.org/directory" # Production
 ```
+- You need to change all references from Ruby 2.2 to 2.3.
+Run:
+```bash
+GEM_HOME=$HOME/.letsencrypt_webfaction/gems RUBYLIB=$GEM_HOME/lib gem2.3 install letsencrypt_webfaction
+```
+And then change
+```bash
+function letsencrypt_webfaction {
+    GEM_HOME=$HOME/.letsencrypt_webfaction/gems PATH=$PATH:$GEM_HOME/bin RUBYLIB=$GEM_HOME/lib ruby2.2 $HOME/.letsencrypt_webfaction/gems/bin/letsencrypt_webfaction $*
+}
+```
+to
+```bash
+function letsencrypt_webfaction {
+    GEM_HOME=$HOME/.letsencrypt_webfaction/gems PATH=$PATH:$GEM_HOME/bin RUBYLIB=$GEM_HOME/lib ruby2.3 $HOME/.letsencrypt_webfaction/gems/bin/letsencrypt_webfaction $*
+}
+```
 
 # Upgrading from v2 to v3
 
