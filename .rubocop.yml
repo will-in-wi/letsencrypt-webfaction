@@ -8,7 +8,7 @@ AllCops:
     - 'vendor/**/*'
   TargetRubyVersion: 2.4
 # Line length is something that isn't dogmatic. 80 chars is a good recommendation.
-Metrics/LineLength:
+Layout/LineLength:
   Enabled: false
 # This requires leading comments which can tend to be redundant.
 Style/Documentation:
@@ -68,10 +68,17 @@ Layout/ClosingHeredocIndentation:
   Enabled: false
 
 # Enable new cops
-# Layout/SpaceAroundMethodCallOperator
-# Lint/RaiseException
-# Lint/StructNewOverride
-# Style/ExponentialNotation
-# Style/HashEachMethods
-# Style/HashTransformKeys
-# Style/HashTransformValues
+Layout/SpaceAroundMethodCallOperator:
+  Enabled: true
+Lint/RaiseException:
+  Enabled: true
+Lint/StructNewOverride:
+  Enabled: true
+Style/ExponentialNotation:
+  Enabled: true
+Style/HashEachMethods:
+  Enabled: true
+Style/HashTransformKeys:
+  Enabled: true
+Style/HashTransformValues:
+  Enabled: true
