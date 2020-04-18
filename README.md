@@ -61,14 +61,14 @@ All places where you need to substitute a value specific to your setup will be d
 Run the following command in an SSH session to install the letsencrypt_webfaction package via the [RubyGems package management site](https://rubygems.org/gems/letsencrypt_webfaction):
 
 ```sh
-GEM_HOME=$HOME/.letsencrypt_webfaction/gems RUBYLIB=$GEM_HOME/lib gem2.3 install letsencrypt_webfaction
+GEM_HOME=$HOME/.letsencrypt_webfaction/gems RUBYLIB=$GEM_HOME/lib gem2.4 install letsencrypt_webfaction
 ```
 
 Add the following to `~/.bash_profile` (using, for example, an FTP client or your favorite text editor):
 
 ```sh
 function letsencrypt_webfaction {
-    GEM_HOME=$HOME/.letsencrypt_webfaction/gems PATH=$PATH:$GEM_HOME/bin RUBYLIB=$GEM_HOME/lib ruby2.3 $HOME/.letsencrypt_webfaction/gems/bin/letsencrypt_webfaction $*
+    GEM_HOME=$HOME/.letsencrypt_webfaction/gems PATH=$PATH:$GEM_HOME/bin RUBYLIB=$GEM_HOME/lib ruby2.4 $HOME/.letsencrypt_webfaction/gems/bin/letsencrypt_webfaction $*
 }
 ```
 This will simplify the running of the LetsEncrypt WebFaction command, by setting some variables in advance.
@@ -131,7 +131,7 @@ The Cron task should run daily (or however often you prefer) and will only renew
 Your Cron task should look like:
 
 ```cron
-18 3 * * *     PATH=$PATH:$GEM_HOME/bin:/usr/local/bin GEM_HOME=$HOME/.letsencrypt_webfaction/gems RUBYLIB=$GEM_HOME/lib ruby2.3 $HOME/.letsencrypt_webfaction/gems/bin/letsencrypt_webfaction run --quiet
+18 3 * * *     PATH=$PATH:$GEM_HOME/bin:/usr/local/bin GEM_HOME=$HOME/.letsencrypt_webfaction/gems RUBYLIB=$GEM_HOME/lib ruby2.4 $HOME/.letsencrypt_webfaction/gems/bin/letsencrypt_webfaction run --quiet
 ```
 
 *Note the usage of `--quiet` to keep the success message from being shown and emailed.*
@@ -148,14 +148,14 @@ You can find the current version by running `letsencrypt_webfaction --version`. 
 
 [The changelog](CHANGELOG.md) describes changes from version to version.
 
-LetsEncrypt WebFaction follows [Semantic Versioning](http://semver.org/). In a nutshell, a version number such as `1.2.3` is divided as `major.minor.patch`. When the major version is incremented, you will probably have to change something about the configuration to make it work. The changelog will let you know what changes you need to make. When the minor version is incremented, there are new features but existing features haven't changed. If the patch version is incremented, the changes are all under the hood and shouldn't change or add any existing features.
+LetsEncrypt WebFaction follows [Semantic Versioning](http://semver.org/). In a nutshell, a version number such as `1.2.4` is divided as `major.minor.patch`. When the major version is incremented, you will probably have to change something about the configuration to make it work. The changelog will let you know what changes you need to make. When the minor version is incremented, there are new features but existing features haven't changed. If the patch version is incremented, the changes are all under the hood and shouldn't change or add any existing features.
 
 TL;DR: Be careful with major version upgrades and you should be fine with upgrading to minor or patch releases.
 
 To upgrade, run the following command to fetch and install the newest version from RubyGems:
 
 ```sh
-GEM_HOME=$HOME/.letsencrypt_webfaction/gems RUBYLIB=$GEM_HOME/lib gem2.3 install letsencrypt_webfaction
+GEM_HOME=$HOME/.letsencrypt_webfaction/gems RUBYLIB=$GEM_HOME/lib gem2.4 install letsencrypt_webfaction
 ```
 
 ## Development

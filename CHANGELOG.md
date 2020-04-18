@@ -2,11 +2,14 @@ Unreleased
 
 * Your change here!
 
+v4.0.1
+
+* Require Ruby >=2.4 (mostly because Faraday, which this depends on, doesn't support 2.2 anymore. Also not support 2.3 because of the xmlrpc library extraction. This just makes things easier, and it seems like WebFaction supports this new version of Ruby everywhere now.)
+
 v4.0.0
 
 * Support ACMEv2
 * No longer adds intermediate certs to bundle, as these don't appear to be provided.
-* No longer supports Ruby 2.2 (mostly because Faraday doesn't, which this depends on)
 
 v3.2.0
 

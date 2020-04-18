@@ -11,7 +11,7 @@ group :development, :test do
   gem 'pry-doc'
   gem 'rake', '~> 12.0'
   gem 'rspec', '~> 3.4'
-  gem 'rubocop', '~> 0.68.0' # Forcing 0.68, as Ruby 2.2 is unsupported after this.
+  gem 'rubocop', '~> 0.82.0'
   gem 'rubocop-performance'
   gem 'simplecov', '~> 0.11'
   gem 'timecop', '~> 0.9.1'

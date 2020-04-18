@@ -6,7 +6,7 @@ AllCops:
     - 'bin/*'
     # Keep rubocop from scanning installed gems.
     - 'vendor/**/*'
-  TargetRubyVersion: 2.3
+  TargetRubyVersion: 2.4
 # Line length is something that isn't dogmatic. 80 chars is a good recommendation.
 Metrics/LineLength:
   Enabled: false
@@ -27,7 +27,7 @@ Metrics/ModuleLength:
     - 'spec/**/*'
 
 # I'm not pulling in a library, or forcing Ruby 2.3+
-Layout/IndentHeredoc:
+Layout/HeredocIndentation:
   Enabled: false
 
 # When we use $stderr.puts, we don't see that as verbose.
@@ -70,3 +70,12 @@ Style/TrailingCommaInArguments:
 # Seems buggy for now.
 Layout/ClosingHeredocIndentation:
   Enabled: false
+
+# Enable new cops
+# Layout/SpaceAroundMethodCallOperator
+# Lint/RaiseException
+# Lint/StructNewOverride
+# Style/ExponentialNotation
+# Style/HashEachMethods
+# Style/HashTransformKeys
+# Style/HashTransformValues

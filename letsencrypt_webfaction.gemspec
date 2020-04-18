@@ -27,11 +27,9 @@ Gem::Specification.new do |spec|
   spec.cert_chain  = ['certs/will_in_wi.pem']
   spec.signing_key = File.expand_path('~/.ssh/gem-private_key.pem') if $PROGRAM_NAME.end_with?('gem')
 
-  spec.required_ruby_version = '>= 2.3.0'
+  spec.required_ruby_version = '>= 2.4.0'
 
   spec.add_runtime_dependency 'acme-client', '~> 2.0'
-  spec.add_runtime_dependency 'toml-rb', '~> 1.1'
-
-  # This will be required for Ruby 2.4. But it is incompatible for Ruby <2.3. Unsupporting Ruby 2.4 for the moment.
-  # spec.add_runtime_dependency 'xmlrpc', '~> 0.3.0'
+  spec.add_runtime_dependency 'toml-rb', '~> 2.0'
+  spec.add_runtime_dependency 'xmlrpc', '~> 0.3.0'
 end

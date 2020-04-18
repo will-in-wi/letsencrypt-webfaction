@@ -45,7 +45,7 @@ module LetsencryptWebfaction
           e[:method] = 'must be "http01"' unless SUPPORTED_VALIDATION_METHODS.include?(validation_method)
           e[:public] = "can't be empty" if public_dirs.none?
           e[:name] = "can't be blank" if cert_name.nil? || cert_name == ''
-          e[:name] = 'can only include letters, numbers, and underscores' if cert_name =~ VALID_CERT_NAME
+          e[:name] = 'can only include letters, numbers, and underscores' if VALID_CERT_NAME.match?(cert_name)
           e[:key_size] = "must be one of #{VALID_KEY_SIZES.join(', ')}" unless VALID_KEY_SIZES.include?(key_size)
         end
       end
