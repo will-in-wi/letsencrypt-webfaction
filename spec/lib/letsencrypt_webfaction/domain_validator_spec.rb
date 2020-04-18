@@ -105,12 +105,12 @@ RSpec.describe LetsencryptWebfaction::DomainValidator do
       # Speed up sleep
       allow_any_instance_of(Object).to receive(:sleep)
 
-      expected_output = <<-ERR
-Failed to verify statuses.
-example.com: Pretend failure
-Make sure that you can access http://example.com/file02.txt
-www.example.com: Pretend failure
-Make sure that you can access http://www.example.com/file02.txt
+      expected_output = <<~ERR
+        Failed to verify statuses.
+        example.com: Pretend failure
+        Make sure that you can access http://example.com/file02.txt
+        www.example.com: Pretend failure
+        Make sure that you can access http://www.example.com/file02.txt
       ERR
 
       expect do
@@ -145,11 +145,11 @@ Make sure that you can access http://www.example.com/file02.txt
       # Speed up sleep
       allow_any_instance_of(Object).to receive(:sleep)
 
-      expected_output = <<-ERR
-Failed to verify statuses.
-example.com: Pretend failure
-Make sure that you can access http://example.com/file01.txt
-www.example.com: Success
+      expected_output = <<~ERR
+        Failed to verify statuses.
+        example.com: Pretend failure
+        Make sure that you can access http://example.com/file01.txt
+        www.example.com: Success
       ERR
 
       expect do
@@ -180,9 +180,9 @@ www.example.com: Success
       # Speed up sleep
       allow_any_instance_of(Object).to receive(:sleep)
 
-      expected_output = <<-ERR
-Failed to verify statuses.
-example.com: Still pending, but timed out
+      expected_output = <<~ERR
+        Failed to verify statuses.
+        example.com: Still pending, but timed out
       ERR
 
       expect do
@@ -240,9 +240,9 @@ example.com: Still pending, but timed out
       # Speed up sleep
       allow_any_instance_of(Object).to receive(:sleep)
 
-      expected_output = <<-ERR
-Failed to verify statuses.
-example.com: Unexpected authorization status ARRRGH!!!!
+      expected_output = <<~ERR
+        Failed to verify statuses.
+        example.com: Unexpected authorization status ARRRGH!!!!
       ERR
 
       expect do

@@ -26,10 +26,6 @@ Metrics/ModuleLength:
     # Tests involve piles of code.
     - 'spec/**/*'
 
-# I'm not pulling in a library, or forcing Ruby 2.3+
-Layout/HeredocIndentation:
-  Enabled: false
-
 # When we use $stderr.puts, we don't see that as verbose.
 Style/StderrPuts:
   Enabled: false
