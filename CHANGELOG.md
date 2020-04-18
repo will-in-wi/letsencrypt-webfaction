@@ -6,6 +6,7 @@ v4.0.0
 
 * Support ACMEv2
 * No longer adds intermediate certs to bundle, as these don't appear to be provided.
+* No longer supports Ruby 2.2 (mostly because Faraday doesn't, which this depends on)
 
 v3.2.0
 

@@ -6,7 +6,7 @@ AllCops:
     - 'bin/*'
     # Keep rubocop from scanning installed gems.
     - 'vendor/**/*'
-  TargetRubyVersion: 2.2
+  TargetRubyVersion: 2.3
 # Line length is something that isn't dogmatic. 80 chars is a good recommendation.
 Metrics/LineLength:
   Enabled: false

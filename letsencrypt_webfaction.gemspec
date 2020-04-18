@@ -25,7 +25,7 @@ Gem::Specification.new do |spec|
   spec.cert_chain  = ['certs/will_in_wi.pem']
   spec.signing_key = File.expand_path('~/.ssh/gem-private_key.pem') if $PROGRAM_NAME.end_with?('gem')
 
-  spec.required_ruby_version = '>= 2.2.0'
+  spec.required_ruby_version = '>= 2.3.0'
 
   spec.add_runtime_dependency 'acme-client', '~> 2.0'
   spec.add_runtime_dependency 'toml-rb', '~> 1.1'

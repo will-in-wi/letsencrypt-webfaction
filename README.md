@@ -61,14 +61,14 @@ All places where you need to substitute a value specific to your setup will be d
 Run the following command in an SSH session to install the letsencrypt_webfaction package via the [RubyGems package management site](https://rubygems.org/gems/letsencrypt_webfaction):
 
 ```sh
-GEM_HOME=$HOME/.letsencrypt_webfaction/gems RUBYLIB=$GEM_HOME/lib gem2.2 install letsencrypt_webfaction
+GEM_HOME=$HOME/.letsencrypt_webfaction/gems RUBYLIB=$GEM_HOME/lib gem2.3 install letsencrypt_webfaction
 ```
 
 Add the following to `~/.bash_profile` (using, for example, an FTP client or your favorite text editor):
 
 ```sh
 function letsencrypt_webfaction {
-    GEM_HOME=$HOME/.letsencrypt_webfaction/gems PATH=$PATH:$GEM_HOME/bin RUBYLIB=$GEM_HOME/lib ruby2.2 $HOME/.letsencrypt_webfaction/gems/bin/letsencrypt_webfaction $*
+    GEM_HOME=$HOME/.letsencrypt_webfaction/gems PATH=$PATH:$GEM_HOME/bin RUBYLIB=$GEM_HOME/lib ruby2.3 $HOME/.letsencrypt_webfaction/gems/bin/letsencrypt_webfaction $*
 }
 ```
 This will simplify the running of the LetsEncrypt WebFaction command, by setting some variables in advance.
@@ -131,7 +131,7 @@ The Cron task should run daily (or however often you prefer) and will only renew
 Your Cron task should look like:
 
 ```cron
-18 3 * * *     PATH=$PATH:$GEM_HOME/bin:/usr/local/bin GEM_HOME=$HOME/.letsencrypt_webfaction/gems RUBYLIB=$GEM_HOME/lib ruby2.2 $HOME/.letsencrypt_webfaction/gems/bin/letsencrypt_webfaction run --quiet
+18 3 * * *     PATH=$PATH:$GEM_HOME/bin:/usr/local/bin GEM_HOME=$HOME/.letsencrypt_webfaction/gems RUBYLIB=$GEM_HOME/lib ruby2.3 $HOME/.letsencrypt_webfaction/gems/bin/letsencrypt_webfaction run --quiet
 ```
 
 *Note the usage of `--quiet` to keep the success message from being shown and emailed.*
@@ -155,7 +155,7 @@ TL;DR: Be careful with major version upgrades and you should be fine with upgrad
 To upgrade, run the following command to fetch and install the newest version from RubyGems:
 
 ```sh
-GEM_HOME=$HOME/.letsencrypt_webfaction/gems RUBYLIB=$GEM_HOME/lib gem2.2 install letsencrypt_webfaction
+GEM_HOME=$HOME/.letsencrypt_webfaction/gems RUBYLIB=$GEM_HOME/lib gem2.3 install letsencrypt_webfaction
 ```
 
 ## Development
