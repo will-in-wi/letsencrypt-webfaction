@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'letsencrypt_webfaction/application'
 
 RSpec.describe LetsencryptWebfaction::Application do

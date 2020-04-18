@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module LetsencryptWebfaction
   class LoggerOutput
     attr_accessor :quiet

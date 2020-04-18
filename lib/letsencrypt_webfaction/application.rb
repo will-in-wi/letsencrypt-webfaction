@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'letsencrypt_webfaction/application/init'
 require 'letsencrypt_webfaction/application/run'
 require 'letsencrypt_webfaction/application/version'

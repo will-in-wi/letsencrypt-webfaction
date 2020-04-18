@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'acme-client'
 require 'letsencrypt_webfaction/domain_validator'
 require 'letsencrypt_webfaction/certificate_installer'

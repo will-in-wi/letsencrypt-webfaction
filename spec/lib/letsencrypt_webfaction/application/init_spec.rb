@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'letsencrypt_webfaction/application/init'
 
 RSpec.describe LetsencryptWebfaction::Application::Init, :uses_tmp_dir do

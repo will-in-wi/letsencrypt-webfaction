@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'acme-client'
 require 'xmlrpc/client'
 require 'letsencrypt_webfaction/application/run'

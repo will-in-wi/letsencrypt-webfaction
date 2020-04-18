@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'letsencrypt_webfaction/application/version'
 
 RSpec.describe LetsencryptWebfaction::Application::Version do

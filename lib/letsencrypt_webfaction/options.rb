@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'toml-rb'
 require 'socket'
 
@@ -7,7 +9,7 @@ module LetsencryptWebfaction
   class Options
     NON_BLANK_FIELDS = %i[username password letsencrypt_account_email directory api_url servername].freeze
 
-    WEBFACTION_API_URL = 'https://api.webfaction.com/'.freeze
+    WEBFACTION_API_URL = 'https://api.webfaction.com/'
 
     def initialize(args)
       @config = args

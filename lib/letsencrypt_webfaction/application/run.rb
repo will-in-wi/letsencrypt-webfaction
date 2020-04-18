@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'letsencrypt_webfaction/options'
 require 'letsencrypt_webfaction/errors'
 require 'letsencrypt_webfaction/webfaction_api_credentials'

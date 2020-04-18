@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'letsencrypt_webfaction/webfaction_api_credentials'
 
 RSpec.describe LetsencryptWebfaction::WebfactionApiCredentials do

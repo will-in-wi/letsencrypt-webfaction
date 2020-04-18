@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Add lib to the require dir.
 $LOAD_PATH.unshift(File.dirname(__FILE__) + '/../lib')
 

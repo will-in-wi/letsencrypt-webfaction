@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'letsencrypt_webfaction/certificate_installer'
 require 'letsencrypt_webfaction/webfaction_api_credentials'
 
