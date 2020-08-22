@@ -1,5 +1,6 @@
 Unreleased
 
+* Fix issues with the key not being registered correctly. #168
 * Your change here!
 
 v4.0.1
