@@ -162,8 +162,14 @@ module LetsencryptWebfaction
         @_client ||= Acme::Client.new(private_key: private_key, directory: @options.directory)
       end
 
+      def key_registered?
+        !client.kid.nil?
+      rescue Acme::Client::Error::AccountDoesNotExist
+        false
+      end
+
       def register_key
-        return if client.kid
+        return if key_registered?
 
         # If the private key is not known to the server, we need to register it for the first time.
         client.new_account(contact: "mailto:#{@options.letsencrypt_account_email}", terms_of_service_agreed: true)
