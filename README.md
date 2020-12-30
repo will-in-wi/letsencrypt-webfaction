@@ -2,13 +2,11 @@
 
 LetsEncrypt utility client for WebFaction hosts.
 
-## *WebFaction has released first-party support for Let's Encrypt Certs!*
+## *WebFaction is closing down.*
 
-The long-awaited support by [webfaction is here!](https://blog.webfaction.com/2018/09/issue-lets-encrypt-ssl-certificates-with-the-control-panel/) See [the blog post for details about how to use it](https://blog.webfaction.com/2018/09/issue-lets-encrypt-ssl-certificates-with-the-control-panel/), it's really easy! I've switched all of my personal certificates over to their implementation. If you are looking to start adding certificates to your site, start there, not with this tool.
+Webfaction is sadly closing their doors and will be completely shut down in June. All of my sites have been migrated to Opalstack, and I no longer have a way to test issues. I suspect that most folks who used this tool have also migrated at this point, or will be doing so before long.
 
-I am not going to abandon this application outright. Too many people have worked too hard on this to suddenly drop it. But I am not planning any further work on it, unless people find actual bugs. If you can't use the WebFaction control panel to issue your Let's Encrypt certs for some reason and so are using this tool, please file a support ticket with WebFaction and also [comment on this ticket](https://github.com/will-in-wi/letsencrypt-webfaction/issues/160).
-
-And finally, THANK YOU to all of you who have filed issues, contributed code and documentation, and helped others solve tickets. You have made this a tremendously fun and rewarding project to work on, and helped out so many fellow WebFaction customers.
+As a result, this project is now closed down. THANK YOU to all of you who have filed issues, contributed code and documentation, and helped others solve tickets. You have made this a tremendously fun and rewarding project to work on, and helped out so many fellow WebFaction customers. It has been an honor to work with so many of you on it.
 
 ## Previous Readme
 
